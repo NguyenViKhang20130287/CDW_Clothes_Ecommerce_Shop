@@ -1,0 +1,166 @@
+:root {
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --font-color-hover: #999999;
+    --font-color-primary: #333333;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.headerContainer {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.headerWrapper {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.leftContent {
+    padding: 10px;
+    cursor: pointer;
+    width: 40%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftContent span, .rightContent span {
+    font-family: var(--font-family-monospace);
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--font-color-primary);
+    cursor: pointer;
+    transition: all .3s;
+    /*margin-right: 30px;*/
+}
+
+.leftContent span:last-child{
+    margin-right: 130px;
+}
+
+.leftContent .home:hover, .leftContent .warranty:hover, .rightContent .sizeTable:hover {
+    color: var(--font-color-hover);
+}
+
+.centerContent {
+    width: 30%;
+    /*text-align: center;*/
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+}
+
+.centerContent .imageLogoWrapper {
+    height: 30px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.centerContent .imageLogoWrapper img {
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*object-fit: cover;*/
+}
+
+.rightContent {
+    display: flex;
+    align-items: center;
+    width: 30%;
+    justify-content: space-between;
+}
+
+.rightContent .sizeTable{
+
+}
+
+.groupBtn{
+    display: flex;
+    align-items: center;
+}
+
+.rightContent .btnIcons {
+    background: none;
+    border: none;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#searchBtn:focus{
+    color: var(--font-color-primary);
+}
+
+.rightContent .searchInput {
+    height: 24px;
+    padding: 16px 10px;
+    border: 1px solid var(--font-color-primary);
+    outline: none;
+    background: none;
+    border-radius: 4px;
+    margin-right: 15px;
+    font-family: var(--font-family-sans-serif);
+    width: 200px;
+}
+
+.rightContent .icons {
+    font-size: 22px;
+    cursor: pointer;
+    transition: all .3s;
+    color: var(--font-color-primary);
+}
+
+.rightContent .btnIcons:hover .icons {
+    color: var(--font-color-hover);
+}
+
+/* responsive */
+@media only screen and (max-width: 767px) {
+    .headerContainer {
+
+    }
+
+    .headerWrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .leftContent{
+        display: none;
+    }
+
+    .centerContent{
+        width: 50%;
+    }
+
+    .centerContent .imageLogoWrapper {
+        height: 30px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .centerContent .imageLogoWrapper img{
+        width: 100%;
+        height: 100%;
+    }
+
+    .rightContent{
+        width: 50%;
+    }
+}
