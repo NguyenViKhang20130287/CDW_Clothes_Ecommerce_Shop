@@ -131,12 +131,13 @@
     justify-content: space-between;
 }
 
-.leftContent span, .rightContent span {
+.leftContent .home, .leftContent .warranty, .rightContent span {
     font-family: var(--font-family-monospace);
     font-weight: 400;
     font-size: 20px;
     color: var(--font-color-primary);
     cursor: pointer;
+    text-decoration: none;
     transition: all .3s;
 }
 

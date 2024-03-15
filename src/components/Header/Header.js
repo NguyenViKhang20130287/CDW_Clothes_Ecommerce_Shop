@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+// import {Link} from 'react-router-dom'
 import LOGO from '../../assets/img/logo.webp'
 import SHIRT_IMG from '../../assets/img/shirt1.webp'
 // icons
@@ -8,6 +9,7 @@ import {HiBars3BottomLeft} from "react-icons/hi2";
 import './Header.css'
 // components
 import ProductCard from "../ProductCard/ProductCard";
+import {Link} from "react-router-dom";
 
 const Header = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
@@ -123,7 +125,7 @@ const Header = () => {
                         </button>
                     </div>
                     <div className={'leftContent'}>
-                        <span className={'home'}>TRANG CHỦ</span>
+                        <Link to={'/'} className={'home'}>TRANG CHỦ</Link>
                         <span className={'warranty'}>ĐỔI TRẢ</span>
                     </div>
                     <div className={'centerContent'}>
@@ -141,9 +143,9 @@ const Header = () => {
                             <button className={'btnIcons'} type={"button"}>
                                 <IoCartOutline className={'icons'}/>
                             </button>
-                            <button className={'btnIcons'} type={"button"}>
+                            <Link to={'/login'} className={'btnIcons'}>
                                 <IoPersonOutline className={'icons'}/>
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
