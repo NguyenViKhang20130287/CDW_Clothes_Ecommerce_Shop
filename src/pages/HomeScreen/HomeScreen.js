@@ -1,15 +1,96 @@
 import React from "react";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import HeaderComponent from "../../components/Header/HeaderComponent";
+import FooterComponent from "../../components/Footer/FooterComponent";
+// images
+import SLIDER_1 from '../../assets/slider/slider_1.webp'
+import SLIDER_2 from '../../assets/slider/slider_2.webp'
+import SLIDER_3 from '../../assets/slider/slider_3.webp'
+import SLIDER_4 from '../../assets/slider/slider_4.webp'
+import SLIDER_5 from '../../assets/slider/slider_5.webp'
+import SHIRT_IMG from '../../assets/img/shirt1.webp'
+import FEEDBACK_1 from '../../assets/findoutmore/feedback_1.webp'
+import FEEDBACK_2 from '../../assets/findoutmore/feedback_2.webp'
+import FEEDBACK_3 from '../../assets/findoutmore/feedback_3.webp'
+import FEEDBACK_4 from '../../assets/findoutmore/feedback_4.webp'
+import FEEDBACK_5 from '../../assets/findoutmore/feedback_5.webp'
+import FEEDBACK_6 from '../../assets/findoutmore/feedback_6.webp'
+import FEEDBACK_7 from '../../assets/findoutmore/feedback_7.webp'
+import FEEDBACK_8 from '../../assets/findoutmore/feedback_8.webp'
+// css
+import './HomeScreen.css'
+import CategoryComponent from "../../components/Category/CategoryComponent";
+import {Link} from "react-router-dom";
 
 const HomeScreen = () => {
+    const images = [SLIDER_1, SLIDER_2, SLIDER_3, SLIDER_4, SLIDER_5]
+    const imagesFeedback = [FEEDBACK_1, FEEDBACK_2, FEEDBACK_3, FEEDBACK_4,
+        FEEDBACK_5, FEEDBACK_6, FEEDBACK_7, FEEDBACK_8]
+
+    const settings = {
+        dots: true,
+        infinite: true,
+        speed: 1000,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 2000
+    };
+
     return (
         <div className={'homeContainer'}>
-            <Header/>
+            <HeaderComponent/>
+            {/**/}
             <div className={'homeWrapper'}>
+                <Slider {...settings} className={'sliderWrapper'}>
+                    {images.map((item, index) => (
+                        <div className={'slider'} key={index}>
+                            <img src={item} alt={`Slider ${index}}`}/>
+                        </div>
+                    ))}
+                </Slider>
+                {/**/}
+                <div className={'descriptionWrapper'}>
+                    <div className={'description'}>
+                        <h3 className={'title'}>Enjoy Your Youth!</h3>
+                        <p className={'content'}>
+                            Không chỉ là thời trang, TEELAB còn là “phòng thí nghiệm” của tuổi trẻ - nơi nghiên cứu và
+                            cho ra đời nguồn năng lượng mang tên “Youth”. Chúng mình luôn muốn tạo nên những trải nghiệm
+                            vui vẻ, năng động và trẻ trung.
+                        </p>
+                    </div>
+                </div>
+                {/**/}
+                <CategoryComponent
+                    className={'categoriesWrapper'}
+                    categoryName={'Áo thun'}
+                    image={SHIRT_IMG}
+                    name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
+                    price={'185.000'}
+                    originPrice={'350.000'}/>
+                <CategoryComponent
+                    className={'categoriesWrapper'}
+                    categoryName={'Áo Polo'}
+                    image={SHIRT_IMG}
+                    name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
+                    price={'185.000'}
+                    originPrice={'350.000'}/>
 
+                {/**/}
+                <div className={'findOutMoreWrapper'}>
+                    <div className={'title'}>Find out TEELAB more</div>
+                    <div className={'images'}>
+                        {imagesFeedback.map((item, index) => (
+                            <Link to={'#'} className={'imageWrapper'} key={index}>
+                                <img src={item} alt={''}/>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
             </div>
-            <Footer/>
+            <FooterComponent/>
         </div>
     )
 }

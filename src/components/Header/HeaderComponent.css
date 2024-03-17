@@ -1,9 +1,3 @@
-:root {
-    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --font-color-hover: #999999;
-    --font-color-primary: #333333;
-}
 
 * {
     margin: 0;
@@ -59,11 +53,11 @@
 }
 
 .searchPopup .searchWrapper .closeBtn:hover {
-    color: var(--font-color-hover);
+    color: var(--color-silver);
 }
 
 .searchPopup .searchWrapper h3 {
-    color: var(--font-color-primary);
+    color: var(--color-black);
     font-family: var(--font-family-monospace);
     font-size: 25px;
     margin-bottom: 20px;
@@ -73,7 +67,7 @@
     display: flex;
     align-items: center;
     width: 100%;
-    border: 1px solid var(--font-color-primary);
+    border: 1px solid var(--color-black);
     overflow: hidden;
     border-radius: 10px;
 }
@@ -99,7 +93,7 @@
 }
 
 .searchPopup .searchWrapper .searchInput button:hover {
-    background: var(--font-color-hover);
+    background: var(--color-silver);
 }
 
 .searchResult {
@@ -135,7 +129,7 @@
     font-family: var(--font-family-monospace);
     font-weight: 400;
     font-size: 20px;
-    color: var(--font-color-primary);
+    color: var(--color-black);
     cursor: pointer;
     text-decoration: none;
     transition: all .3s;
@@ -146,7 +140,7 @@
 }
 
 .leftContent .home:hover, .leftContent .warranty:hover, .rightContent .sizeTable:hover {
-    color: var(--font-color-hover);
+    color: var(--color-silver);
 }
 
 .centerContent {
@@ -187,18 +181,18 @@
 }
 
 #searchBtn:focus {
-    color: var(--font-color-primary);
+    color: var(--color-black);
 }
 
 .rightContent .icons {
     font-size: 22px;
     cursor: pointer;
     transition: all .3s;
-    color: var(--font-color-primary);
+    color: var(--color-black);
 }
 
 .rightContent .btnIcons:hover .icons {
-    color: var(--font-color-hover);
+    color: var(--color-silver);
 }
 
 .categoriesContainer {
@@ -216,13 +210,13 @@
 }
 
 .categoriesContainer .categoriesWrapper .categoryItem {
-    color: var(--font-color-primary);
+    color: var(--color-black);
     cursor: pointer;
     transition: all .3s;
 }
 
 .categoriesContainer .categoriesWrapper .categoryItem:hover {
-    color: var(--font-color-hover);
+    color: var(--color-silver);
 }
 
 /* responsive */
@@ -249,7 +243,7 @@
         position: absolute;
         left: 0;
         top: 0;
-        border: 1px solid var(--font-color-hover);
+        border: 1px solid var(--color-silver);
         width: 40%;
         height: 100vh;
         z-index: 2;
@@ -284,7 +278,7 @@
     .sidebarPopupResponsive .sidebarWrapper .sideBarItem {
         padding: 10px;
         font-size: 14px;
-        border-bottom: 1px solid var(--font-color-hover);
+        border-bottom: 1px solid var(--color-silver);
     }
 
     .sidebarPopupResponsive .sidebarWrapper .categoriesWrapper {
@@ -293,7 +287,7 @@
     .sidebarPopupResponsive .sidebarWrapper .categoriesWrapper .categoryItem {
         padding: 10px;
         font-size: 14px;
-        border-bottom: 1px solid var(--font-color-hover);
+        border-bottom: 1px solid var(--color-silver);
     }
 
     .headerWrapper {

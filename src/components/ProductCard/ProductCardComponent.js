@@ -1,9 +1,9 @@
 import React from "react";
-import './ProductCard.css'
+import './ProductCardComponent.css'
 
-const ProductCard = ({image, name, price, originPrice}) => {
+const ProductCardComponent = ({image, name, price, originPrice}) => {
     return (
-        <div className={'searchResultItem'}>
+        <div className={'productCardItem'}>
             <div className={'itemImage'}>
                 <img src={image} alt={''}/>
             </div>
@@ -18,4 +18,4 @@ const ProductCard = ({image, name, price, originPrice}) => {
     )
 }
 
-export default ProductCard
+export default ProductCardComponent

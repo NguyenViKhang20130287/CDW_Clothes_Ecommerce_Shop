@@ -1,17 +1,16 @@
 import React, {useState} from "react";
 // import {Link} from 'react-router-dom'
 import LOGO from '../../assets/img/logo.webp'
-import SHIRT_IMG from '../../assets/img/shirt1.webp'
 // icons
 import {IoCartOutline, IoSearchOutline, IoPersonOutline, IoCloseOutline} from "react-icons/io5";
 import {HiBars3BottomLeft} from "react-icons/hi2";
 // css
-import './Header.css'
+import './HeaderComponent.css'
 // components
-import ProductCard from "../ProductCard/ProductCard";
+import ProductCardComponent from "../ProductCard/ProductCardComponent";
 import {Link} from "react-router-dom";
 
-const Header = () => {
+const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
     const [sidebarToggleStatus, setSidebarToggleStatus] = useState(false)
 
@@ -45,23 +44,23 @@ const Header = () => {
                         </div>
                         <div className={'searchResult'}>
                             <div className={'searchResultList'}>
-                                {/*<ProductCard image={SHIRT_IMG}*/}
+                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
                                 {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
                                 {/*             price={'150.000'}*/}
                                 {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCard image={SHIRT_IMG}*/}
+                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
                                 {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
                                 {/*             price={'150.000'}*/}
                                 {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCard image={SHIRT_IMG}*/}
+                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
                                 {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
                                 {/*             price={'150.000'}*/}
                                 {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCard image={SHIRT_IMG}*/}
+                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
                                 {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
                                 {/*             price={'150.000'}*/}
                                 {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCard image={SHIRT_IMG}*/}
+                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
                                 {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
                                 {/*             price={'150.000'}*/}
                                 {/*             originPrice={'350.000'}/>*/}
@@ -190,4 +189,4 @@ const Header = () => {
     )
 }
 
-export default Header;
+export default HeaderComponent;
