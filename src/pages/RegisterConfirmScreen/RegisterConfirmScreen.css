@@ -1,0 +1,103 @@
+.registerConfirmContainer {
+}
+
+.registerConfirmContainer .registerConfirmWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox {
+    border: 2px solid var(--color-silver);
+    width: 400px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .title {
+    font-family: var(--font-family-monospace);
+    font-size: 25px;
+    color: var(--color-black);
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.registerConfirmConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .email,
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .username,
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .password {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-silver);
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .email input,
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .username input,
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .password input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 14px;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .password input::-ms-reveal,
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .password input::-ms-clear {
+    display: none;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .password .eye {
+    cursor: pointer;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background: none;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .registerConfirmBtn {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    background: var(--color-black);
+    font-weight: bold;
+    color: #ffffff;
+    padding: 5px 0;
+    border-radius: 6px;
+    transition: all .5s;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .formGroup .registerConfirmBtn:hover {
+    background: var(--color-silver-white);
+    color: var(--color-black);
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .otherOptions {
+    margin-top: 10px;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .loginOptionWrapper .login {
+    font-family: var(--font-family-sans-serif);
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--color-black);
+    transition: all .3s;
+    margin-top: 10px;
+    float: left;
+}
+
+.registerConfirmContainer .registerConfirmWrapper .registerConfirmBox .loginOptionWrapper .login:hover {
+    color: var(--color-silver);
+}
