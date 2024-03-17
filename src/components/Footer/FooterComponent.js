@@ -1,6 +1,6 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./Footer.css";
+import "./FooterComponent.css";
 import { IoMdSend } from "react-icons/io";
 import logo from "../../assets/img/logo.png";
 import certification from "../../assets/img/certification.webp";
@@ -9,7 +9,7 @@ import instagram from "../../assets/img/insta.png";
 import shopee from "../../assets/img/shopee.png";
 import lazada from "../../assets/img/lazada.jpg";
 import tiktok from "../../assets/img/tiktok.jpg";
-const Footer = () => {
+const FooterComponent = () => {
     return (
         <footer className="footer">
             <div className="container">
@@ -123,5 +123,5 @@ const Footer = () => {
         </footer>
     );
 }
-export default Footer;
+export default FooterComponent;
 

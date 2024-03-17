@@ -1,0 +1,46 @@
+.categoryContainer{
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.categoryContainer .title{
+    font-family: var(--font-family-sans-serif);
+    font-weight: 500;
+    font-size: 30px;
+}
+
+.categoryContainer .moreCard{
+    width: 22%;
+    height: 330px;
+    margin-top: 15px;
+    background: var(--color-silver-white);
+    color: var(--color-black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-family-sans-serif);
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 12px;
+    transition: all .3s;
+}
+
+.categoryContainer .moreCard:hover{
+    transform: scale(1.1);
+    color: var(--color-silver);
+}
+
+@media only screen and (max-width: 767px) {
+    .categoryContainer{
+        padding: 0;
+    }
+
+    .categoryContainer .title{
+        font-size: 20px;
+    }
+
+    .categoryContainer .moreCard{
+        width: 44%;
+        height: 300px;
+    }
+}

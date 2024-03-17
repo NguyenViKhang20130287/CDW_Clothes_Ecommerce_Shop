@@ -1,9 +1,14 @@
 import './App.css';
-import Header from "./components/Header/Header";
+import {Routes, Route} from 'react-router-dom'
+import HomeScreen from "./pages/HomeScreen/HomeScreen";
+import LoginScreen from "./pages/LoginScreen/LoginScreen";
 
 function App() {
     return (
-        <Header/>
+        <Routes>
+            <Route path={'/'} element={<HomeScreen/>}/>
+            <Route path={'/login'} element={<LoginScreen/>}/>
+        </Routes>
     );
 }
 
