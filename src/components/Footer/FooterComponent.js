@@ -1,22 +1,22 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "../components/Footer.css";
+import "./FooterComponent.css";
 import { IoMdSend } from "react-icons/io";
-import logo from "../assets/img/logo.png";
-import certification from "../assets/img/certification.webp";
-import fb from "../assets/img/fb.png";
-import instagram from "../assets/img/insta.png";
-import shopee from "../assets/img/shopee.png";
-import lazada from "../assets/img/lazada.jpg";
-import tiktok from "../assets/img/tiktok.jpg";
-const Footer = () => {
+import logo from "../../assets/img/logo.png";
+import certification from "../../assets/img/certification.webp";
+import fb from "../../assets/img/fb.png";
+import instagram from "../../assets/img/insta.png";
+import shopee from "../../assets/img/shopee.png";
+import lazada from "../../assets/img/lazada.jpg";
+import tiktok from "../../assets/img/tiktok.jpg";
+const FooterComponent = () => {
     return (
         <footer className="footer">
             <div className="container">
                 <div className="row">
                     <div className="col-lg-4 col-md-12 col-12 col-contact-footer">
                         <div className="logo-footer">
-                            <a href="/">
+                            <a href="/public">
                                 <img width="135" height="21" className="lazy loaded"
                                      src={logo}
                                          data-src={logo}
@@ -82,7 +82,7 @@ const Footer = () => {
                     <div className="col-xl-2 col-lg-3 col-md-6 col-12 footer-click one">
                         <h4>About Us</h4>
                         <ul className="footer-menu toggle-mn">
-                            <li><a href="/" title="Trang chủ" rel="nofollow">Trang chủ</a></li>
+                            <li><a href="/public" title="Trang chủ" rel="nofollow">Trang chủ</a></li>
 
                             <li><a href="/tat-ca-san-pham" title="Tất cả sản phẩm" rel="nofollow">Tất cả sản phẩm</a>
                             </li>
@@ -123,5 +123,5 @@ const Footer = () => {
         </footer>
     );
 }
-export default Footer;
+export default FooterComponent;
 

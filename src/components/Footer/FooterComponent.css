@@ -1,11 +1,4 @@
-
-footer {
-    display: flex;
-    justify-content: space-between;
-}
-
 .footer {
-    position: relative;
     background: #000;
     padding-top: 40px;
     color: #999999;
@@ -62,6 +55,7 @@ footer {
 .footer-mailchip {
     text-align: center;
 }
+
 .footer form input {
     height: 40px;
     min-height: 40px;
@@ -88,8 +82,12 @@ footer {
     border: none;
     height: 34px;
     width: 34px;
-    color:white;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .footer-mailchip .social-button {
     margin: 0 9px;
 }
@@ -98,10 +96,11 @@ footer {
     margin: 0 9px;
     max-width: 35px;
 }
+
 .footer-mailchip .social-button .lazada {
     margin: 0 9px;
     max-width: 35px;
-    border-radius: 10px!important;
+    border-radius: 10px !important;
 }
 
 .footer ul {

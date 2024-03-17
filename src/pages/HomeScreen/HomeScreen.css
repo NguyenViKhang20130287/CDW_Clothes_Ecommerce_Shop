@@ -1,0 +1,145 @@
+.homeContainer{
+    height: auto;
+}
+
+.homeWrapper {
+    width: 80%;
+    height: auto;
+    margin: auto;
+    padding: 10px;
+}
+
+.homeWrapper .sliderWrapper {
+    padding: 10px;
+    margin-bottom: 40px;
+    height: 600px;
+}
+
+.slick-dots{
+    bottom: 0;
+}
+
+.slick-dots li button:before{
+    font-size: 12px;
+}
+
+.homeWrapper .sliderWrapper.slider {
+    height: 600px;
+}
+
+.homeWrapper.sliderWrapper.slider img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.homeWrapper .descriptionWrapper{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.homeWrapper .descriptionWrapper .description{
+    font-family: var(--font-family-sans-serif);
+    text-align: center;
+    width: 60%;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.homeWrapper .descriptionWrapper .description .title{
+    font-size: 30px;
+    font-weight: 400;
+}
+
+.homeWrapper .categoriesWrapper{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 10px 0 10px 25px;
+}
+
+.homeWrapper .findOutMoreWrapper{
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-top: 1px solid #dadada;
+}
+
+.homeWrapper .findOutMoreWrapper .title{
+    font-family: var(--font-family-sans-serif);
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.homeWrapper .findOutMoreWrapper .images{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.homeWrapper .findOutMoreWrapper .images .imageWrapper{
+    width: 20%;
+    margin: 10px;
+    height: 228px;
+    transition: all .4s;
+}
+
+.homeWrapper .findOutMoreWrapper .images .imageWrapper:hover{
+    transform: scale(1.1);
+}
+
+.homeWrapper .findOutMoreWrapper .images .imageWrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media only screen and (max-width: 767px) {
+    .homeWrapper {
+        width: 100%;
+    }
+    .homeWrapper .sliderWrapper {
+        height: 200px;
+        overflow: hidden;
+        margin-top: 50px;
+    }
+
+    .homeWrapper .sliderWrapper .slider{
+        height: 200px;
+    }
+
+    .homeWrapper .sliderWrapper .slider img{
+        object-fit: cover;
+        height: 200px;
+    }
+
+    .homeWrapper .descriptionWrapper{
+        width: 100%;
+    }
+
+    .homeWrapper .descriptionWrapper .description{
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .homeWrapper .descriptionWrapper .description .title{
+        font-size: 20px;
+    }
+
+    .homeWrapper .categoriesWrapper{
+        padding: 0;
+    }
+
+    .homeWrapper .findOutMoreWrapper .title{
+        font-size: 20px;
+    }
+
+    .homeWrapper .findOutMoreWrapper .images .imageWrapper{
+        width: 44%;
+    }
+}

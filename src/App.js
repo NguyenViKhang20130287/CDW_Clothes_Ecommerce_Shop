@@ -1,13 +1,15 @@
 import './App.css';
+import {Routes, Route} from 'react-router-dom'
+import HomeScreen from "./pages/HomeScreen/HomeScreen";
+import LoginScreen from "./pages/LoginScreen/LoginScreen";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <div><p>appp</p></div>
-      </header>
-    </div>
-  );
+    return (
+        <Routes>
+            <Route path={'/'} element={<HomeScreen/>}/>
+            <Route path={'/login'} element={<LoginScreen/>}/>
+        </Routes>
+    );
 }
 
 export default App;
