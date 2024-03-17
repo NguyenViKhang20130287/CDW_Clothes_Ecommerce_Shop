@@ -1,11 +1,4 @@
-
-footer {
-    display: flex;
-    justify-content: space-between;
-}
-
 .footer {
-    position: relative;
     background: #000;
     padding-top: 40px;
     color: #999999;

@@ -1,7 +1,6 @@
 .categoryContainer{
     padding: 10px;
     margin-bottom: 10px;
-    border-bottom: 1px solid #dadada;
 }
 
 .categoryContainer .title{
@@ -29,4 +28,19 @@
 .categoryContainer .moreCard:hover{
     transform: scale(1.1);
     color: var(--color-silver);
+}
+
+@media only screen and (max-width: 767px) {
+    .categoryContainer{
+        padding: 0;
+    }
+
+    .categoryContainer .title{
+        font-size: 20px;
+    }
+
+    .categoryContainer .moreCard{
+        width: 44%;
+        height: 300px;
+    }
 }
