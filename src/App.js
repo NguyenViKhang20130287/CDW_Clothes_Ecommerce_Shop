@@ -7,6 +7,7 @@ import RegisterConfirmScreen from './pages/RegisterConfirmScreen/RegisterConfirm
 import ForgotPasswordScreen from "./pages/ForgotPassword/ForgotPasswordScreen";
 import ForgotPasswordConfirm from "./pages/ForgotPasswordConfirm/ForgotPasswordConfirm";
 import ProductDetailScreen from "./pages/ProductDetailScreen/ProductDetailScreen";
+import ExchangeScreen from "./pages/ExchangeScreen/ExchangeScreen";
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
             <Route path={'/register-confirm'} element={<RegisterConfirmScreen/>}/>
             <Route path={'/forgot-password'} element={<ForgotPasswordScreen/>}/>
             <Route path={'/forgot-password-confirm'} element={<ForgotPasswordConfirm/>}/>
+            <Route path={'/exchange'} element={<ExchangeScreen/>}/>
         </Routes>
     );
 }

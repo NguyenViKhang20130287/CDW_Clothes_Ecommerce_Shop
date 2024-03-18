@@ -29,7 +29,7 @@ const ProductCard2Component = () => {
                     </div>
                     <div className="product-info">
                         <h3 className="product-name"><a
-                            href="/"
+                            href="/public"
                             title="Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228">
                             Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228</a></h3>
                         <div className="bottom-action">
