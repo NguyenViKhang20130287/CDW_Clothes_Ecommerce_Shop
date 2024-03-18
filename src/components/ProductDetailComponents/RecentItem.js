@@ -1,7 +1,7 @@
 import React from "react";
 import {Swiper, SwiperSlide} from "swiper/react";
-import ProductCard2Component from "../ProductCard/ProductCard2Component";
 import {Navigation} from "swiper/modules";
+import ProductCard2Component from "./ProductCard2Component";
 const RecentItem = () => {
     return (
         <div>
