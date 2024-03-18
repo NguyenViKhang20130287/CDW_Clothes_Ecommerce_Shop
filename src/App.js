@@ -6,12 +6,14 @@ import RegisterScreen from './pages/RegisterScreen/RegisterScreen'
 import RegisterConfirmScreen from './pages/RegisterConfirmScreen/RegisterConfirmScreen'
 import ForgotPasswordScreen from "./pages/ForgotPassword/ForgotPasswordScreen";
 import ForgotPasswordConfirm from "./pages/ForgotPasswordConfirm/ForgotPasswordConfirm";
+import ProductDetailScreen from "./pages/ProductDetailScreen/ProductDetailScreen";
 
 function App() {
     return (
         <Routes>
             <Route path={'/'} element={<HomeScreen/>}/>
             <Route path={'/login'} element={<LoginScreen/>}/>
+            <Route path={'/detail'} element={<ProductDetailScreen/>}/>
             <Route path={'/register'} element={<RegisterScreen/>}/>
             <Route path={'/register-confirm'} element={<RegisterConfirmScreen/>}/>
             <Route path={'/forgot-password'} element={<ForgotPasswordScreen/>}/>

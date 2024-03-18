@@ -1,0 +1,158 @@
+
+div#sapo-product-reviews {
+    margin-top: 15px;
+}
+
+#sapo-product-reviews {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+    background: #fff;
+    box-sizing: border-box;
+    color: #212b35;
+}
+
+.sapo-product-reviews-summary, #sapo-product-reviews-noitem {
+    background-color: rgba(208, 1, 27, 0.1);
+}
+
+#sapo-product-reviews-noitem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #c4cdd5;
+    box-sizing: border-box;
+    min-height: 130px;
+}
+#sapo-product-reviews-noitem .content {
+    text-align: center;
+    padding: 25px 0;
+}
+#sapo-product-reviews-noitem .content p {
+    color: #212b35;
+    margin: 0 0 20px;
+}
+
+.sapo-product-reviews-summary, #sapo-product-reviews-noitem {
+    background-color: rgba(208, 1, 27, 0.1);
+}
+
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+}
+
+.btn-new-review {
+    background-color: #d0011b;
+    border-color: #d0011b;
+}
+
+.btn-new-review {
+    border: 1px solid #d0011b;
+    background:#d0011b;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #fff;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 17px;
+    min-width: 180px;
+}
+
+@media (min-width: 350px) and (max-width: 575px) {
+    .centered-form {
+        width: 350px!important;
+    }
+}
+
+
+
+.centered-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 700px;
+    /*height: 100;*/
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.title-form {
+    font-size: 18px;
+    line-height: 21px;
+    margin: 0 0 10px;
+}
+
+.product-name {
+    font-size: 18px;
+    line-height: 21px;
+    margin: 0 0 22px;
+    text-align: center;
+    color: #212b35;
+}
+
+.stars {
+    margin-top: -15px;
+}
+
+.centered-form {
+    /*position: relative;*/
+    /* rest of the styles */
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #d0011b;
+}
+
+.centered-form .name{
+    margin-top: 10px;
+}
+.centered-form input {
+    margin-bottom: 10px;
+    padding-left: 20px;
+    height: 40px;
+    border-radius: 10px;
+    border: #646464 solid 1px;
+}
+@media (min-width: 576px) {
+    .centered-form {
+        height: 450px;
+    }
+    .phone {
+        margin-left: 20px;
+        width: 45%;
+    }
+}
+
+.content {
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.file {
+    padding-top: 5px;
+}
+
+.send-review {
+    margin-top: 5px;
+    background-color: #d0011b;
+    border-color: #d0011b;
+    box-sizing: border-box;
+    border-radius: 3px;
+    font-size: 14px;
+    color: #fff;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 17px;
+}

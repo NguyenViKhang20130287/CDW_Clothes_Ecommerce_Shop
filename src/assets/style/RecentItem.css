@@ -1,0 +1,202 @@
+.section-recent-view-product {
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+.block-title {
+    text-align: center;
+    font-family: "Futura", sans-serif;
+}
+
+.block-title h2 {
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    color: #000;
+    position: relative;
+}
+
+.block-title h2:before {
+    content: '';
+     background: #000000;
+    bottom: 0;
+    left: 50%;
+    height: 1px;
+    width: 460px;
+    transform: translateX(-50%);
+    max-width: 70%;
+}
+
+.item_product_main {
+    position: relative;
+    padding: 0px;
+}
+
+.item_product_main form {
+    margin-bottom: 0;
+}
+
+.item_product_main .product-thumbnail {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+
+.item_product_main .product-info {
+    margin: 0px;
+    position: relative;
+    text-align: center;
+}
+
+.item_product_main .product-thumbnail.sale:before {
+    content: attr(data-sale);
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 3;
+    text-align: center;
+    color: #fff;
+    background: #d52220;
+    font-weight: 500;
+    font-size: 12px;
+    width: 46px;
+    height: 18px;
+}
+
+.item_product_main .image_thumb {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.item_product_main .image_thumb .product-image {
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    padding-bottom: 100%;
+}
+
+.item_product_main .image_thumb img.loaded {
+    min-height: unset;
+    width: auto !important;
+    height: unset !important;
+}
+
+.item_product_main .image_thumb img {
+    width: auto !important;
+    max-height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    -webkit-transition: opacity 800ms ease;
+    -moz-transition: opacity 800ms ease;
+    -o-transition: opacity 800ms ease;
+    transition: opacity 800ms ease;
+}
+.item_product_main .image_thumb .product-image.second-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 2;
+}
+
+.item_product_main .product-info .product-name {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0 0 10px;
+    height: 45px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.product-name a {
+    font-family: "Futura", sans-serif;
+    color: #000000;
+    text-decoration-line: none;
+
+}
+
+.item_product_main .product-info .bottom-action {
+    position: relative;
+}
+
+@media (max-width: 1199px)
+.item_product_main .product-info .price-box {
+    font-size: 14px;
+    padding-right: 0;
+}
+
+.item_product_main .product-info .price-box {
+    color: #d52220;
+    line-height: 1.3;
+    display: block;
+    font-size: 16px;
+    margin-right: 10px;
+    margin-bottom: 0;
+    padding-right: 0px;
+    height: 37px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+    -webkit-transition: all 0.15s;
+    transition: all 0.15s;
+}
+
+.item_product_main .product-info .price-box .price {
+    margin-right: 10px;
+}
+
+.item_product_main .product-info .price-box .compare-price {
+    text-decoration: line-through;
+    color: #9e9e9e;
+    font-weight: 300;
+    display: inline;
+}
+
+
+.item_product_main .product-thumbnail .product-image.second-image {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.item_product_main .product-thumbnail:hover .product-image.second-image {
+    opacity: 1;
+}
+
+.item_product_main .product-thumbnail:hover .product-image:first-child {
+    opacity: 0;
+}
+
+.item_product_main .product-thumbnail .product-image:first-child {
+    transition: opacity 0.5s ease-in-out;
+}
+/*@media (min-width: 1200px)*/
+/*.recent-viewed .swiper-button-prev,.recent-viewed .swiper-button-next {*/
+/*    top: 150px;*/
+/*    font-size: 30px;*/
+/*}*/
+
+@media (min-width: 240px) and (max-width: 575px) {
+    .item_product_main .product-thumbnail.sale:before {
+        top: 5px;
+        left: 5px;
+        font-size: 10px;
+        width: 30px;
+        height: 12px;
+    }
+    .block-title h2 {
+        font-size: 25px;
+    }
+}
