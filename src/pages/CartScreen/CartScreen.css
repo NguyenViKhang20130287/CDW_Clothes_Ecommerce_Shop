@@ -1,0 +1,224 @@
+.container {
+    margin-bottom: 40px;
+    font-family: "Futura", sans-serif;
+}
+
+.header-cart {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.header-cart h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.column-title h3 {
+    font-size: 17px;
+    font-weight: bold;
+    padding-top: 10px;
+    padding-bottom: -5px;
+}
+
+
+.cart-container .quantity-title {
+    padding-left: 35px;
+}
+
+
+.cart-container .product-value p, .product-value h4 {
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+}
+
+
+.cart-container .column-title {
+    border: solid 1px #ebebeb;
+}
+
+.cart-container .value-container {
+    border: solid 1px #ebebeb;
+}
+
+.cart-container .cart-item {
+    border-bottom: solid 1px #ebebeb;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.cart-container .main-image img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+    border-style: none;
+    height: auto;
+}
+
+.cart-container .color-size {
+    padding-top: 30px;
+}
+
+
+.cart-container .price, .cart-container .quantity, .cart-container .delete-btn {
+    padding-top: 65px;
+}
+
+.cart-container .price h4 {
+    font-weight: 800;
+    color: #d0011b;
+    font-size: 17px;
+}
+.cart-container .price-container p {
+    font-size: 17px;
+    font-weight: 800;
+    text-decoration-line: line-through;
+    text-decoration-color: #d0011b;
+    text-decoration-thickness: 2px;
+}
+
+.cart-container .increase-btn button, .decrease-btn button {
+    border: solid 1px #ebebeb;
+    color: #d0011b;
+    font-size: 20px;
+    font-weight: bold;
+    width: 40px;
+    margin-top: -7px;
+    cursor: pointer;;
+}
+
+.cart-container .increase-btn {
+    padding-right: 50px;
+}
+
+.cart-container .delete-btn {
+    padding-top: 55px;
+
+}
+
+.cart-container .delete-btn button {
+    border: none;
+    color: red;
+    width: 60px;
+    height: 35px;
+    background: #FFFFFF;
+    font-size: 25px;
+}
+
+.total-container {
+    margin-top: 30px;
+}
+
+.total-container .cart__subtotal {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: flex;
+}
+
+.total-container .total-title {
+    float: left;
+    width: 50%;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.total-container .total-price {
+    float: right;
+    font-weight: 800;
+    font-size: 20px;
+    padding-left: 100px;
+    color: #d0011b;
+}
+
+.total-container .checkout {
+    display: block;
+    position: relative;
+    padding-top: 0;
+}
+
+.total-container .btn-checkout {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    line-height: 40px;
+    border: initial;
+    font-size: 20px;
+}
+@media (max-width: 576px) {
+    .cart-container .main-image img {
+        padding-top: 20px;
+    }
+    .cart-container .color-size {
+        padding-top: 2px;
+    }
+    .cart-container .increase-btn button, .decrease-btn button {
+        font-size: 18px;
+
+        width: 30px;
+    }
+    .cart-container .quantity-index {
+        padding: 0 7px;
+    }
+    .cart-container .delete-btn button {
+        width:0px;
+    }
+    .cart-container .price h4 {
+        font-size: 15px;
+    }
+    .cart-container .price-container p {
+        font-size: 15px;
+    }
+    .cart-container .quantity-title {
+        padding-left: 25px;
+    }
+    .total-container {
+        width: 100%;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    .cart-container .main-image img {
+        padding-top: 20px;
+    }
+    .cart-container .color-size {
+        padding-top: 2px;
+    }
+    .cart-container .increase-btn button, .decrease-btn button {
+        font-size: 18px;
+
+        width: 30px;
+    }
+    .cart-container .quantity-index {
+        padding: 0 7px;
+    }
+    .cart-container .delete-btn button {
+        width:0px;
+    }
+    .quantity {
+        padding-left: 37px;
+    }
+    .total-container {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+    .cart-container .quantity-title {
+        padding-left: 15px !important;
+    }
+    .cart-container .quantity-index {
+        padding: 0 10px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+    .cart-container .quantity-index {
+        padding: 0 10px;
+    }
+    .cart-container .quantity-title {
+        padding-left: 25px;
+    }
+}
