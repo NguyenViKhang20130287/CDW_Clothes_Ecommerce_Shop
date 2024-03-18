@@ -1,0 +1,103 @@
+.formEmailContainer {
+}
+
+.formEmailContainer .forgotPasswordWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox {
+    border: 2px solid var(--color-silver);
+    width: 400px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .title {
+    font-family: var(--font-family-monospace);
+    font-size: 25px;
+    color: var(--color-black);
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .email,
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .username,
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .password {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-silver);
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .email input,
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .username input,
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .password input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 14px;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .password input::-ms-reveal,
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .password input::-ms-clear {
+    display: none;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .password .eye {
+    cursor: pointer;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background: none;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .forgotPasswordBtn {
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    background: var(--color-black);
+    font-weight: bold;
+    color: #ffffff;
+    padding: 5px 0;
+    border-radius: 6px;
+    transition: all .5s;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .formGroup .forgotPasswordBtn:hover {
+    background: var(--color-silver-white);
+    color: var(--color-black);
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .otherOptions {
+    margin-top: 10px;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .loginOptionWrapper .login {
+    font-family: var(--font-family-sans-serif);
+    font-size: 16px;
+    text-decoration: none;
+    color: var(--color-black);
+    transition: all .3s;
+    margin-top: 10px;
+    float: left;
+}
+
+.formEmailContainer .forgotPasswordWrapper .forgotPasswordBox .loginOptionWrapper .login:hover {
+    color: var(--color-silver);
+}
