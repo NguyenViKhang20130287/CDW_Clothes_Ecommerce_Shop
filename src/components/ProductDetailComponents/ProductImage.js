@@ -1,5 +1,5 @@
-import React, {useEffect, useLayoutEffect, useRef, useState} from "react";
-import SwiperCore, {Navigation} from 'swiper/modules';
+import React, {useEffect, useRef, useState} from "react";
+import {Navigation} from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/bundle';

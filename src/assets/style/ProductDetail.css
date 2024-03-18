@@ -1,5 +1,13 @@
+
 .product-image-detail {
     position: relative;
+}
+
+
+@media (max-width: 767px) {
+    body {
+        font-size: 14px;
+    }
 }
 
 .swiper-container {
@@ -107,10 +115,6 @@
     .mini-swiper {
         width: 80%;
         /*margin-right: 12px;*/
-    }
-
-    .big-swiper .swiper-button-next {
-        right: 80px;
     }
 }
 
@@ -293,6 +297,9 @@ input[type="checkbox"], input[type="radio"] {
     font-size: 14px;
     padding: 0 5px;
     cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: 500;
 }
 
 .clearfix::after {
@@ -317,6 +324,10 @@ input[type="checkbox"], input[type="radio"] {
     position: relative;
     color: #FFF;
     z-index: 9;
+}
+
+.swatch .clearfix {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .details-pro .form-product .swatch:not(.swatch-color) input:checked + label:before {
@@ -345,6 +356,8 @@ a.product-banchay {
     color: #d61c1f;
     margin-bottom: 3px;
     font-size: 14px;
+    text-decoration-line: none;
+    cursor: pointer;
 }
 
 .product-banchay img {
@@ -512,10 +525,13 @@ ul.tabs li {
     height: 0;
     overflow: hidden;
 }
+
 .product-tab .tab-content.current .rte {
     padding: 15px 0;
 }
 
-
+.product-tab .tab-content .rte {
+    font-size: 14px;
+}
 
 
