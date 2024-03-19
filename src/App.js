@@ -6,6 +6,7 @@ import RegisterScreen from './pages/RegisterScreen/RegisterScreen'
 import RegisterConfirmScreen from './pages/RegisterConfirmScreen/RegisterConfirmScreen'
 import ForgotPasswordScreen from "./pages/ForgotPassword/ForgotPasswordScreen";
 import ForgotPasswordConfirm from "./pages/ForgotPasswordConfirm/ForgotPasswordConfirm";
+import CollectionScreen from "./pages/Collections/CollectionScreen";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
             <Route path={'/register-confirm'} element={<RegisterConfirmScreen/>}/>
             <Route path={'/forgot-password'} element={<ForgotPasswordScreen/>}/>
             <Route path={'/forgot-password-confirm'} element={<ForgotPasswordConfirm/>}/>
+            <Route path={'/categories'} element={<CollectionScreen/>}/>
         </Routes>
     );
 }
