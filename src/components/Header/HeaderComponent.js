@@ -125,15 +125,21 @@ const HeaderComponent = () => {
                     </div>
                     <div className={'leftContent'}>
                         <Link to={'/'} className={'home'}>TRANG CHỦ</Link>
-                        <span className={'warranty'}>ĐỔI TRẢ</span>
+                        <span className={'warranty'}>
+                            <Link to={'/exchange'}>ĐỔI TRẢ</Link>
+                        </span>
                     </div>
                     <div className={'centerContent'}>
                         <div className={'imageLogoWrapper'}>
-                            <img src={LOGO} alt={''}/>
+                            <Link to={'/'}>
+                                <img src={LOGO} alt={'logo'}/>
+                            </Link>
                         </div>
                     </div>
                     <div className={'rightContent'}>
-                        <span className={'sizeTable'}>BẢNG SIZE</span>
+                        <span className={'sizeTable'}>
+                            <Link to={'/size-selector'}>BẢNG SIZE</Link>
+                        </span>
                         <div className={'groupBtn'}>
                             <button className={'btnIcons'} id={'searchBtn'} type={"button"}
                                     onClick={e => handleShowHideSearch(e)}>

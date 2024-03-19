@@ -1,0 +1,17 @@
+
+.page {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-family: Tahoma, Geneva, sans-serif;
+    font-size: 14px
+}
+.title-head {
+    font-size: 40px;
+    color: #333;
+    text-decoration: none;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+}
