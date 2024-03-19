@@ -65,6 +65,7 @@ const HomeScreen = () => {
                 {/**/}
                 <CategoryComponent
                     className={'categoriesWrapper'}
+                    isHome={true}
                     categoryName={'Áo thun'}
                     image={SHIRT_IMG}
                     name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}

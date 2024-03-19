@@ -1,0 +1,62 @@
+.collectionScreenContainer {
+}
+
+.collectionScreenContainer .collectionScreenWrapper {
+    display: flex;
+    padding: 10px;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper {
+    width: 20%;
+    padding: 10px;
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .title{
+    font-family: var(--font-family-monospace);
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .collectionWrapper,
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .sortWrapper,
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .colorWrapper{
+    padding:  10px;
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .sortWrapper .sortItem{
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-family: var(--font-family-sans-serif);
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .sortWrapper .sortItem input{
+    margin-right: 10px;
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .colorWrapper{
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
+}
+
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .colorItem{
+    display: flex;
+    align-items: center;
+    width: 30%;
+    margin: 5px 0;
+
+}
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .colorItem input{}
+.collectionScreenContainer .collectionScreenWrapper .optionShowWrapper .colorItem label{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+.collectionScreenContainer .collectionScreenWrapper .productShowWrapper{
+    width: 80%;
+}
