@@ -1,0 +1,324 @@
+.order-wrap {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: row;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 14px;
+    margin: 0 auto;
+}
+
+.order-main {
+    width: 68%
+}
+
+.order-aside {
+    width: 32%;
+    color: #717171;
+    position: relative;
+}
+
+.order-aside .sidebar-header, order-aside .sidebar-content {
+    padding-left: 2em;
+}
+
+.order-aside .sidebar-header {
+    border-bottom: 1px solid #e1e1e1;
+    padding-top: 20px;
+    padding-bottom: 20px
+
+}
+
+
+
+.order-aside .sidebar-header .sidebar-title {
+    color: #333;
+    font-weight: 600;
+    font-size: 1.15rem;
+}
+
+.order-aside .sidebar-content {
+    padding-left: 2em;
+}
+
+
+.order-summary-sections {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-summary-section {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.order-summary-section table, .order-summary-section .total-line-table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 1em;
+    width: 100%;
+    margin: 0;
+}
+
+.order-summary-section .product-table tbody th {
+    padding-left: 1em;
+    font-weight: 500;
+    color: #333;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.order-summary-section .product-table .visually-hidden{
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    width: 2px;
+    height: 2px;
+    margin: -2px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+}
+
+.order-summary-section {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+.order-summary-section .product-table td:first-child, .order-summary-section .product-table th:first-child, .total-line td:first-child, .total-line th:first-child {
+    padding-left: 0;
+    text-align: left;
+}
+
+.order-summary-section .product-table td:last-child, .order-summary-section .product-table th:last-child, .total-line td:last-child, .total-line th:last-child {
+    text-align: right;
+}
+.order-summary-section .product-table td, .order-summary-section .product-table th, .total-line td, .total-line th {
+    font-weight: normal;
+}
+
+.order-summary-section .product-table .order-product-image {
+    padding-top: 1em;
+}
+.order-summary-section~.order-summary-section {
+    border-top: 1px solid rgba(175, 175, 175, .34);
+}
+
+.order-product-image .order-product-thumbnail {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    background: #fff;
+    position: relative;
+}
+.order-product-image .order-product-thumbnail .product-thumbnail-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+.order-product-image .order-product-thumbnail .product-thumbnail-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+    overflow-clip-margin: content-box;
+    overflow: clip;
+}
+
+.order-product-image .order-product-thumbnail .product-thumbnail-quantity {
+    color: #FFFFFF;
+    background-color: #000000;
+    font-size: .78em;
+    white-space: nowrap;
+    padding: 0 .62em;
+    border-radius: 2em;
+    position: absolute;
+    right: -.9em;
+    top: -.55em;
+    z-index: 3;
+    box-sizing: border-box;
+    min-width: 1.75em;
+    height: 1.75em;
+    text-align: center;
+    line-height: 1.75em;
+}
+
+.product-table .order-product-description {
+    text-align: left;
+    width: 100%;
+}
+
+.product-table  .product-description-name, .product-table .product-description-property {
+    display: block;
+}
+.product-table .product-description-property {
+    font-size: .85em;
+    color: #969696;
+}
+
+
+.total-line th, .total-line td {
+    padding-top: .75em;
+}
+
+.total-line .total-line-price {
+    padding-left: 1.5em;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.total-line table tfoot {
+    display: table-footer-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+.total-line-table-tbody+.total-line-table-footer .total-line:first-child th, .total-line-table-tbody+.total-line-table-footer .total-line:first-child td {
+    padding-top: 2em;
+    position: relative;
+}
+
+.order-aside .total-line-table-tbody+.total-line-table-footer .total-line:first-child th:before, .order-aside .total-line-table-tbody+.total-line-table-footer .total-line:first-child td:before {
+    background-color: rgba(175, 175, 175, .34);
+    content: '';
+    position: absolute;
+    top: 1em;
+    left: 0;
+    width: 100%;
+    height: 1px;
+}
+
+.total-line .total-line-name .payment-due-label-total {
+    font-size: 1.2em;
+}
+.total-line .total-line-price .payment-due-price {
+    font-size: 1.5em;
+    font-weight: 500;
+    letter-spacing: -.04em;
+    line-height: 1em;
+    color: #000000!important;
+}
+
+
+.order-summary-nav {
+    margin-bottom: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+
+.order-summary-nav .spinner {
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    cursor: pointer;
+    background-clip: border-box;
+    box-sizing: border-box;
+    border: 1px transparent solid;
+    border-radius: 5px;
+    font-weight: 500;
+    padding: .98em 1.7em;
+    text-align: center;
+    position: relative;
+
+}
+
+.order-summary-nav .previous-link-arrow {
+    display: inline-block;
+    vertical-align: middle;
+    font-style: normal;
+    transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+    text-decoration: none;
+    cursor: pointer;
+    color: #000000;
+    padding-right: 8px;
+}
+
+.order-summary-nav .previous-link-content {
+    vertical-align: middle;
+    color: #000000;
+    cursor: pointer;
+
+}
+
+.edit-checkout .fieldset {
+    margin: -.4em;
+}
+
+.edit-checkout .fieldset .field {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding: .4em;
+}
+
+.edit-checkout .field-input-btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+.edit-checkout .field-input-btn-wrapper .field-input-wrapper {
+    position: relative;
+    flex-grow: 1;
+}
+.edit-checkout .fieldset .field .btn {
+    color: #FFFFFF;
+    background-color: #000000;
+    border-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    margin-left: .85714em;
+    white-space: nowrap;
+    opacity: .6;
+}
+.edit-checkout .fieldset .field .field-label {
+    transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    margin-top: .4em;
+    margin-left: 1px;
+    padding: 0 .8em;
+    color: #999;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    font-size: 1em;
+    transform: translateY(6px);
+    text-align: left;
+    display: block;
+}
+.edit-checkout .fieldset .field .field-input {
+    border-radius: 4px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: .94em .8em;
+    border: 1px #d9d9d9 solid;
+    height: 44px;
+    background-color: #fff;
+    color: #333;
+    font: inherit;
+    margin: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -webkit-font-smoothing: inherit;
+    line-height: normal;
+}
