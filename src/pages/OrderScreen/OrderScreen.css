@@ -22,10 +22,410 @@
     float: left;
     box-sizing: border-box;
 }
+
 .order-main .col-two {
     width: 50%;
 }
 
+.order-main .section:first-child {
+    padding-top: 2em;
+}
+
+.order-main .section {
+    padding-top: 2em;
+}
+
+.order-main .section-header {
+    margin-bottom: 12px;
+}
+
+.section-header .layout-flex {
+    display: flex;
+    align-items: baseline;
+}
+
+.section-header .section-title {
+    color: #333;
+    font-weight: 600;
+    font-size: 1.15rem;
+    flex: 1 1 auto;
+}
+
+.section-content .field {
+    padding: .4em;
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-content .field .field-input-wrapper {
+    position: relative;
+}
+
+.section-content .field--show-floating-label .field-label {
+    transform: none;
+    font-size: .84em;
+    padding-left: .9em;
+}
+
+.section-content .field-label {
+    text-align: left;
+    margin: .5em 0;
+    display: block;
+}
+
+.section-content .field .field-label {
+    transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    margin-top: .7em;
+    margin-left: 1px;
+    padding: 0 .8em;
+    color: #999;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+}
+
+.section-content .field-input-select {
+    white-space: nowrap;
+}
+
+.section-content .field--show-floating-label .field-input {
+    padding-left: .5em;
+    padding-right: 2em;
+    padding-top: 1.5em;
+    padding-bottom: .35em;
+}
+
+.section-content .field--show-floating-label .field-label {
+    transform: none;
+    font-size: .84em;
+    padding-left: .9em;
+}
+
+.section-content .field-caret {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    pointer-events: none;
+    width: 2em;
+    height: 43%;
+    border-left: 1px rgba(179, 179, 179, .5) solid;
+}
+
+.section-content .field-caret .fa {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    display: inline-block;
+    font: normal normal normal 14px / 1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.section-content .field-input {
+    border-radius: 4px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: .94em .8em;
+    border: 1px #d9d9d9 solid;
+    height: 44px;
+    background-color: #fff;
+    color: #333;
+    font: inherit;
+    margin-left: 3px;
+}
+
+.order-main .order-note {
+    margin-left: .2em;
+}
+
+.order-note .field {
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    padding: .4em;
+}
+
+.order-note .field-input-wrapper {
+    position: relative;
+}
+
+.order-note .field--show-floating-label .field-label {
+    transform: none;
+    font-size: .84em;
+    padding-left: .9em;
+}
+
+.order-note .field-label {
+    transition: all .2s ease-out;
+    -webkit-transition: all .2s ease-out;
+}
+
+.order-note .field-label {
+    text-align: left;
+    margin: .5em 0;
+    display: block;
+}
+
+.order-note .field-label {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    margin-top: .4em;
+    margin-left: 1px;
+    padding: 0 .8em;
+    color: #999;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    font-size: 1em;
+    transform: translateY(6px);
+}
+
+.order-note textarea.field-input {
+    height: auto;
+    resize: vertical;
+}
+
+.order-note .field-input {
+    border-radius: 4px;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    padding: .94em .8em;
+    border: 1px #d9d9d9 solid;
+    height: 44px;
+    background-color: #fff;
+    color: #333;
+}
+.two {
+    padding-right: 30px!important;
+}
+
+.two .section-content::after, .section-content::before {
+    content: "";
+    display: table;
+}
+
+.two .alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.two .hide {
+    display: none !important;
+}
+
+.two .alert {
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+
+.two .content-box {
+    border: 1px solid #cecdcd;
+    background: #fff;
+    background-clip: padding-box;
+    border-radius: 5px;
+    color: #545454;
+}
+
+.two .content-box-row {
+    display: table;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    padding: 1em;
+}
+
+.two .content-box-row:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.radio-wrapper:after, .radio-wrapper:before {
+    content: "";
+    display: table;
+}
+
+.two .radio-wrapper {
+    display: table;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.two .radio-wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.two .radio-input {
+    display: table-cell;
+    white-space: nowrap;
+    padding-right: .75em;
+}
+
+.two .radio-label {
+    cursor: pointer;
+    vertical-align: middle;
+    display: table-cell;
+    width: 100%;
+}
+
+.input-radio{
+    border-radius: 50%;
+}
+
+.two .input-radio {
+    border-color: #d9d9d9;
+    background-color: #fff;
+    width: 18px;
+    height: 18px;
+    transition: all .2s ease-in-out;
+    position: relative;
+    cursor: pointer;
+    vertical-align: -4px;
+}
+.two .input[type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.two .input-radio:checked {
+    box-shadow: 0 0 0 10px #000000 inset;
+    -webkit-box-shadow: 0 0 0 10px #000000 inset;
+    border: none;
+
+}
+
+
+.two .input-radio:checked:after {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.two .input-radio:after {
+    width: 4px;
+    height: 4px;
+    margin-left: -2px;
+    margin-top: -2px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+.two .input-radio::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: scale(0.2);
+    opacity: 0;
+    transition: all 0.2s ease-in-out 0.1s;
+    border-radius: 50%;
+}
+
+.two .radio-label {
+    cursor: pointer;
+    vertical-align: middle;
+    display: table-cell;
+    width: 100%;
+}
+
+.two .radio-label .radio-label-primary {
+    cursor: inherit;
+    font-family: inherit;
+    vertical-align: top;
+    display: table-cell;
+    width: 100%;
+}
+
+.two .radio-label .radio-label-accessory {
+    text-align: right;
+    padding-left: .75em;
+    white-space: nowrap;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.two .radio-label .radio-label-accessory .content-box-emphasis {
+    font-weight: 500;
+    color: #333;
+}
+
+.two .radio-label-icon {
+    color: #000000;
+    font-size: 1.5em;
+    height: 100%;
+    display: inline-block;
+}
+
+.two .radio-label-icon .payment-icon {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    width: 52px;
+    height: 28px;
+    transition: opacity .5s cubic-bezier(.3,0,0,1);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    font: normal normal normal 14px / 1 FontAwesome;
+    font-size: inherit;
+    transform: translate(0,0);
+}
+
+.two .radio-label-primary {
+    cursor: inherit;
+    font-family: inherit;
+    vertical-align: top;
+    display: table-cell;
+    width: 100%;
+}
+
+.two .radio-label-accessory {
+    text-align: right;
+    padding-left: .75em;
+    white-space: nowrap;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.two .content-box-row:last-child .content-box-row-desc {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom-width: 1px;
+}
+
+.two .content-box-row-desc {
+     background-color: #f8f8f8;
+    padding: 1.14em;
+    margin: 1.14em -1.14em -1.14em -1.14em;
+    border-color: rgba(175, 175, 175, .34);
+    border-style: solid;
+    border-width: 0 1px;
+}
 .order-aside {
     width: 32%;
     color: #3a3a3a;

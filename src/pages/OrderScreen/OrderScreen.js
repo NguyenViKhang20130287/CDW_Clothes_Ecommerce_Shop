@@ -1,11 +1,59 @@
-import React from "react";
+import React, {useState} from "react";
 import HeaderComponent from "../../components/Header/HeaderComponent";
 import FooterComponent from "../../components/Footer/FooterComponent";
 import "./OrderScreen.css";
 import img from "../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp";
 import {Link} from "react-router-dom";
+import {MdOutlinePayment} from "react-icons/md";
 
 const OrderScreen = () => {
+    const [focusedField, setFocusedField] = useState('');
+    const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
+    const [note, setNote] = useState('');
+    const [province, setProvince] = useState('');
+    const [district, setDistrict] = useState('');
+    const [ward, setWard] = useState('');
+    const [isPaymentMethodSelected, setIsPaymentMethodSelected] = useState(false);
+
+    const handlePaymentMethodClick = () => {
+        setIsPaymentMethodSelected(!isPaymentMethodSelected);
+    };
+
+    const handleFocus = (event) => {
+        setFocusedField(event.target.name);
+    };
+
+    const handleBlur = (event) => {
+        if (event.target.value === '') {
+            setFocusedField('');
+        }
+    };
+
+    const handleChange = (event) => {
+        if (event.target.name === 'billingName') {
+            setName(event.target.value);
+        }
+        if (event.target.name === 'billingPhone') {
+            setPhone(event.target.value);
+        }
+        if (event.target.name === 'billingAddress') {
+            setAddress(event.target.value);
+        }
+        if (event.target.name === 'note') {
+            setNote(event.target.value);
+        }
+        if (event.target.name === 'billingProvince') {
+            setProvince(event.target.value);
+        }
+        if (event.target.name === 'billingDistrict') {
+            setDistrict(event.target.value);
+        }
+        if (event.target.name === 'billingWard') {
+            setWard(event.target.value);
+        }
+    };
     const fakeProduct = [
         {
             id: 1,
@@ -57,22 +105,21 @@ const OrderScreen = () => {
                         <article className={'animate-floating-labels row'}>
                             <div className="col col-two">
                                 <section className="section">
-                                    <div className="section__header">
+                                    <div className="section-header">
                                         <div className="layout-flex">
-                                            <h2 className="section__title layout-flex__item layout-flex__item--stretch">
-                                                <i className="fa fa-id-card-o fa-lg section__title--icon hide-on-desktop"></i>
+                                            <h2 className="section-title">
                                                 Thông tin nhận hàng
                                             </h2>
                                         </div>
                                     </div>
-                                    <div className="section__content">
+                                    <div className="section-content">
                                         <div className="fieldset">
                                             <div className="field field--show-floating-label">
-                                                <div className="field__input-wrapper">
-                                                    <label htmlFor="customer-address" className="field__label">Sổ
+                                                <div className="field-input-wrapper">
+                                                    <label htmlFor="customer-address" className="field-label">Sổ
                                                         địa chỉ</label>
-                                                    <select size="1" className="field__input field__input--select"
-                                                            id="customer-address" data-bind="customerAddress">
+                                                    <select size="1" className="field-input field-input-select"
+                                                            id="customer-address">
                                                         <option value="0">Địa chỉ khác...</option>
                                                         <option data-name="Nguyễn Huy Hiệp"
                                                                 data-address="Ký túc xá khu B Đại học Quốc Gia Hồ Chí Minh"
@@ -83,52 +130,54 @@ const OrderScreen = () => {
                                                         </option>
 
                                                     </select>
-                                                    <div className="field__caret">
-                                                        <i className="fa fa-caret-down"></i>
-                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div className="field "
-                                                 data-bind-class="{'field--show-floating-label': billing.name}">
-                                                <div className="field__input-wrapper">
-                                                    <label htmlFor="billingName" className="field__label">Họ và
+                                            <div
+                                                className={`field ${name ? 'field--show-floating-label' : ''}`}
+                                                onFocus={handleFocus} onBlur={handleBlur}>
+                                                <div className="field-input-wrapper">
+                                                    <label htmlFor="billingName" className="field-label">Họ và
                                                         tên</label>
-                                                    <input name="billingName" id="billingName" type="text"
-                                                           className="field__input" data-bind="billing.name"
-                                                           value=""/>
+                                                    <input onChange={handleChange} value={name} name="billingName"
+                                                           id="billingName" type="text"
+                                                           className="field-input"/>
                                                 </div>
-
                                             </div>
 
-                                            <div className="field">
-                                                <div className="field__input-wrapper field__input-wrapper--connected">
-                                                    <label htmlFor="billingPhone" className="field__label">
+                                            <div
+                                                className={`field ${phone ? 'field--show-floating-label' : ''}`}
+                                                onFocus={handleFocus} onBlur={handleBlur}>
+                                                <div className="field-input-wrapper field-input-wrapper-connected">
+                                                    <label htmlFor="billingPhone" className="field-label">
                                                         Số điện thoại
                                                     </label>
-                                                    <input name="billingPhone" id="billingPhone" type="tel"
-                                                           className="field__input" data-bind="billing.phone"
-                                                           value=""/>
+                                                    <input onChange={handleChange} name="billingPhone" id="billingPhone"
+                                                           type="tel"
+                                                           className="field-input"
+                                                           value={phone}/>
                                                 </div>
 
                                             </div>
-                                            <div className="field">
-                                                <div className="field__input-wrapper">
-                                                    <label htmlFor="billingAddress" className="field__label">
+                                            <div
+                                                className={`field ${address ? 'field--show-floating-label' : ''}`}
+                                                onFocus={handleFocus} onBlur={handleBlur}>
+                                                <div className="field-input-wrapper">
+                                                    <label htmlFor="billingAddress" className="field-label">
                                                         Địa chỉ
                                                     </label>
-                                                    <input name="billingAddress" id="billingAddress" type="text"
-                                                           className="field__input" data-bind="billing.address"
-                                                           value=""/>
+                                                    <input onChange={handleChange} name="billingAddress" id="billingAddress" type="text"
+                                                           className="field-input"
+                                                           value={address}/>
                                                 </div>
 
                                             </div>
                                             <div className="field field--show-floating-label ">
-                                                <div className="field__input-wrapper field__input-wrapper--select2">
-                                                    <label htmlFor="billingProvince" className="field__label">Tỉnh
+                                                <div className="field-input-wrapper field-input-wrapper--select2">
+                                                    <label htmlFor="billingProvince" className="field-label">Tỉnh
                                                         thành</label>
-                                                    <select name="billingProvince" id="billingProvince" size="1"
-                                                            className="field__input field__input--select select2-hidden-accessible"
+                                                    <select onChange={handleChange} name="billingProvince" id="billingProvince" size="1"
+                                                            className="field-input field-input-select select2-hidden-accessible"
                                                             tabIndex="-1" aria-hidden="true">
                                                         <option value="" hidden="">---</option>
                                                         <option value="1">Hà Nội</option>
@@ -138,15 +187,12 @@ const OrderScreen = () => {
                                             </div>
 
                                             <div className="field field--show-floating-label ">
-                                                <div className="field__input-wrapper field__input-wrapper--select2">
-                                                    <label htmlFor="billingDistrict" className="field__label">
+                                                <div className="field-input-wrapper field-input-wrapper-select2">
+                                                    <label htmlFor="billingDistrict" className="field-label">
                                                         Quận huyện
                                                     </label>
-                                                    <select name="billingDistrict" id="billingDistrict" size="1"
-                                                            className="field__input field__input--select select2-hidden-accessible"
-                                                            value="47" data-bind="billing.district"
-                                                            data-address-type="district" data-address-zone="billing"
-                                                            data-select2-id="select2-data-billingDistrict"
+                                                    <select onChange={handleChange} name="billingDistrict" id="billingDistrict" size="1"
+                                                            className="field-input field-input-select select2-hidden-accessible"
                                                             tabIndex="-1" aria-hidden="true">
                                                         <option value="" hidden="">---</option>
                                                         <option value="30">Quận 1</option>
@@ -156,16 +202,13 @@ const OrderScreen = () => {
                                             </div>
 
                                             <div className="field field--show-floating-label ">
-                                                <div className="field__input-wrapper field__input-wrapper--select2">
-                                                    <label htmlFor="billingWard" className="field__label">
+                                                <div className="field-input-wrapper field-input-wrapper-select2">
+                                                    <label htmlFor="billingWard" className="field-label">
                                                         Phường xã
                                                     </label>
-                                                    <select name="billingWard" id="billingWard" size="1"
-                                                            className="field__input field__input--select select2-hidden-accessible"
-                                                            value="9240" data-bind="billing.ward"
-                                                            data-address-type="ward" data-address-zone="billing"
-                                                            data-select2-id="select2-data-billingWard" tabIndex="-1"
-                                                            aria-hidden="true">
+                                                    <select onChange={handleChange} name="billingWard" id="billingWard" size="1"
+                                                            className="field-input field-input-select select2-hidden-accessible"
+                                                            tabIndex="-1" aria-hidden="true">
                                                         <option value="" hidden="">---</option>
                                                         <option value="9238">Phường Linh Xuân</option>
                                                         <option value="9239">Phường Bình Chiểu</option>
@@ -175,56 +218,52 @@ const OrderScreen = () => {
                                         </div>
                                     </div>
                                 </section>
-                                <div className="fieldset">
+                                <div className="order-note">
                                     <h3 className="visually-hidden">Ghi chú</h3>
-                                    <div className="field">
-                                        <div className="field__input-wrapper">
-                                            <label htmlFor="note" className="field__label">
+                                    <div
+                                        className={`field ${note ? 'field--show-floating-label' : ''}`}
+                                        onFocus={handleFocus} onBlur={handleBlur}>
+                                        <div className="field-input-wrapper">
+                                            <label htmlFor="note" className="field-label">
                                                 Ghi chú (tùy chọn)
                                             </label>
-                                            <textarea name="note" id="note" className="field__input"
-                                                      data-bind="note"></textarea>
+                                            <textarea onChange={handleChange} name="note" id="note" className="field-input"
+                                                      value={note}></textarea>
                                         </div>
 
                                     </div>
                                 </div>
 
                             </div>
-                            <div className="col col-two">
+                            <div className="col col-two two">
                                 <section className="section" data-define="{shippingMethod: '643555_0,20.000 VND'}">
-                                    <div className="section__header">
+                                    <div className="section-header">
                                         <div className="layout-flex">
-                                            <h2 className="section__title layout-flex__item layout-flex__item--stretch">
-                                                <i className="fa fa-truck fa-lg section__title--icon hide-on-desktop"></i>
+                                            <h2 className="section-title layout-flex-item layout-flex-item-stretch">
+                                                <i className="fa fa-truck fa-lg section-title-icon hide-on-desktop"></i>
                                                 Vận chuyển
                                             </h2>
                                         </div>
                                     </div>
-                                    <div className="section__content" data-tg-refresh="refreshShipping"
+                                    <div className="section-content" data-tg-refresh="refreshShipping"
                                          id="shippingMethodList">
-                                        <div className="alert alert-retry alert--danger hide">
+                                        <div className="alert alert-retry alert-danger hide">
                                             <span data-bind="loadingShippingErrorMessage">Không thể load phí vận chuyển. Vui lòng thử lại</span>
                                             <i className="fa fa-refresh"></i>
                                         </div>
-
-
                                         <div className="content-box">
-                                            <div className="content-box__row"
-                                                 data-define-array="{shippingMethods: {name: '643555_0,20.000 VND', textPrice: '20.000đ', textDiscountPrice: '-', subtotalPriceWithShippingFee: '760.000đ'}}">
+                                            <div
+                                                className={`content-box-row ${province && district && ward ? '' : 'hide'}`}>
                                                 <div className="radio-wrapper">
-                                                    <div className="radio__input">
-                                                        <input type="radio" className="input-radio"
-                                                               name="shippingMethod" id="shippingMethod-643555_0"
-                                                               value="643555_0,20.000 VND"
-                                                               data-bind="shippingMethod"/>
+                                                    <div className="radio-input">
+                                                        <input type="radio" className="input-radio"/>
                                                     </div>
-                                                    <label htmlFor="shippingMethod-643555_0"
-                                                           className="radio__label">
-														<span className="radio__label__primary">
+                                                    <label className="radio-label">
+														<span className="radio-label-primary">
 															<span>Giao hàng thông thường</span>
 														</span>
-                                                        <span className="radio__label__accessory">
-															<span className="content-box__emphasis price">
+                                                        <span className="radio-label-accessory">
+															<span className="content-box-emphasis price">
 																20.000đ
 															</span>
 														</span>
@@ -232,42 +271,43 @@ const OrderScreen = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="alert alert--info hide">
+                                        <div className={`alert alert-info ${province && district && ward ? 'hide' : ''}`}>
                                             Vui lòng nhập thông tin giao hàng
                                         </div>
                                     </div>
                                 </section>
                                 <section className="section">
-                                    <div className="section__header">
+                                    <div className="section-header">
                                         <div className="layout-flex">
-                                            <h2 className="section__title layout-flex__item layout-flex__item--stretch">
-                                                <i className="fa fa-credit-card fa-lg section__title--icon hide-on-desktop"></i>
+                                            <h2 className="section-title layout-flex-item layout-flex-item-stretch">
+                                                <i className="fa fa-credit-card fa-lg section-title-icon hide-on-desktop"></i>
                                                 Thanh toán
                                             </h2>
                                         </div>
                                     </div>
-                                    <div className="section__content">
+                                    <div className="section-content">
                                         <div className="content-box" data-define="{paymentMethod: undefined}">
-                                            <div className="content-box__row">
+                                            <div className="content-box-row">
                                                 <div className="radio-wrapper">
-                                                    <div className="radio__input">
-                                                        <input name="paymentMethod" id="paymentMethod-491325"
+                                                    <div className="radio-input">
+                                                        <input onClick={handlePaymentMethodClick} name="paymentMethod" id="paymentMethod-491325"
                                                                type="radio" className="input-radio"
                                                                data-bind="paymentMethod" value="491325"
                                                                data-provider-id="4"/>
                                                     </div>
-                                                    <label htmlFor="paymentMethod-491325" className="radio__label">
-                                                        <span className="radio__label__primary">Thanh toán khi giao hàng (COD)</span>
-                                                        <span className="radio__label__accessory">
-															<span className="radio__label__icon">
-																<i className="payment-icon payment-icon--4"></i>
+                                                    <label htmlFor="paymentMethod-491325" className="radio-label">
+                                                        <span className="radio-label-primary">Thanh toán khi giao hàng (COD)</span>
+                                                        <span className="radio-label-accessory">
+															<span className="radio-label-icon">
+                                                                <MdOutlinePayment
+                                                                    className={'payment-icon payment-icon--4'}></MdOutlinePayment>
 															</span>
 														</span>
 
                                                     </label>
                                                 </div>
 
-                                                <div className="content-box__row__desc hide"
+                                                <div className={`content-box-row-desc ${isPaymentMethodSelected ? '' : 'hide'}`}
                                                      data-bind-show="paymentMethod == 491325" data-provider-id="4">
                                                     <p>Bạn sẽ thanh toán khi nhận được hàng</p>
                                                 </div>
@@ -306,7 +346,7 @@ const OrderScreen = () => {
                                                         <td className={'order-product-image'}>
                                                             <div className={'order-product-thumbnail'}>
                                                                 <div className={'product-thumbnail-wrapper'}>
-                                                                    <img src={product.image} alt
+                                                                    <img src={product.image} alt=""
                                                                          className={'product-thumbnail-image'}/>
                                                                 </div>
                                                                 <span
