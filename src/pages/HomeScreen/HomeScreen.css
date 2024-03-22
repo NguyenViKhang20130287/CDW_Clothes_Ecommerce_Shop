@@ -54,13 +54,6 @@
     font-weight: 400;
 }
 
-.homeWrapper .categoriesWrapper{
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    padding: 10px 0 10px 25px;
-}
-
 .homeWrapper .findOutMoreWrapper{
     text-align: center;
     width: 100%;

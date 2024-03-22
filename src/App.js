@@ -10,6 +10,7 @@ import ProductDetailScreen from "./pages/ProductDetailScreen/ProductDetailScreen
 import ExchangeScreen from "./pages/ExchangeScreen/ExchangeScreen";
 import CartScreen from "./pages/CartScreen/CartScreen";
 import OrderScreen from "./pages/OrderScreen/OrderScreen";
+import CollectionScreen from "./pages/Collections/CollectionScreen";
 
 function App() {
     return (
@@ -24,6 +25,7 @@ function App() {
             <Route path={'/exchange'} element={<ExchangeScreen/>}/>
             <Route path={'/cart'} element={<CartScreen/>}/>
             <Route path={'/order'} element={<OrderScreen/>}/>
+            <Route path={'/categories'} element={<CollectionScreen/>}/>
         </Routes>
     );
 }
