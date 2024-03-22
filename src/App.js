@@ -11,6 +11,7 @@ import ExchangeScreen from "./pages/ExchangeScreen/ExchangeScreen";
 import CartScreen from "./pages/CartScreen/CartScreen";
 import OrderScreen from "./pages/OrderScreen/OrderScreen";
 import CollectionScreen from "./pages/Collections/CollectionScreen";
+import SizeSelectorScreen from "./pages/SizeSelectorScreen/SizeSelectorScreen";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
             <Route path={'/cart'} element={<CartScreen/>}/>
             <Route path={'/order'} element={<OrderScreen/>}/>
             <Route path={'/categories'} element={<CollectionScreen/>}/>
+            <Route parh={'/size'} element={<SizeSelectorScreen/>}/>
         </Routes>
     );
 }
