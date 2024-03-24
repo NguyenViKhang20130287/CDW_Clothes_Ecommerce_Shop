@@ -1,0 +1,197 @@
+.AccountDetailContainer {
+    background: #f5f5f5;
+    position: relative;
+}
+
+.AccountDetailContainer .AccountDetailWrapper {
+    width: 80%;
+    margin: 10px auto;
+    display: flex;
+    padding: 10px;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar {
+    width: 20%;
+    padding: 20px;
+    height: 420px;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailImg {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 25px;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailImg .imgWrapper {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 9999px;
+    margin-right: 10px;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailImg .imgWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailImg .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailImg .info .username {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-black);
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailImg .info .editProfile {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--color-silver);
+    cursor: pointer;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailItem {
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    color: var(--color-black);
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .accountDetailItem .icons {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .myAccount {
+    display: inline-block;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .myAccount .title {
+    display: flex;
+    align-items: center;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .myAccount .options {
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .myAccount .options button {
+    text-align: left;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+    color: #636e72;
+}
+
+.AccountDetailContainer .AccountDetailWrapper .AccountDetailContent {
+    width: 80%;
+    background: #FFFFFF;
+    border-radius: 4px;
+}
+
+/*address edit popup*/
+.AccountDetailContainer .editAddressPopup {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper {
+    width: 500px;
+    /*height: 250px;*/
+    background: #FFFFFF;
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper .title span {
+    font-size: 18px;
+    font-family: var(--font-family-sans-serif);
+    color: var(--color-black);
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone {
+    display: flex;
+    align-items: center;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editFullName,
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editPhone {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editFullName .editFullNameInput,
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editPhone input {
+    /*box-sizing: border-box;*/
+    /*width: 100%;*/
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editFullName .editFullNameInput,
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editFullNamePhone .editFullName .editFullNameInput:focus {
+    border-color: var(--color-black);
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editAddress,
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .editAddressDetail {
+    padding: 10px;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .addressDefault {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .addressDefault input[type='checkbox'] {
+    margin-right: 5px;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .addressDefault label{
+    font-size: 14px;
+    font-family: var(--font-family-sans-serif);
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .action{
+    padding: 10px;
+    text-align: right;
+}
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .action button{
+    width: 100px;
+    border: 1px solid var(--color-black);
+    background: var(--color-black);
+    font-weight: 500;
+    color: #FFFFFF;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all .3s;
+}
+
+.AccountDetailContainer .editAddressPopup .editAddressPopupWrapper form .action button:hover{
+    background: #FFFFFF;
+    color: var(--color-black);
+}

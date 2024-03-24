@@ -10,7 +10,9 @@ import ProductDetailScreen from "./pages/ProductDetailScreen/ProductDetailScreen
 import ExchangeScreen from "./pages/ExchangeScreen/ExchangeScreen";
 import SizeSelectorScreen from "./pages/SizeSelectorScreen/SizeSelectorScreen";
 import CartScreen from "./pages/CartScreen/CartScreen";
-import CollectionScreen from "./pages/Collections/CollectionScreen";
+import CollectionScreen from "./pages/CollectionsScreen/CollectionScreen";
+import AccountDetail from "./pages/AccountDetailScreen/AccountDetail";
+import AdminHomeScreen from "./pages/Admin/MainScreen/AdminMainScreen";
 
 function App() {
     return (
@@ -26,6 +28,9 @@ function App() {
             <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
             <Route path={'/cart'} element={<CartScreen/>}/>
             <Route path={'/categories'} element={<CollectionScreen/>}/>
+            <Route path={'/account-detail'} element={<AccountDetail/>}/>
+            {/*  Admin  */}
+            <Route path={'/admin'} element={<AdminHomeScreen/>}/>
         </Routes>
     );
 }
