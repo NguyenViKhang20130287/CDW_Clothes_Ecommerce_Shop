@@ -12,6 +12,7 @@ import CartScreen from "./pages/CartScreen/CartScreen";
 import OrderScreen from "./pages/OrderScreen/OrderScreen";
 import CollectionScreen from "./pages/Collections/CollectionScreen";
 import SizeSelectorScreen from "./pages/SizeSelectorScreen/SizeSelectorScreen";
+import OrderTrackingScreen from "./pages/OrderTrackingScreen/OrderTrackingScreen";
 
 function App() {
     return (
@@ -27,7 +28,8 @@ function App() {
             <Route path={'/cart'} element={<CartScreen/>}/>
             <Route path={'/order'} element={<OrderScreen/>}/>
             <Route path={'/categories'} element={<CollectionScreen/>}/>
-            <Route parh={'/size'} element={<SizeSelectorScreen/>}/>
+            <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
+            <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
         </Routes>
     );
 }
