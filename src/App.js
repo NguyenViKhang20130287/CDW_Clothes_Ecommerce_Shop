@@ -8,11 +8,10 @@ import ForgotPasswordScreen from "./pages/ForgotPassword/ForgotPasswordScreen";
 import ForgotPasswordConfirm from "./pages/ForgotPasswordConfirm/ForgotPasswordConfirm";
 import ProductDetailScreen from "./pages/ProductDetailScreen/ProductDetailScreen";
 import ExchangeScreen from "./pages/ExchangeScreen/ExchangeScreen";
-import SizeSelectorScreen from "./pages/SizeSelectorScreen/SizeSelectorScreen";
 import CartScreen from "./pages/CartScreen/CartScreen";
-import CollectionScreen from "./pages/CollectionsScreen/CollectionScreen";
-import AccountDetail from "./pages/AccountDetailScreen/AccountDetail";
 import AdminHomeScreen from "./pages/Admin/MainScreen/AdminMainScreen";
+import SizeSelectorScreen from "./pages/SizeSelectorScreen/SizeSelectorScreen";
+import OrderTrackingScreen from "./pages/OrderTrackingScreen/OrderTrackingScreen";
 
 function App() {
     return (
@@ -25,12 +24,11 @@ function App() {
             <Route path={'/forgot-password'} element={<ForgotPasswordScreen/>}/>
             <Route path={'/forgot-password-confirm'} element={<ForgotPasswordConfirm/>}/>
             <Route path={'/exchange'} element={<ExchangeScreen/>}/>
-            <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
             <Route path={'/cart'} element={<CartScreen/>}/>
+            <Route path={'/order'} element={<OrderScreen/>}/>
             <Route path={'/categories'} element={<CollectionScreen/>}/>
-            <Route path={'/account-detail'} element={<AccountDetail/>}/>
-            {/*  Admin  */}
             <Route path={'/admin'} element={<AdminHomeScreen/>}/>
+            <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
         </Routes>
     );
 }

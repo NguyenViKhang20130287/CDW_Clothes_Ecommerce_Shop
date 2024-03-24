@@ -140,7 +140,7 @@ const CartScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className={'row'}>
+                <div className={'row price-cart'}>
                     <div className="col-4 col-lg-4 col-12 col-md-8 offset-4 offset-md-4 offset-lg-8 offset-xl-8 total-container">
                         <div className="cart__subtotal">
                             <div className="total-title">Tổng tiền:</div>
