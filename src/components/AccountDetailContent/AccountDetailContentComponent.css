@@ -1,0 +1,485 @@
+.accountDetailContentWrapper {
+    height: 420px;
+    height: auto;
+}
+
+.accountDetailContentWrapper .title {
+    font-family: var(--font-family-sans-serif);
+    border-bottom: 1px solid #dadada;
+    padding: 20px;
+}
+
+.accountDetailContentWrapper .title h3 {
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.accountDetailContentWrapper .title span {
+    font-size: 15px;
+    color: var(--color-silver)
+}
+
+.accountDetailContentWrapper .profileWrapper {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm {
+    width: 70%;
+    padding: 10px;
+    border-right: 1px solid #dadada;
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .editControl {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .editControl label {
+    width: 30%;
+    text-align: right;
+    margin-right: 20px;
+    font-size: 14px;
+    color: var(--color-silver);
+}
+
+
+.accountDetailContentWrapper .profileWrapper .editForm .editControl input {
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    font-size: 14px;
+    background: none;
+    padding: 5px 10px;
+    transition: all .3s;
+    color: var(--color-black);
+    border: 1px solid #FFFFFF;
+}
+
+
+.accountDetailContentWrapper .profileWrapper .editForm .fullName input:focus {
+    border: 1px solid #dadada;
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .editControl input:disabled {
+    color: var(--color-black);
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .editControl button {
+    background: none;
+    border: none;
+    width: 100px;
+    font-size: 14px;
+    transition: all .3s;
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .editControl button:hover {
+    text-decoration: underline;
+    color: var(--color-silver);
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .saveBtn {
+    background: var(--color-black);
+    color: var(--color-silver-white);
+    font-size: 14px;
+    padding: 5px 10px;
+    width: 100px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: 1px solid var(--color-black);
+    transition: all .3s;
+}
+
+.accountDetailContentWrapper .profileWrapper .editForm .saveBtn:hover {
+    background: #FFFFFF;
+    color: var(--color-black);
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatarWrapper {
+    width: 30%;
+    margin: auto;
+    padding: 10px;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 9999px;
+    margin-bottom: 20px;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar input[type = 'file'] {
+    display: none;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar label {
+    border: 1px solid #dadada;
+    width: 100px;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-black);
+    transition: all .3s;
+    cursor: pointer;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar label:hover {
+    color: var(--color-silver);
+}
+
+/* address */
+.addressContainer {
+    position: relative;
+}
+
+.addressContainer .headerAddress {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.addressContainer .headerAddress .addAddressBtn {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    border: 1px solid #000000;
+    padding: 5px 10px;
+    background: #FFFFFF;
+    color: var(--color-black);
+    transition: all .3s;
+    border-radius: 3px;
+}
+
+.addressContainer .headerAddress .addAddressBtn span {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.addressContainer .headerAddress .addAddressBtn:hover {
+    background: var(--color-black);
+    color: var(--color-silver-white);
+}
+
+.addressContainer .addressListWrapper {
+    padding: 20px;
+}
+
+.addressContainer .addressListWrapper .addressList {
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #dadada;
+    padding: 20px;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo {
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone h3 {
+    font-size: 16px;
+    font-weight: bold;
+    padding-right: 10px;
+    border-right: 1px solid var(--color-silver);
+    border-bottom: 0;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone span {
+    font-size: 16px;
+    color: var(--color-silver);
+    padding-left: 10px;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .address {
+    display: flex;
+    flex-direction: column;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .address span {
+    font-size: 15px;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction button {
+    border: 1px solid var(--color-black);
+    border-radius: 3px;
+    background: #FFFFFF;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all .3s;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction .updateAddress {
+    margin-bottom: 10px;
+    border: none;
+    text-align: right;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction .updateAddress:hover {
+    color: var(--color-silver);
+    text-decoration: underline;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction .setDefaultAddress {
+    padding: 5px 10px;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction .setDefaultAddress:hover {
+    background: var(--color-black);
+    color: var(--color-silver-white);
+}
+
+/* change password */
+.changePasswordContainer {
+}
+
+.changePasswordContainer .changePasswordWrapper {
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.changePasswordContainer .changePasswordWrapper form {
+    width: 80%;
+    height: 200px;
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl label{
+    font-family: var(--font-family-sans-serif);
+    font-size: 16px;
+    color: var(--color-silver);
+    margin-right: 20px;
+    width: 40%;
+    text-align: right;
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper{
+    border: 1px solid var(--color-silver);
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper input{
+    border: none;
+    background: none;
+    outline: none;
+    padding: 5px 10px;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 16px;
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper input::-ms-reveal,
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper input::-ms-clear {
+    display: none;
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper:focus-within{
+    border: 1px solid var(--color-black);
+}
+
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper button{
+    border: none;
+    background: none;
+    outline: none;
+    padding: 5px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* order */
+.purchaseOrderContainer{
+    background: #f5f5f5;
+}
+.purchaseOrderContainer .listStatusWrapper{
+    display: flex;
+    background: #FFFFFF;
+}
+
+.purchaseOrderContainer .listStatusWrapper .statusBtn{
+    width: 14%;
+    border: none;
+    background: none;
+    font-size: 15px;
+    padding: 15px 0;
+    transition: all .3s;
+}
+
+.purchaseOrderContainer .listStatusWrapper .statusBtn:hover{
+    color: var(--color-silver);
+}
+
+.purchaseOrderContainer .listStatusWrapper .active{
+    border-bottom: 3px solid var(--color-black);
+}
+
+.purchaseOrderContainer .searchOrderContainer{
+    background: #f5f5f5;
+    padding: 10px 0;
+}
+
+.purchaseOrderContainer .searchOrderContainer .searchOrderWrapper{
+    display: flex;
+    align-items: center;
+    background: #dadada;
+    background: var(--color-silver);
+    background: #EAEAEA;
+    padding: 0 10px;
+}
+
+.purchaseOrderContainer .searchOrderWrapper input{
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    background: none;
+    outline: none;
+    /*margin-left: 5px;*/
+    font-size: 16px;
+    padding: 10px;
+}
+
+.purchaseOrderContainer .orderContainer{
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper{
+    background: #FFFFFF;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader{
+    padding: 10px;
+    border-bottom: 1px solid #dadada;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus{
+    display: flex;
+    align-items: center;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .detail{
+    font-size: 14px;
+    font-family: var(--font-family-sans-serif);
+    font-weight: 400;
+    color: #26aa99;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-right: 1px solid var(--color-silver);
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .status{
+    text-transform: uppercase;
+    font-size: 14px;
+    color: red;
+    padding: 0 10px;
+}
+
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts{
+    padding: 10px;
+}
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct{
+    display: flex;
+    padding: 10px;
+}
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper{
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper{
+    display: flex;
+    flex-direction: column;
+    line-height: 2;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .nameProduct{
+    font-size: 16px;
+    font-family: var(--font-family-sans-serif);
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .colorSize{
+    font-size: 14px;
+    font-family: var(--font-family-sans-serif);
+    color: var(--color-silver);
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice,
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice{
+    font-size: 16px;
+    font-family: var(--font-family-sans-serif);
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice{
+    margin-right: 10px;
+    color: var(--color-silver);
+    text-decoration: line-through;
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .action{text-align: right}
+.purchaseOrderContainer .orderContainer .orderWrapper .action button{
+    width: 150px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid var(--color-black);
+    background: var(--color-black);
+    color: #FFFFFF;
+    border-radius: 4px;
+    transition: all .3s;
+}
+.purchaseOrderContainer .orderContainer .orderWrapper .action button:hover{
+    background: #FFFFFF;
+    color: var(--color-black);
+}

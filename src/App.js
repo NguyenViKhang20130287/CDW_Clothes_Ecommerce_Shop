@@ -9,8 +9,7 @@ import ForgotPasswordConfirm from "./pages/ForgotPasswordConfirm/ForgotPasswordC
 import ProductDetailScreen from "./pages/ProductDetailScreen/ProductDetailScreen";
 import ExchangeScreen from "./pages/ExchangeScreen/ExchangeScreen";
 import CartScreen from "./pages/CartScreen/CartScreen";
-import OrderScreen from "./pages/OrderScreen/OrderScreen";
-import CollectionScreen from "./pages/Collections/CollectionScreen";
+import AdminHomeScreen from "./pages/Admin/MainScreen/AdminMainScreen";
 import SizeSelectorScreen from "./pages/SizeSelectorScreen/SizeSelectorScreen";
 import OrderTrackingScreen from "./pages/OrderTrackingScreen/OrderTrackingScreen";
 
@@ -28,7 +27,7 @@ function App() {
             <Route path={'/cart'} element={<CartScreen/>}/>
             <Route path={'/order'} element={<OrderScreen/>}/>
             <Route path={'/categories'} element={<CollectionScreen/>}/>
-            <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
+            <Route path={'/admin'} element={<AdminHomeScreen/>}/>
             <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
         </Routes>
     );
