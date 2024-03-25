@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './CartScreen.css';
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import img from '../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp';
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import img from '../../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp';
 import {MdDeleteOutline} from "react-icons/md";
 
 const CartScreen = () => {
@@ -140,7 +140,7 @@ const CartScreen = () => {
                         </div>
                     </div>
                 </div>
-                <div className={'row'}>
+                <div className={'row price-cart'}>
                     <div className="col-4 col-lg-4 col-12 col-md-8 offset-4 offset-md-4 offset-lg-8 offset-xl-8 total-container">
                         <div className="cart__subtotal">
                             <div className="total-title">Tổng tiền:</div>

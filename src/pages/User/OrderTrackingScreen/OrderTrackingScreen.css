@@ -1,0 +1,457 @@
+
+.tracking-info {
+    align-items: center;
+    display: flex;
+    font-size: 14px;
+    justify-content: space-between;
+    line-height: 16px;
+    padding: 20px 24px;
+}
+
+.tracking-info .back-order {
+    background: none;
+    border: 0;
+    color: rgba(0, 0, 0, .54);
+    display: flex;
+    margin-right: 16px;
+    padding: 0;
+}
+
+.tracking-info .back-order>span {
+    line-height: 16px;
+    vertical-align: bottom;
+}
+
+.tracking-info .back-order .arrow {
+    font-size: 14px;
+    height: 16px;
+    margin: 0 5px 0 0;
+    line-height: 16px;
+    vertical-align: bottom;
+    width: 1em;
+    fill: currentColor;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+}
+
+.tracking-info .order-info {
+    display: flex;
+    text-align: right;
+}
+.tracking-info .order-info .divine {
+    margin: 0 16px;
+}
+
+.tracking-info .order-info .tracking-delivery-status {
+    color: #ee4d2d;
+    text-transform: uppercase;
+}
+
+.stepper-container {
+    padding: 40px 24px;
+    background: #FFFFFF;
+}
+
+.stepper-container .stepper {
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    position: relative;
+}
+
+
+.stepper-container .stepper .stepper-step {
+    cursor: default;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: 140px;
+    z-index: 1;
+}
+
+.stepper-container .stepper .stepper-step .stepper-step-icon {
+    align-items: center;
+    background-color: #fff;
+    border: 4px solid #e0e0e0;
+    border-radius: 50%;
+    box-sizing: border-box;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.875rem;
+    height: 60px;
+    justify-content: center;
+    margin: auto;
+    position: relative;
+    transition: background-color .3s cubic-bezier(.4, 0, .2, 1) .7s, border-color .3s cubic-bezier(.4, 0, .2, 1) .7s, color .3s cubic-bezier(.4, 0, .2, 1) .7s;
+    width: 60px;
+}
+
+.stepper-container .stepper .stepper-step .stepper-step-icon--finish {
+    border-color: #2dc258;
+    color: #2dc258;
+}
+
+.stepper-container .stepper .stepper-step .stepper-step-text {
+    color: rgba(0, 0, 0, .8);
+    font-size: .875rem;
+    line-height: 1.25rem;
+    margin: 1.25rem 0 .25rem;
+    text-transform: capitalize;
+}
+
+.stepper-container .stepper .stepper-step .stepper-step-date {
+    color: rgba(0, 0, 0, .26);
+    font-size: .75rem;
+    height: .875rem;
+}
+
+.stepper-container .stepper .stepper-line {
+    height: 4px;
+    position: absolute;
+    top: 29px;
+    width: 100%;
+}
+
+.stepper-container .stepper .stepper-line-background, .stepper-container .stepper .stepper-line-foreground {
+    box-sizing: border-box;
+    height: 100%;
+    margin: 0 70px;
+    position: absolute;
+}
+
+.stepper-container .stepper .stepper-line-background {
+    background: #e0e0e0;
+}
+
+.stepper-container .stepper .stepper-line-foreground {
+    background: rgb(45, 194, 88);
+    transition: width 1s cubic-bezier(.4, 0, .2, 1)
+}
+
+.tracking-container .buy-again-container {
+    align-items: center;
+    background-color: #fffcf5;
+    border-top: 1px dotted rgba(0, 0, 0, .09);
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    padding: 12px 24px;
+}
+
+.tracking-container .buy-again-container .empty {
+    padding: 0 12px 0 0;
+    text-align: left;
+    word-wrap: break-word;
+    color: rgba(0, 0, 0, .54);
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.tracking-container .buy-again-container .buy-again {
+    flex-shrink: 0;
+    text-align: right;
+    float: right;
+}
+
+.tracking-container .buy-again-container .buy-again .buy-again-btn {
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 220px;
+    border: 1px solid rgba(0, 0, 0, .09);
+    color: #555;
+    background-color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 8px 10px;
+    min-height: 40px;
+    min-width: 150px;
+    text-transform: capitalize;
+}
+
+.tracking-container .address-delivery-big-container .tracking-line {
+    padding: 3px 0;
+}
+
+.tracking-container .address-delivery-big-container .tracking-line .line {
+    background-image: repeating-linear-gradient(45deg, #6fa6d6, #6fa6d6 33px, transparent 0, transparent 41px, #f18d9b 0, #f18d9b 74px, transparent 0, transparent 82px);
+    background-position-x: -1.875rem;
+    background-size: 7.25rem .1875rem;
+    height: .1875rem;
+    width: 100%;
+}
+
+.address-delivery-big-container {
+   background: #FFFFFF;
+}
+
+.address-delivery-big-container .address-delivery-container {
+    padding: 20px 24px 24px;
+}
+.address-delivery-big-container .address-delivery-container .address-title-thing {
+    align-items: flex-end;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 12px;
+}
+.address-delivery-big-container .address-delivery-container .address-title-thing .address-title {
+    color: rgba(0, 0, 0, .8);
+    font-size: 20px;
+    line-height: 24px;
+    text-transform: capitalize;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery {
+    display: flex;
+}
+
+.address-delivery-big-container .address-delivery-container .address-delivery .address-mini-container {
+    flex: 1;
+    line-height: 22px;
+    max-width: 100%;
+    padding: 10px 24px 0 0;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .address-mini-container .receiver {
+    color: rgba(0, 0, 0, .8);
+    margin: 0 0 7px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .address-mini-container .phone-address {
+    color: rgba(0, 0, 0, .54);
+    font-size: 12px;
+    white-space: pre-line;
+}
+
+
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container {
+    border-left: 1px solid rgba(0, 0, 0, .09);
+    padding: 4px 0 0 12px;
+    width: 620px;
+}
+
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item {
+    align-items: flex-start;
+    display: flex;
+    gap: 12px;
+    padding: 0;
+    position: relative;
+}
+
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-line {
+    height: 100%;
+    left: 12px;
+    position: absolute;
+    top: 12px;
+    width: 1px;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content {
+    align-items: flex-start;
+    color: rgba(0, 0, 0, .54);
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 14px;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content .delivery-image {
+    align-items: center;
+    display: flex;
+    height: 24px;
+    justify-content: center;
+    min-width: 24px;
+    width: 24px;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content .delivery-image img {
+    height: 24px;
+    position: relative;
+    width: 24px;
+    z-index: 2;
+}
+
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content .delivery-time {
+    color: rgba(0, 0, 0, .8);
+    flex-shrink: 0;
+    margin-top: 3px;
+    padding: 0 30px;
+    /*width: 120px;*/
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content .delivery-status-content {
+    min-width: 0;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content .delivery-status-content p {
+    word-wrap: break-word;
+    line-height: 20px;
+    margin: 1px 0 8px;
+}
+.address-delivery-big-container .address-delivery-container .address-delivery .delivery-mini-container .delivery-item .delivery-content .delivery-status-content p.delivery-status-title {
+    font-weight: 700;
+    margin-bottom: -2px;
+}
+
+.tracking-product-container {
+    background-color: #fafafa;
+    padding: 12px 24px;
+}
+
+.tracking-container .tracking-mini-container {
+    display: flex;
+    word-wrap: break-word;
+    align-items: center;
+    color: rgba(0, 0, 0, .87);
+    flex-wrap: nowrap;
+    padding: 12px 0 0;
+    border-top: 1px solid rgba(0, 0, 0, .09)
+}
+
+.tracking-container .tracking-mini-container .tracking-product {
+    align-items: flex-start;
+    flex: 1;
+    flex-wrap: nowrap;
+    padding: 0 12px 0 0;
+    display: flex;
+    word-wrap: break-word;
+}
+
+.tracking-container .tracking-mini-container .tracking-product .tracking-product-image {
+    background: #e1e1e1;
+    border: 1px solid #e1e1e1;
+    flex-shrink: 0;
+    height: 80px;
+    width: 80px;
+}
+
+.tracking-container .tracking-mini-container .tracking-product .tracking-product-info {
+    align-items: flex-start;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0 0 10px 12px;
+    word-wrap: break-word;
+}
+
+.tracking-container .tracking-mini-container .tracking-product .tracking-product-info .tracking-product-name {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0 0 5px;
+    max-height: 48px;
+}
+.tracking-container .tracking-mini-container .tracking-product .tracking-product-info .tracking-product-size-color, .tracking-container .tracking-mini-container .tracking-product .tracking-product-info .tracking-product-quantity {
+    margin: 0 0 5px;
+    color: rgba(0, 0, 0, .54);
+}
+.tracking-container .tracking-mini-container .tracking-product .tracking-product-info .tracking-product-return {
+    border: .5px solid #26aa99;
+    color: #26aa99;
+    border-radius: 1px;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0 6px 0 0;
+    padding: 2px 4px;
+    vertical-align: middle;
+}
+
+.tracking-container .tracking-mini-container .tracking-price-big-container {
+    text-align: right;
+}
+
+.tracking-container .tracking-mini-container .tracking-price-big-container .tracking-price-container {
+    margin-left: 12px;
+}
+
+.tracking-container .tracking-mini-container .tracking-price-big-container .tracking-original-price {
+    color: #000;
+    margin: 0 4px 0 0;
+    opacity: .26;
+    overflow: hidden;
+    -webkit-text-decoration-line: line-through;
+    text-decoration-line: line-through;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    line-height: 16px;
+    vertical-align: middle;
+}
+
+.tracking-container .tracking-mini-container .tracking-price-big-container  .tracking-current-price {
+    color: #ee4d2d;
+    font-size: 14px;
+    line-height: 16px;
+    vertical-align: middle;
+}
+
+.tracking-container .all-cost-container {
+    background-color: #fafafa;
+    border-top: 1px solid rgba(0, 0, 0, .09);
+}
+
+.tracking-container .all-cost-container .cost {
+    align-items: center;
+    border-bottom: 1px dotted rgba(0, 0, 0, .09);
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 24px;
+    text-align: right;
+}
+.tracking-container .all-cost-container .cost .cost-title {
+    color: rgba(0, 0, 0, .54);
+    font-size: 12px;
+    padding: 13px 10px;
+}
+.tracking-container .all-cost-container .cost .cost-price {
+    border-left: 1px dotted rgba(0, 0, 0, .09);
+    justify-content: flex-end;
+    padding: 13px 0 13px 10px;
+    width: 240px;
+    word-wrap: break-word;
+    color: rgba(0, 0, 0, .8);
+}
+
+.tracking-container .payment-method {
+    background-color: #fafafa;
+    margin-bottom: 30px;
+}
+.tracking-container .payment-method .payment-method-container {
+    border: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 24px;
+    text-align: right;
+    align-items: center;
+}
+
+.tracking-container .payment-method .payment-method-container .payment-method-title>span {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.tracking-container .payment-method .payment-method-container .payment-method-title .title {
+    vertical-align: middle;
+    color: rgba(0, 0, 0, .54);
+    font-size: 12px;
+    padding: 13px 10px;
+    text-align: right;
+}
+
+.tracking-container .payment-method .payment-method-container .payment-method-content {
+    border-left: 1px dotted rgba(0, 0, 0, .09);
+    justify-content: flex-end;
+    padding: 13px 0 13px 10px;
+    width: 240px;
+    word-wrap: break-word;
+    color: rgba(0, 0, 0, .8);
+    text-align: right;
+    font-size: .875rem;
+}

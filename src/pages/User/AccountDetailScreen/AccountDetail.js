@@ -3,16 +3,16 @@ import {TextField} from "@mui/material";
 import {makeStyles} from '@mui/styles';
 
 // components
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
 // icons
 import {FaPen, FaRegUser} from "react-icons/fa";
 import {BiPurchaseTag} from "react-icons/bi";
 import {MdNotificationsNone} from "react-icons/md";
 // css
 import './AccountDetail.css'
-import IMG from '../../assets/img/avt.jpg'
-import AccountDetailContentComponent from "../../components/AccountDetailContent/AccountDetailContentComponent";
+import IMG from '../../../assets/img/avt.jpg'
+import AccountDetailContentComponent from "../../../components/AccountDetailContent/AccountDetailContentComponent";
 
 const useStyles = makeStyles({
     root: {
