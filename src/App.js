@@ -36,6 +36,7 @@ function App() {
             <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
             {/*  Admin  */}
             <Route path={'/admin'} element={<AdminMainScreen/>}/>
+            <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
         </Routes>
     );
 }
