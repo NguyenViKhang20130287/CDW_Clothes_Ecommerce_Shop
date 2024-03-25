@@ -1,8 +1,8 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./ExchangeScreen.css";
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
 
 const ExchangeScreen = () => {
 

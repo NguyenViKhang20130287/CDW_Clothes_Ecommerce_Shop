@@ -1,13 +1,13 @@
 import React, {useState} from "react";
+import {Link} from "react-router-dom";
+// components
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
 // icons
 import {CiUser, CiLock} from "react-icons/ci";
 import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";
-
 // css
 import './LoginScreen.css'
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import {Link} from "react-router-dom";
 
 const LoginScreen = () => {
     const [typePassword, setTypePassword] = useState('password')

@@ -1,18 +1,22 @@
 import React from "react";
+//  com
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+// css
 import './OrderTrackingScreen.css'
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import img1 from '../../assets/img/ProductDetailSlider/BigSlider/BigSlider1.webp'
-import img2 from '../../assets/img/ProductDetailSlider/BigSlider/BigSlider3.webp'
+// icon
 import {IoIosArrowBack} from "react-icons/io";
 import {CgNotes} from "react-icons/cg";
 import {FaRegMoneyBillAlt} from "react-icons/fa";
 import {CiDeliveryTruck} from "react-icons/ci";
 import {RiUserReceived2Line} from "react-icons/ri";
-import check from '../../assets/img/Tracking/delivered_parcel_active_3x.png';
-import transit from '../../assets/img/Tracking/domestic_transit_3x.png';
-import prepared from '../../assets/img/Tracking/preparing_to_ship_3x.png';
-import order_place from '../../assets/img/Tracking/order_placed_3x.png';
+//
+import img1 from '../../../assets/img/ProductDetailSlider/BigSlider/BigSlider1.webp'
+import img2 from '../../../assets/img/ProductDetailSlider/BigSlider/BigSlider3.webp'
+import check from '../../../assets/img/Tracking/delivered_parcel_active_3x.png';
+import transit from '../../../assets/img/Tracking/domestic_transit_3x.png';
+import prepared from '../../../assets/img/Tracking/preparing_to_ship_3x.png';
+import order_place from '../../../assets/img/Tracking/order_placed_3x.png';
 
 const OrderTrackingScreen = () => {
     const order = [
