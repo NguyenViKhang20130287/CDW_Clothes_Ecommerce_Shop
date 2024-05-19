@@ -2,27 +2,29 @@ import React from "react";
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
+import {Link} from "react-router-dom";
+// com
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import CategoryComponent from "../../../components/Category/CategoryComponent";
+
 // images
-import SLIDER_1 from '../../assets/slider/slider_1.webp'
-import SLIDER_2 from '../../assets/slider/slider_2.webp'
-import SLIDER_3 from '../../assets/slider/slider_3.webp'
-import SLIDER_4 from '../../assets/slider/slider_4.webp'
-import SLIDER_5 from '../../assets/slider/slider_5.webp'
-import SHIRT_IMG from '../../assets/img/shirt1.webp'
-import FEEDBACK_1 from '../../assets/findoutmore/feedback_1.webp'
-import FEEDBACK_2 from '../../assets/findoutmore/feedback_2.webp'
-import FEEDBACK_3 from '../../assets/findoutmore/feedback_3.webp'
-import FEEDBACK_4 from '../../assets/findoutmore/feedback_4.webp'
-import FEEDBACK_5 from '../../assets/findoutmore/feedback_5.webp'
-import FEEDBACK_6 from '../../assets/findoutmore/feedback_6.webp'
-import FEEDBACK_7 from '../../assets/findoutmore/feedback_7.webp'
-import FEEDBACK_8 from '../../assets/findoutmore/feedback_8.webp'
+import SLIDER_1 from '../../../assets/slider/slider_1.webp'
+import SLIDER_2 from '../../../assets/slider/slider_2.webp'
+import SLIDER_3 from '../../../assets/slider/slider_3.webp'
+import SLIDER_4 from '../../../assets/slider/slider_4.webp'
+import SLIDER_5 from '../../../assets/slider/slider_5.webp'
+import SHIRT_IMG from '../../../assets/img/shirt1.webp'
+import FEEDBACK_1 from '../../../assets/findoutmore/feedback_1.webp'
+import FEEDBACK_2 from '../../../assets/findoutmore/feedback_2.webp'
+import FEEDBACK_3 from '../../../assets/findoutmore/feedback_3.webp'
+import FEEDBACK_4 from '../../../assets/findoutmore/feedback_4.webp'
+import FEEDBACK_5 from '../../../assets/findoutmore/feedback_5.webp'
+import FEEDBACK_6 from '../../../assets/findoutmore/feedback_6.webp'
+import FEEDBACK_7 from '../../../assets/findoutmore/feedback_7.webp'
+import FEEDBACK_8 from '../../../assets/findoutmore/feedback_8.webp'
 // css
 import './HomeScreen.css'
-import CategoryComponent from "../../components/Category/CategoryComponent";
-import {Link} from "react-router-dom";
 
 const HomeScreen = () => {
     const images = [SLIDER_1, SLIDER_2, SLIDER_3, SLIDER_4, SLIDER_5]

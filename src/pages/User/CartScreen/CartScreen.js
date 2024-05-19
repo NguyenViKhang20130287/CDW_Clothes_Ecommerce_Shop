@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './CartScreen.css';
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import img from '../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp';
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import img from '../../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp';
 import {MdDeleteOutline} from "react-icons/md";
 
 const CartScreen = () => {

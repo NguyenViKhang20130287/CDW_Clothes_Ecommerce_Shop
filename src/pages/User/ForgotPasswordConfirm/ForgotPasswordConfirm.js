@@ -1,14 +1,12 @@
 import React, {useState} from "react";
-// components
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-// css
-import './RegisterConfirmScreen.css'
-import {CiLock, CiUser} from "react-icons/ci";
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import {CiLock} from "react-icons/ci";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link} from "react-router-dom";
+import './ForgotPasswordConfirm.css'
 
-const RegisterConfirmScreen = () => {
+const ForgotPasswordConfirm = () =>{
     const [typePassword, setTypePassword] = useState('password')
     const [password, setPassword] = useState('')
 
@@ -20,20 +18,16 @@ const RegisterConfirmScreen = () => {
             setTypePassword('password')
         }
     }
-    return (
-        <div className={'registerConfirmContainer'}>
+    return(
+        <div className={'forgotPasswordConfirmContainer'}>
             <HeaderComponent/>
-            <div className={'registerConfirmWrapper'}>
-                <div className={'registerConfirmBox'}>
-                    <h3 className={'title'}>XÁC NHẬN ĐĂNG KÍ</h3>
+            <div className={'forgotPasswordConfirmWrapper'}>
+                <div className={'forgotPasswordConfirmBox'}>
+                    <h3 className={'title'}>ĐẶT LẠI MẬT KHẨU</h3>
                     <form className={'formGroup'}>
-                        <div className={'username'}>
-                            <CiUser/>
-                            <input placeholder={'Nhập username'} type={'text'}/>
-                        </div>
                         <div className={'password'}>
                             <CiLock/>
-                            <input placeholder={'Nhập mật khẩu'} type={typePassword}
+                            <input placeholder={'Nhập mật khẩu mới'} type={typePassword}
                                    value={password}
                                    onChange={event => setPassword(event.target.value)}/>
                             <button type={'button'} className={'eye'}
@@ -43,7 +37,7 @@ const RegisterConfirmScreen = () => {
                         </div>
                         <div className={'password'}>
                             <CiLock/>
-                            <input placeholder={'Nhập lại mật khẩu'} type={typePassword}
+                            <input placeholder={'Nhập lại mật khẩu mới'} type={typePassword}
                                    value={password}
                                    onChange={event => setPassword(event.target.value)}/>
                             <button type={'button'} className={'eye'}
@@ -51,7 +45,7 @@ const RegisterConfirmScreen = () => {
                                 {password.length > 0 ? typePassword === 'password' ? <FaEye/> : <FaEyeSlash/> : ''}
                             </button>
                         </div>
-                        <button type={'submit'} className={'registerConfirmBtn'}>ĐĂNG KÍ</button>
+                        <button type={'submit'} className={'forgotPasswordConfirmBtn'}>ĐẶT LẠI MẬT KHẨU</button>
                     </form>
                     <div className={'loginOptionWrapper'}>
                         <Link to={'/login'} className={'login'}>
@@ -64,4 +58,4 @@ const RegisterConfirmScreen = () => {
         </div>
     )
 }
-export default RegisterConfirmScreen
+export default ForgotPasswordConfirm

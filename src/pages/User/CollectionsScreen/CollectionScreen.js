@@ -1,16 +1,16 @@
 import React, {useState} from "react";
 // components
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import CheckBoxComponent from "../../components/Checkbox/CheckBoxComponent";
-import CategoryComponent from "../../components/Category/CategoryComponent";
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import CheckBoxComponent from "../../../components/Checkbox/CheckBoxComponent";
+import CategoryComponent from "../../../components/Category/CategoryComponent";
+import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxComponent";
 // icon
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
 // img
-import SHIRT_IMG from "../../assets/img/shirt1.webp";
+import SHIRT_IMG from "../../../assets/img/shirt1.webp";
 // css
 import './CollectionScreen.css'
-import RadioBoxComponent from "../../components/RadioBoxComponent/RadioBoxComponent";
 
 const CollectionScreen = () => {
     const [selectOptionSort, setSelectOptionSort] = useState('newest')

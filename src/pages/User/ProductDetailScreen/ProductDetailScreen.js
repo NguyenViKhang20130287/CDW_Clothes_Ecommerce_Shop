@@ -1,14 +1,14 @@
 import React from "react";
-import ProductImage from "../../components/ProductDetailComponents/ProductImage";
+import ProductImage from "../../../components/ProductDetailComponents/ProductImage";
+import ProductInformation from "../../../components/ProductDetailComponents/ProductInformation";
+import ProductDetailContent from "../../../components/ProductDetailComponents/ProductDetailContent";
+import ProductReview from "../../../components/ProductDetailComponents/ProductReview";
+import RecentItem from "../../../components/ProductDetailComponents/RecentItem";
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import SimilarItem from "../../../components/ProductDetailComponents/SimilarItem";
+import "../../../assets/style/ProductDetail.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ProductInformation from "../../components/ProductDetailComponents/ProductInformation";
-import ProductDetailContent from "../../components/ProductDetailComponents/ProductDetailContent";
-import ProductReview from "../../components/ProductDetailComponents/ProductReview";
-import RecentItem from "../../components/ProductDetailComponents/RecentItem";
-import "../../assets/style/ProductDetail.css";
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import SimilarItem from "../../components/ProductDetailComponents/SimilarItem";
 
 const ProductDetailScreen = () => {
     return (

@@ -1,10 +1,13 @@
 import React, {useState} from "react";
-import HeaderComponent from "../../components/Header/HeaderComponent";
-import FooterComponent from "../../components/Footer/FooterComponent";
-import "./OrderScreen.css";
-import img from "../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp";
 import {Link} from "react-router-dom";
+// com
+import HeaderComponent from "../../../components/Header/HeaderComponent";
+import FooterComponent from "../../../components/Footer/FooterComponent";
+import img from "../../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp";
+// icon
 import {MdOutlinePayment} from "react-icons/md";
+// css
+import "./OrderScreen.css";
 
 const OrderScreen = () => {
     const [focusedField, setFocusedField] = useState('');
