@@ -3,7 +3,7 @@ import {CiMail} from "react-icons/ci";
 import {Link} from "react-router-dom";
 import './FornEmailComponent.css'
 
-const FormEmailComponent = ({title, onChange, value, onClick, error}) => {
+const FormEmailComponent = ({title, onChange, value, onClick, error, borderColor}) => {
     return (
         <div className={'formEmailContainer'}>
             <div className={'forgotPasswordWrapper'}>
@@ -18,7 +18,7 @@ const FormEmailComponent = ({title, onChange, value, onClick, error}) => {
                                 color: 'red'
                             }}>{error}</span>
                         }
-                        <div className={'email'}>
+                        <div className={'email'} style={{borderColor:borderColor}}>
                             <CiMail/>
                             <input placeholder={'Nhập email'}
                                    type={'text'}

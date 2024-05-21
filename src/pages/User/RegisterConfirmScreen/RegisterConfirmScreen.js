@@ -22,6 +22,8 @@ const RegisterConfirmScreen = () => {
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
 
+
+
     const handleShowHidePassword = (e) => {
         e.preventDefault()
         if (typePassword === 'password') {
