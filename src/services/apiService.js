@@ -26,3 +26,12 @@ export const registerConfirm = async (userData)=>{
         console.log(error)
     }
 }
+
+export const login = async (userData) =>{
+    try {
+        const res = await apiService.post(`/auth/login`, userData)
+        return res.data
+    }catch (error){
+        console.log(error)
+    }
+}
