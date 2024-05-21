@@ -1,0 +1,80 @@
+.sidebarAdminContainer {
+    width: 350px;
+    background: var(--color-black);
+    padding: 10px;
+}
+
+.sidebarAdminContainer .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    border-bottom: 1px solid var(--color-silver);
+}
+
+.sidebarAdminContainer .title h3 {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-family: var(--font-family-monospace);
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.sidebarAdminContainer .sidebar {
+    background: var(--color-black);
+    border: none;
+    width: 100%;
+    padding: 10px;
+}
+
+.sidebarAdminContainer .sidebar .menu {
+    background: var(--color-black);
+}
+
+.ps-menu-button{
+    background: none;
+}
+
+/*sidebar text color*/
+.ps-menu-root {
+    color: #FFFFFF !important;
+    text-transform: uppercase;
+    font-size: 16px;
+    background: var(--color-black);
+}
+
+.css-16jesut >.ps-menu-button{
+    height: 70px;
+}
+
+/*hover over menuitems color*/
+.ps-menu-button{
+    transition: all .5s;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.ps-menu-button:last-child{
+    /*margin-bottom: 0;*/
+}
+
+.ps-submenu-expand-icon{
+    font-size: 5px;
+}
+
+.ps-submenu-expand-icon .css-honxw6, .ps-submenu-expand-icon .css-jn69v9{
+    width: 8px;
+    height: 8px;
+}
+
+.ps-menu-button:hover {
+    background-color: #FFFFFF !important;
+    color: var(--color-black) !important;
+}
+
+/*text and background color for submenu*/
+.ps-submenu-content {
+    color: #FFFFFF !important;
+    background-color: var(--color-black) !important;
+    font-size: 15px;
+}

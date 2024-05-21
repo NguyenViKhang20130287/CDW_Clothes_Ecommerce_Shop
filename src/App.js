@@ -14,8 +14,6 @@ import AccountDetail from "./pages/User/AccountDetailScreen/AccountDetail";
 import OrderScreen from "./pages/User/OrderScreen/OrderScreen";
 import SizeSelectorScreen from "./pages/User/SizeSelectorScreen/SizeSelectorScreen";
 import OrderTrackingScreen from "./pages/User/OrderTrackingScreen/OrderTrackingScreen";
-// admin
-import AdminMainScreen from "./pages/Admin/MainScreen/AdminMainScreen";
 
 function App() {
     return (
@@ -33,9 +31,6 @@ function App() {
             <Route path={'/categories'} element={<CollectionScreen/>}/>
             <Route path={'/account-detail'} element={<AccountDetail/>}/>
             <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
-            <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
-            {/*  Admin  */}
-            <Route path={'/admin'} element={<AdminMainScreen/>}/>
             <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
         </Routes>
     );
