@@ -24,7 +24,6 @@ const LoginScreen = () => {
 
     return (
         <div className={'loginContainer'}>
-            <HeaderComponent/>
             <div className={'loginWrapper'}>
                 <div className={'loginBox'}>
                     <h3 className={'title'}>ĐĂNG NHẬP</h3>
@@ -67,7 +66,6 @@ const LoginScreen = () => {
                     </div>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     )
 }

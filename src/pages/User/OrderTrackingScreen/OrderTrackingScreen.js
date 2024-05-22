@@ -90,7 +90,6 @@ const OrderTrackingScreen = () => {
     ]
     return (
         <div>
-            <HeaderComponent/>
             <div className={'container'}>
                 {order.map((item, index) => {
                     const total_price_no_shipping = (item.total_price - item.shipping_cost).toLocaleString("vi-VN");
@@ -326,7 +325,6 @@ const OrderTrackingScreen = () => {
                     );
                 })}
             </div>
-            <FooterComponent/>
         </div>
     )
 }

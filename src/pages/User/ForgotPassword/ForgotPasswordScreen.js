@@ -8,9 +8,7 @@ import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent
 const ForgotPasswordScreen =() =>{
     return(
         <div className={'forgotPasswordContainer'}>
-            <HeaderComponent/>
             <FormEmailComponent title={'LẤY LẠI MẬT KHẨU'}/>
-            <FooterComponent/>
         </div>
     )
 }

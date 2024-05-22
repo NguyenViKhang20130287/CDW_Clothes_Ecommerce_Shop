@@ -69,7 +69,6 @@ const CartScreen = () => {
 
     return (
         <div className={'big-container'}>
-            <HeaderComponent/>
             <div className={'container'}>
                 <div className={'header-cart'}>
                     <h1>Giỏ hàng của bạn</h1>
@@ -156,7 +155,6 @@ const CartScreen = () => {
                     </div>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     );
 }

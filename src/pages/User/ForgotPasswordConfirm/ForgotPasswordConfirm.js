@@ -20,7 +20,6 @@ const ForgotPasswordConfirm = () =>{
     }
     return(
         <div className={'forgotPasswordConfirmContainer'}>
-            <HeaderComponent/>
             <div className={'forgotPasswordConfirmWrapper'}>
                 <div className={'forgotPasswordConfirmBox'}>
                     <h3 className={'title'}>ĐẶT LẠI MẬT KHẨU</h3>
@@ -54,7 +53,6 @@ const ForgotPasswordConfirm = () =>{
                     </div>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     )
 }

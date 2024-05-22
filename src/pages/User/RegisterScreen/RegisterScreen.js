@@ -8,9 +8,7 @@ import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent
 const RegisterScreen = () =>{
     return (
         <div className={'registerContainer'}>
-            <HeaderComponent/>
             <FormEmailComponent title={'ĐĂNG KÍ'}/>
-            <FooterComponent/>
         </div>
     )
 }

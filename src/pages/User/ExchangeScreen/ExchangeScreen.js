@@ -8,7 +8,6 @@ const ExchangeScreen = () => {
 
     return (
         <div className="big">
-            <HeaderComponent/>
             <section className="page">
                 <div className="container">
                     <div className="row">
@@ -69,7 +68,6 @@ const ExchangeScreen = () => {
                     </div>
                 </div>
             </section>
-            <FooterComponent/>
         </div>
     );
 }
