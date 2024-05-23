@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {login} from '../../../services/apiService'
 // components
@@ -12,22 +12,19 @@ import './LoginScreen.css'
 import toast from "react-hot-toast";
 
 const LoginScreen = () => {
-    const [typePassword, setTypePassword] = useState('password')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isShowPassword, setIsShowPassword] = useState(false)
+    const [errorColor, setErrorColor] = useState('var(--color-silver)')
     const navigate = useNavigate()
-
-    const handleShowHidePassword = (e) => {
-        e.preventDefault()
-        if (typePassword === 'password') {
-            setTypePassword('text')
-        } else {
-            setTypePassword('password')
-        }
-    }
 
     const handleLogin = async (e) => {
         e.preventDefault()
+        if (password.length < 6) {
+            setErrorColor('red')
+            toast.error('Mật khẩu phải dài hơn 6 kí tự')
+            return
+        }
         try {
             const userData = {
                 username: username,
@@ -55,6 +52,10 @@ const LoginScreen = () => {
         console.log('clicked')
     }
 
+    useEffect(() => {
+        setErrorColor('var(--color-silver)')
+    }, [password]);
+
     return (
         <div className={'loginContainer'}>
             <HeaderComponent/>
@@ -71,14 +72,23 @@ const LoginScreen = () => {
                                 value={username}
                             />
                         </div>
-                        <div className={'password'}>
+                        <div className={'password'}
+                             style={{
+                                 borderColor: errorColor
+                             }}
+                        >
                             <CiLock/>
-                            <input placeholder={'Nhập mật khẩu'} type={typePassword}
+                            <input placeholder={'Nhập mật khẩu'}
+                                   type={isShowPassword ? 'text' : 'password'}
                                    value={password}
                                    onChange={event => setPassword(event.target.value)}/>
                             <button type={'button'} className={'eye'}
-                                    onClick={event => handleShowHidePassword(event)}>
-                                {password.length > 0 ? typePassword === 'password' ? <FaEye/> : <FaEyeSlash/> : ''}
+                                    onClick={event => setIsShowPassword(!isShowPassword)}>
+                                {password.length > 0 ?
+                                    (isShowPassword ? <FaEyeSlash/> : <FaEye/>)
+                                    : ''
+                                }
+                                {/*{password.length > 0 ? typePassword === 'password' ? <FaEye/> : <FaEyeSlash/> : ''}*/}
                             </button>
                         </div>
                         <button type={'submit'}

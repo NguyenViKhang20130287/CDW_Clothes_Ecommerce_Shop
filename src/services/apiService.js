@@ -9,29 +9,32 @@ const apiService = axios.create({
     }
 })
 
-export const register = async (userEmail) => {
+const postRequest = async (endpoint, data = null, params = {}) => {
     try {
-        const res = await apiService.post(`/auth/register?email=${userEmail}`)
-        return res.data
+        const res = await apiService.post(endpoint, data, {params});
+        return res.data;
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        throw error;  // Optionally rethrow the error after logging it
     }
+};
+
+export const register = async (userEmail) => {
+    return postRequest(`/auth/register`, null, {email: userEmail})
 }
 
-export const registerConfirm = async (userData)=>{
-    try {
-        const res = await apiService.post(`/auth/register/confirm`, userData)
-        return res.data
-    }catch (error){
-        console.log(error)
-    }
+export const forgotPassword = async (userEmail) => {
+    return postRequest(`/auth/forgot-password`, null, {email: userEmail})
 }
 
-export const login = async (userData) =>{
-    try {
-        const res = await apiService.post(`/auth/login`, userData)
-        return res.data
-    }catch (error){
-        console.log(error)
-    }
+export const registerConfirm = async (userData) => {
+    return postRequest(`/auth/register/confirm`, userData)
+}
+
+export const resetPassword = async (data) =>{
+    return postRequest(`/auth/forgot-password/reset`, data)
+}
+
+export const login = async (userData) => {
+    return postRequest(`/auth/login`, userData)
 }
