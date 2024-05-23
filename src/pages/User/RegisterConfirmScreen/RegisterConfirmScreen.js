@@ -17,11 +17,8 @@ const RegisterConfirmScreen = () => {
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
     const [otp, setOtp] = useState('')
-    const [isMatched, setIsMatch] = useState(true)
     const [errorColor, setErrorColor] = useState('#999999FF')
-    const [message, setMessage] = useState('')
     const navigate = useNavigate()
-
 
 
     const handleShowHidePassword = (e) => {
@@ -36,36 +33,41 @@ const RegisterConfirmScreen = () => {
     const handleRegisterConfirm = async (e) => {
         e.preventDefault()
         if (rePassword !== password) {
-            setMessage('Mật khẩu không trùng khớp, vui lòng nhập lại !')
-            setIsMatch(false)
-            setErrorColor('red')
-        } else {
-            setErrorColor('#999999FF')
-            const userData = {
-                email: localStorage.getItem('emailRegistered'),
-                username: username,
-                password: password,
-                otp: otp
+            toast.error('Mật khẩu không trùng khớp, vui lòng nhập lại !')
+            return
+        }
+        if (username.length < 8) {
+            toast.error('Username phải dài hơn 8 kí tự !')
+            return
+        }
+        if (password.length < 6) {
+            toast.error('Mật khẩu phải dài hơn 6 kí tự !')
+            return
+        }
+        const userData = {
+            email: localStorage.getItem('emailRegistered'),
+            username: username,
+            password: password,
+            otp: otp
+        }
+        console.log('Data user: ', userData)
+        try {
+            const res = await registerConfirm(userData)
+            if (res.statusCodeValue === 200) {
+                toast.success('Đăng kí tài khoản thành công', {
+                    onClose: () => {
+                        setTimeout(() => {
+                            navigate('/login');
+                        }, 10000);
+                    }
+                });
+            } else {
+                toast.error(res.body)
+                // setMessage(res.body)
             }
-            console.log('Data user: ', userData)
-            try {
-                const res = await registerConfirm(userData)
-                if (res.statusCodeValue === 200){
-                    toast.success('Đăng kí tài khoản thành công', {
-                        onClose: () => {
-                            setTimeout(() => {
-                                navigate('/login');
-                            }, 10000);
-                        }
-                    });
-                }else{
-                    toast.error(res.body)
-                    // setMessage(res.body)
-                }
-                console.log('Data register confirm: ', res)
-            } catch (error) {
-                console.log(error)
-            }
+            console.log('Data register confirm: ', res)
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -101,7 +103,7 @@ const RegisterConfirmScreen = () => {
                             </button>
                         </div>
 
-                        <div className={'password'} style={{borderColor: errorColor}}>
+                        <div className={'password'}>
                             <CiLock/>
                             <input placeholder={'Nhập lại mật khẩu'} type={typePassword}
                                    value={rePassword}
@@ -121,15 +123,6 @@ const RegisterConfirmScreen = () => {
                                    value={otp}
                             />
                         </div>
-                        {!isMatched &&
-                            <span style={{
-                                textAlign: 'left',
-                                color: 'red',
-                                fontSize: '14px',
-                                marginBottom: '10px'
-                            }}
-                            >{message}</span>
-                        }
                         <button type={'submit'}
                                 className={'registerConfirmBtn'}
                                 onClick={e => handleRegisterConfirm(e)}

@@ -19,8 +19,8 @@ const HeaderComponent = () => {
     const [avatar, setAvatar] = useState('')
     const navigate = useNavigate()
 
-    console.log('Token: ', token)
-    console.log('Avt: ', avatar)
+    // console.log('Token: ', token)
+    // console.log('Avt: ', avatar)
 
     const handleShowHideSearch = (e) => {
         e.preventDefault()

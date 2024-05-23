@@ -20,7 +20,7 @@ const RegisterScreen = () => {
         e.preventDefault();
         if (!emailRegex.test(email)) {
             setErrorColor("red");
-            setError("Địa chỉ email không hợp lệ!");
+            toast.error("Địa chỉ email không hợp lệ!")
             return;
         }
         try {
@@ -32,7 +32,7 @@ const RegisterScreen = () => {
                 });
                 navigate("/register-confirm");
             } else {
-                setError(data.body);
+                toast.error(data.body)
             }
         } catch (err) {
             console.error(err);
