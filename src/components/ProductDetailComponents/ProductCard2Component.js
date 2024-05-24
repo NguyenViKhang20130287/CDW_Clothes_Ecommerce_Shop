@@ -44,7 +44,7 @@ const ProductCard2Component = ({product}) => {
                       encType="multipart/form-data">
                     <div className={`product-thumbnail ${discountRate ? 'sale' : ''}`} data-sale={discountRate}>
                         <a className="image_thumb"
-                           href="/public"
+                           href="/product-detail/4"
                            title={product.title}>
                             <div className="product-image">
                                 <img className="lazy loaded"
@@ -62,7 +62,7 @@ const ProductCard2Component = ({product}) => {
                     </div>
                     <div className="product-info">
                         <h3 className="product-name"><a
-                            href="/public"
+                            href="/product-detail/4"
                             title={product.name}>
                             {product.name}</a></h3>
                         <div className="bottom-action">

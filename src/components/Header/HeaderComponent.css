@@ -218,6 +218,17 @@
 .categoriesContainer .categoriesWrapper .categoryItem:hover {
     color: var(--color-silver);
 }
+.cart-quantity {
+    top: 0;
+    right: 0;
+    background: #070707;
+    color: white!important;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 12px!important;
+    margin-top: -11px!important;
+
+}
 
 /* responsive */
 @media only screen and (max-width: 767px) {
@@ -351,4 +362,5 @@
         padding: 5px 5px;
         font-size: 12px;
     }
+
 }

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import policy1 from "../../assets/img/ProductDetailSlider/Policy/product_poli_1.webp";
 import policy2 from "../../assets/img/ProductDetailSlider/Policy/product_poli_3.webp";
 import cup from "../../assets/img/ProductDetailSlider/Policy/cup.webp";
+import {useDispatch, useSelector} from "react-redux";
 
 const ColorSwatch = ({colors, selectedColor, setSelectedColor}) => {
     return (
@@ -108,7 +109,6 @@ const ProductInformation = ({product}) => {
         }
     }, [product.colorSizes]);
     const colorSet = new Set();
-    const sizeSet = new Set();
 
     const colors = product.colorSizes ? product.colorSizes.reduce((acc, item) => {
         if (!colorSet.has(item.color.name)) {
@@ -158,6 +158,23 @@ const ProductInformation = ({product}) => {
             setQuantity(prevQuantity => prevQuantity - 1);
         }
     };
+
+    const dispatch = useDispatch();
+    const addToCart = () => {
+        dispatch({
+            type: 'cart/add',
+            payload: {
+                product: product,
+                selectedColor: selectedColor,
+                selectedSize: selectedSize,
+                quantity: quantity,
+                selectedColorSize: selectedColorSize
+            }
+        });
+    };
+
+    const cartItems = useSelector(state => state.root.cart);
+    console.log(cartItems);
 
     const currentDate = new Date();
     const hasValidPromotion = product.productPromotions && product.productPromotions.length > 0 && new Date(product.productPromotions[0].promotion.start_date) <= currentDate && currentDate <= new Date(product.productPromotions[0].promotion.end_date);
@@ -292,8 +309,8 @@ const ProductInformation = ({product}) => {
 
                         <div className="btn-mua"
                              style={{display: selectedColorSize && selectedColorSize.quantity > 0 ? 'block' : 'none'}}>
-                            <button type="submit"
-                                    className="btn btn-lg btn-gray btn-cart btn_buy add_to_cart"
+                            <button type="button"
+                                    className="btn btn-lg btn-gray btn-cart btn_buy add_to_cart" onClick={addToCart}
                             >Thêm vào giỏ
                             </button>
                             <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now">Mua ngay

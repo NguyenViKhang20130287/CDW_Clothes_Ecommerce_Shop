@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 // import {Link} from 'react-router-dom'
 import LOGO from '../../assets/img/logo.webp'
 // icons
@@ -9,7 +9,15 @@ import './HeaderComponent.css'
 // components
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
 import {Link} from "react-router-dom";
+import { useSelector } from 'react-redux';
+import {createSelector} from "@reduxjs/toolkit";
 
+const getCartItems = state => state.cart?.items || [];
+
+export const getCartItemsSelector = createSelector(
+    [getCartItems],
+    (items) => items
+);
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
     const [sidebarToggleStatus, setSidebarToggleStatus] = useState(false)
@@ -27,6 +35,16 @@ const HeaderComponent = () => {
             setSidebarToggleStatus(true)
         else setSidebarToggleStatus(false)
     }
+
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const cartItems = useSelector(state => state.root.cart);
+    console.log(cartItems);
+
+    useEffect(() => {
+        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+        console.log(newTotalQuantity);
+        setTotalQuantity(newTotalQuantity);
+    }, [cartItems]);
 
     return (
         <div className={'main'}>
@@ -147,6 +165,7 @@ const HeaderComponent = () => {
                             </button>
                             <button className={'btnIcons'} type={"button"}>
                                 <IoCartOutline className={'icons'}/>
+                                <span className="cart-quantity">{totalQuantity}</span>
                             </button>
                             <Link to={'/login'} className={'btnIcons'}>
                                 <IoPersonOutline className={'icons'}/>

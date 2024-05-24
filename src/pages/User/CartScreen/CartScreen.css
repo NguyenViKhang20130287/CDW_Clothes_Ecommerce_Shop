@@ -64,6 +64,11 @@
     padding-top: 65px;
 }
 
+.cart-container .delete-all {
+    padding-top: 0px!important;
+
+}
+
 .cart-container .price h4 {
     font-weight: 700;
     color: #d0011b;
@@ -228,4 +233,9 @@
 
 .price-cart {
     margin-bottom: 30px;
+}
+.cart-container .quantity .stock {
+    font-size: 15px;
+    margin-left: 35px;
+    margin-top: 20px;
 }
