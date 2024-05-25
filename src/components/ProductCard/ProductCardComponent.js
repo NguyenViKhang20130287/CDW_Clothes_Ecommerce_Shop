@@ -11,8 +11,8 @@ const ProductCardComponent = ({image, name, price, originPrice}) => {
                 <span>{name}</span>
             </div>
             <div className={'itemPrice'}>
-                <span className={'price'}>{price}đ</span>
-                <span className={'originPrice'}>{originPrice}đ</span>
+                <span className={'price'}>{price.toLocaleString('vi-VN') + 'đ'}</span>
+                {originPrice ? <span className={'originPrice'}>{originPrice.toLocaleString('vi-VN') + 'đ'}</span> : null}
             </div>
         </div>
     )

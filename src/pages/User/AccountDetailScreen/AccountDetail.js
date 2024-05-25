@@ -53,7 +53,6 @@ const AccountDetail = () => {
     }, [isShow])
     return (
         <div className={'AccountDetailContainer'}>
-            <HeaderComponent/>
             <div className={'AccountDetailWrapper'}>
                 <div className={'AccountDetailSideBar'}>
                     <div className={'accountDetailImg'}>
@@ -204,7 +203,6 @@ const AccountDetail = () => {
                     </form>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     )
 }

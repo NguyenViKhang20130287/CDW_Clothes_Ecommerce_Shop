@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-// components
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
 import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
-// services
 import { register } from '../../../services/apiService';
 
 const RegisterScreen = () => {
@@ -47,7 +43,6 @@ const RegisterScreen = () => {
 
     return (
         <div className="registerContainer">
-            <HeaderComponent />
             <FormEmailComponent
                 title="ĐĂNG KÍ"
                 onChange={(e) => setEmail(e.target.value)}
@@ -56,7 +51,6 @@ const RegisterScreen = () => {
                 error={error}
                 borderColor={errorColor}
             />
-            <FooterComponent />
         </div>
     );
 };

@@ -43,7 +43,6 @@ const HomeScreen = () => {
 
     return (
         <div className={'homeContainer'}>
-            <HeaderComponent/>
             {/**/}
             <div className={'homeWrapper'}>
                 <Slider {...settings} className={'sliderWrapper'}>
@@ -93,7 +92,6 @@ const HomeScreen = () => {
                     </div>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     )
 }

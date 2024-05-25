@@ -1,0 +1,25 @@
+
+.categoryContainer .search-title {
+    color: var(--color-black);
+    font-family: var(--font-family-monospace);
+    font-size: 25px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.categoryContainer .searchBar {
+    margin: 0 auto 20px;
+    width: 50%;
+    border: 1px solid var(--color-black);
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.categoryContainer .searchBar input {
+    align-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    outline: none;
+    border: none;
+}
