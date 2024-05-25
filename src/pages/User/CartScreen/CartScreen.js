@@ -10,6 +10,8 @@ import APIService from "../../../services/APIService";
 const CartScreen = () => {
     const dispatch = useDispatch();
     const cartItems = useSelector(state => state.root.cart);
+    const [canCheckout, setCanCheckout] = useState(true);
+
     const totalPrice = cartItems.reduce((total, item) => {
         let discountRate = 0;
         if (item.product.productPromotions && item.product.productPromotions.length > 0) {
@@ -18,8 +20,7 @@ const CartScreen = () => {
         const discountPrice = (item.product.price - (item.product.price * discountRate / 100));
         return total + (discountPrice * item.quantity);
     }, 0);
-
-    const [canCheckout, setCanCheckout] = useState(true);
+    const formattedTotalPrice = totalPrice.toLocaleString('vi-VN') + 'đ';
 
     useEffect(() => {
         const canCheckout = cartItems.every(item => {
@@ -32,7 +33,7 @@ const CartScreen = () => {
         setCanCheckout(canCheckout);
     }, [cartItems]);
 
-    const formattedTotalPrice = totalPrice.toLocaleString('vi-VN') + 'đ';
+
 
     return (
         <div className={'big-container'}>

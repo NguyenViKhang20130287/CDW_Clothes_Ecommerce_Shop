@@ -1,21 +1,22 @@
 import React, {useEffect, useState} from "react";
-// import {Link} from 'react-router-dom'
 import LOGO from '../../assets/img/logo.webp'
-// icons
 import {IoCartOutline, IoSearchOutline, IoPersonOutline, IoCloseOutline} from "react-icons/io5";
 import {HiBars3BottomLeft} from "react-icons/hi2";
-// css
 import './HeaderComponent.css'
-// components
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {useSelector} from 'react-redux';
-import SearchedProduct from "../Search/SearchedProduct";
 import APIService from "../../services/APIService";
+import ProductCardComponent from "../ProductCard/ProductCardComponent";
 
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
     const [sidebarToggleStatus, setSidebarToggleStatus] = useState(false)
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const cartItems = useSelector(state => state.root.cart);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchResult, setSearchResult] = useState([]);
+    const navigate = useNavigate();
 
     const handleShowHideSearch = (e) => {
         e.preventDefault()
@@ -31,18 +32,18 @@ const HeaderComponent = () => {
         else setSidebarToggleStatus(false)
     }
 
-    const [totalQuantity, setTotalQuantity] = useState(0);
-    const cartItems = useSelector(state => state.root.cart);
-
-    useEffect(() => {
-        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
-        setTotalQuantity(newTotalQuantity);
-    }, [cartItems]);
-    const [searchKeyword, setSearchKeyword] = useState('');
     const handleInputChange = (event) => {
         setSearchKeyword(event.target.value);
     }
-    const [searchResult, setSearchResult] = useState([]);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchKeyword.trim()) {
+            navigate('/search', { state: { keyword: searchKeyword } });
+            setSearchPopupShowStatus(false);
+        }
+    };
+
     const findProduct = async () => {
         if (searchKeyword.trim() === '') {
             setSearchResult([]);
@@ -55,6 +56,12 @@ const HeaderComponent = () => {
             }
         }
     }
+
+    useEffect(() => {
+        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setTotalQuantity(newTotalQuantity);
+    }, [cartItems]);
+
     useEffect(() => {
         findProduct();
     }, [searchKeyword])
@@ -72,14 +79,25 @@ const HeaderComponent = () => {
                             <input placeholder={'Tìm kiếm sản phẩm...'}
                                    value={searchKeyword}
                                    onChange={handleInputChange}
+                                   onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
                             />
-                            <button className={'searchBtn'} type={'button'}>Tìm kiếm</button>
+                            <button className={'searchBtn'} type={'button'} onClick={handleSearch}>Tìm kiếm</button>
                         </div>
                         <div className={'searchResult'}>
                             <div className={'searchResultList'}>
-                                {searchResult.slice(0, 4).map((product, index) => (
-                                    <SearchedProduct key={index} image={product.thumbnail} name={product.name}/>
+                                {searchResult.slice(0, 7).map((product, index) => (
+                                    <ProductCardComponent image={product.thumbnail}
+                                                          name={product.name}
+                                                          price={product.price}
+                                                          originPrice={product.price}/>
                                 ))}
+                                {searchResult.length > 7 && (
+                                    <div className={'productCardItem'}>
+                                        <div className={'itemImage'}>
+                                            <span>Xem thêm</span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
