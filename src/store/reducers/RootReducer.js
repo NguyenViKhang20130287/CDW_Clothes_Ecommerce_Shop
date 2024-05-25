@@ -1,6 +1,7 @@
 const persistedCart = localStorage.getItem('cart');
+const persistedViewed = localStorage.getItem('recentlyViewed');
 const initState = {
-    viewed: [],
+    viewed: persistedViewed ? JSON.parse(persistedViewed) : [],
     products: [],
     cart: persistedCart ? JSON.parse(persistedCart) : []
 }
@@ -167,13 +168,19 @@ export const root = (state = initState, action) => {
         }
         case 'recent/add': {
             const existingProductIndex = state.viewed.findIndex(product => product.id === action.payload.id);
+            let updatedViewed;
             if (existingProductIndex !== -1) {
-                return state;
+                // If the product already exists in the viewed list, remove it
+                updatedViewed = state.viewed.filter((_, index) => index !== existingProductIndex);
             } else {
-                return {
-                    ...state,
-                    viewed: [action.payload, ...state.viewed]
-                }
+                updatedViewed = [...state.viewed];
+            }
+            // Add the new product at the start of the viewed list
+            updatedViewed.unshift(action.payload);
+            localStorage.setItem('recentlyViewed', JSON.stringify(updatedViewed));
+            return {
+                ...state,
+                viewed: updatedViewed
             }
         }
         default:

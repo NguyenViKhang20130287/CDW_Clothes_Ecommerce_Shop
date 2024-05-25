@@ -7,17 +7,12 @@ import {HiBars3BottomLeft} from "react-icons/hi2";
 // css
 import './HeaderComponent.css'
 // components
-import ProductCardComponent from "../ProductCard/ProductCardComponent";
 import {Link} from "react-router-dom";
-import { useSelector } from 'react-redux';
-import {createSelector} from "@reduxjs/toolkit";
+import {useSelector} from 'react-redux';
+import SearchedProduct from "../Search/SearchedProduct";
+import APIService from "../../services/APIService";
 
-const getCartItems = state => state.cart?.items || [];
 
-export const getCartItemsSelector = createSelector(
-    [getCartItems],
-    (items) => items
-);
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
     const [sidebarToggleStatus, setSidebarToggleStatus] = useState(false)
@@ -38,14 +33,31 @@ const HeaderComponent = () => {
 
     const [totalQuantity, setTotalQuantity] = useState(0);
     const cartItems = useSelector(state => state.root.cart);
-    console.log(cartItems);
 
     useEffect(() => {
         const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
-        console.log(newTotalQuantity);
         setTotalQuantity(newTotalQuantity);
     }, [cartItems]);
-
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const handleInputChange = (event) => {
+        setSearchKeyword(event.target.value);
+    }
+    const [searchResult, setSearchResult] = useState([]);
+    const findProduct = async () => {
+        if (searchKeyword.trim() === '') {
+            setSearchResult([]);
+        } else {
+            try {
+                const searchResult = await new APIService().fetchData(`http://localhost:8080/api/v1/product/search?name=${searchKeyword}`);
+                setSearchResult(searchResult);
+            } catch (error) {
+                console.error('Error fetching product', error);
+            }
+        }
+    }
+    useEffect(() => {
+        findProduct();
+    }, [searchKeyword])
     return (
         <div className={'main'}>
             <div className={'headerContainer'}>
@@ -57,31 +69,17 @@ const HeaderComponent = () => {
                         </button>
                         <h3 className={'searchTitle'}>TÌM KIẾM</h3>
                         <div className={'searchInput'}>
-                            <input placeholder={'Tìm kiếm sản phẩm...'}/>
+                            <input placeholder={'Tìm kiếm sản phẩm...'}
+                                   value={searchKeyword}
+                                   onChange={handleInputChange}
+                            />
                             <button className={'searchBtn'} type={'button'}>Tìm kiếm</button>
                         </div>
                         <div className={'searchResult'}>
                             <div className={'searchResultList'}>
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
+                                {searchResult.slice(0, 4).map((product, index) => (
+                                    <SearchedProduct key={index} image={product.thumbnail} name={product.name}/>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -164,8 +162,11 @@ const HeaderComponent = () => {
                                 <IoSearchOutline className={'icons'}/>
                             </button>
                             <button className={'btnIcons'} type={"button"}>
-                                <IoCartOutline className={'icons'}/>
-                                <span className="cart-quantity">{totalQuantity}</span>
+                                <Link to={'/cart'}>
+                                    <IoCartOutline className={'icons'}/>
+                                    <span className="cart-quantity">{totalQuantity}</span>
+                                </Link>
+
                             </button>
                             <Link to={'/login'} className={'btnIcons'}>
                                 <IoPersonOutline className={'icons'}/>
