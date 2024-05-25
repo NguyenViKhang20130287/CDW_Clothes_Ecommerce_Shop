@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
-import APIService from "../../services/APIService";
+import APIService from "../../services/APIService1";
 const SearchComponent = ({keyword}) => {
 
     const [searchKeyword, setSearchKeyword] = useState(keyword);

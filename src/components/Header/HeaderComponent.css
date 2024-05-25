@@ -180,6 +180,72 @@
     cursor: pointer;
 }
 
+.rightContent .groupBtn .avatarIcon {
+    margin-left: 10px;
+}
+
+.rightContent .groupBtn .avatarIcon:hover .avatarOption{
+    visibility: inherit;
+}
+
+.rightContent .groupBtn .avatarIcon .avatarIconWrapper {
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+}
+
+.rightContent .groupBtn .avatarIcon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.rightContent .groupBtn .avatarIcon .avatarOption {
+    /*border: 1px solid var(--color-black);*/
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    background-color: #FFFFFF;
+    z-index: 3;
+    top: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    font-weight: 500;
+    visibility: hidden;
+    transition: all .3s;
+}
+
+.rightContent .groupBtn .avatarIcon .avatarOption button {
+    border: none;
+    background: none;
+    font-size: 14px;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: left;
+    font-family: var(--font-family-monospace);
+    color: var(--color-black);
+    padding: 10px;
+    font-weight: 500;
+    transition: all .3s;
+}
+
+
+.rightContent .groupBtn .avatarIcon .avatarOption .myAccountLink {
+    padding: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    font-family: var(--font-family-monospace);
+    transition: all .3s;
+}
+
+.rightContent .groupBtn .avatarIcon .avatarOption .myAccountLink:hover,
+.rightContent .groupBtn .avatarIcon .avatarOption button:hover {
+    background-color: #cccccc;
+}
+
 #searchBtn:focus {
     color: var(--color-black);
 }
@@ -267,7 +333,7 @@
         transform: translateX(-100%);
     }
 
-    .sidebarResponsiveToggle{
+    .sidebarResponsiveToggle {
         transform: translateX(0);
     }
 

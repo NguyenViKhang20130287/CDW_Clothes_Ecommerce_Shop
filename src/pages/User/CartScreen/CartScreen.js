@@ -5,7 +5,6 @@ import {useDispatch} from 'react-redux';
 import {MdDeleteOutline} from "react-icons/md";
 import {useSelector} from "react-redux";
 import {clearCart, decreaseQuantity, deleteItem, increaseQuantity} from "../../../store/actions/cartActions";
-import APIService from "../../../services/APIService";
 
 const CartScreen = () => {
     const dispatch = useDispatch();

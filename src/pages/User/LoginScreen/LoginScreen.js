@@ -1,5 +1,6 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import {login} from '../../../services/apiService'
 // components
 import HeaderComponent from "../../../components/Header/HeaderComponent";
 import FooterComponent from "../../../components/Footer/FooterComponent";
@@ -8,19 +9,52 @@ import {CiUser, CiLock} from "react-icons/ci";
 import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";
 // css
 import './LoginScreen.css'
+import toast from "react-hot-toast";
 
 const LoginScreen = () => {
-    const [typePassword, setTypePassword] = useState('password')
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isShowPassword, setIsShowPassword] = useState(false)
+    const [errorColor, setErrorColor] = useState('var(--color-silver)')
+    const navigate = useNavigate()
 
-    const handleShowHidePassword = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault()
-        if (typePassword === 'password') {
-            setTypePassword('text')
-        } else {
-            setTypePassword('password')
+        if (password.length < 6) {
+            setErrorColor('red')
+            toast.error('Mật khẩu phải dài hơn 6 kí tự')
+            return
         }
+        try {
+            const userData = {
+                username: username,
+                password: password
+            }
+            console.log('User data: ', userData)
+            const res = await login(userData)
+            console.log('Login Data: ', res)
+            if (res.statusCodeValue === 200) {
+                localStorage.setItem("token", res.body.token)
+                toast.success('Đăng nhập thành công', {
+                    onClose: () => {
+                        setTimeout(() => {
+                            navigate('/');
+                        }, 10000);
+                    }
+                });
+                navigate('/');
+            } else {
+                toast.error(res.body)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        console.log('clicked')
     }
+
+    useEffect(() => {
+        setErrorColor('var(--color-silver)')
+    }, [password]);
 
     return (
         <div className={'loginContainer'}>
@@ -30,19 +64,37 @@ const LoginScreen = () => {
                     <form className={'formGroup'}>
                         <div className={'emailUsername'}>
                             <CiUser/>
-                            <input placeholder={'Nhập email hoặc username'} type={'text'}/>
+                            <input
+                                placeholder={'Nhập email hoặc username'}
+                                type={'text'}
+                                onChange={e => setUsername(e.target.value)}
+                                value={username}
+                            />
                         </div>
-                        <div className={'password'}>
+                        <div className={'password'}
+                             style={{
+                                 borderColor: errorColor
+                             }}
+                        >
                             <CiLock/>
-                            <input placeholder={'Nhập mật khẩu'} type={typePassword}
+                            <input placeholder={'Nhập mật khẩu'}
+                                   type={isShowPassword ? 'text' : 'password'}
                                    value={password}
                                    onChange={event => setPassword(event.target.value)}/>
                             <button type={'button'} className={'eye'}
-                                    onClick={event => handleShowHidePassword(event)}>
-                                {password.length > 0 ? typePassword === 'password' ? <FaEye/> : <FaEyeSlash/> : ''}
+                                    onClick={event => setIsShowPassword(!isShowPassword)}>
+                                {password.length > 0 ?
+                                    (isShowPassword ? <FaEyeSlash/> : <FaEye/>)
+                                    : ''
+                                }
+                                {/*{password.length > 0 ? typePassword === 'password' ? <FaEye/> : <FaEyeSlash/> : ''}*/}
                             </button>
                         </div>
-                        <button type={'submit'} className={'loginBtn'}>ĐĂNG NHẬP</button>
+                        <button type={'submit'}
+                                className={'loginBtn'}
+                                onClick={e => handleLogin(e)}
+                        >ĐĂNG NHẬP
+                        </button>
                     </form>
                     <div className={'otherOptions'}>
                         <div className={'register-forgot-wrapper'}>
@@ -62,7 +114,6 @@ const LoginScreen = () => {
                                 <FaGoogle/>
                             </button>
                         </div>
-
                     </div>
                 </div>
             </div>

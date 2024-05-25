@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from "react";
 import LOGO from '../../assets/img/logo.webp'
+import AVATAR from '../../assets/img/user.png'
+// icons
 import {IoCartOutline, IoSearchOutline, IoPersonOutline, IoCloseOutline} from "react-icons/io5";
 import {HiBars3BottomLeft} from "react-icons/hi2";
 import './HeaderComponent.css'
 import {Link, useNavigate} from "react-router-dom";
 import {useSelector} from 'react-redux';
-import APIService from "../../services/APIService";
+import APIService from "../../services/APIService1";
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
-
+import toast from "react-hot-toast";
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
@@ -17,6 +19,11 @@ const HeaderComponent = () => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const navigate = useNavigate();
+    const token = localStorage.getItem("token");
+    const [avatar, setAvatar] = useState('')
+
+    // console.log('Token: ', token)
+    // console.log('Avt: ', avatar)
 
     const handleShowHideSearch = (e) => {
         e.preventDefault()
@@ -30,6 +37,13 @@ const HeaderComponent = () => {
         if (sidebarToggleStatus === false)
             setSidebarToggleStatus(true)
         else setSidebarToggleStatus(false)
+    }
+
+    const handleLogout = (e) =>{
+        e.preventDefault()
+        localStorage.removeItem('token')
+        toast.success('Tài khoản đã đăng xuất')
+        navigate('/')
     }
 
     const handleInputChange = (event) => {
@@ -186,9 +200,46 @@ const HeaderComponent = () => {
                                 </Link>
 
                             </button>
-                            <Link to={'/login'} className={'btnIcons'}>
-                                <IoPersonOutline className={'icons'}/>
-                            </Link>
+                            {token ?
+                                (avatar ?
+                                        <div className={'avatarIcon'}>
+                                            <div className={'avatarIconWrapper'}>
+                                                <img src={avatar} alt={''}/>
+                                            </div>
+                                            <div className={'avatarOption'}>
+                                                <Link to={'/account-detail'} className={'myAccountLink'}>
+                                                    Tài khoản của tôi
+                                                </Link>
+                                                <button
+                                                    className={'logoutBtn'}
+                                                    onClick={e => handleLogout(e)}
+                                                >Đăng xuất
+                                                </button>
+                                            </div>
+                                        </div>
+                                        :
+                                        <div className={'avatarIcon'}>
+                                            <div className={'avatarIconWrapper'}>
+                                                <img src={AVATAR} alt={''}/>
+                                            </div>
+                                            <div className={'avatarOption'}>
+                                                <Link to={'/account-detail'} className={'myAccountLink'}>
+                                                    Tài khoản của tôi
+                                                </Link>
+                                                <button
+                                                    className={'logoutBtn'}
+                                                    onClick={e => handleLogout(e)}
+                                                >Đăng xuất
+                                                </button>
+                                            </div>
+                                        </div>
+                                )
+                                :
+                                <Link to={'/login'} className={'btnIcons'}>
+                                    <IoPersonOutline className={'icons'}/>
+                                </Link>
+                            }
+
                         </div>
                     </div>
                 </div>

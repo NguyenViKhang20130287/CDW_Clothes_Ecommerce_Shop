@@ -4,6 +4,7 @@ import {BrowserRouter} from 'react-router-dom'
 import './index.css';
 import store from "./store/reducers/store";
 import App from './App';
+import {Toaster} from "react-hot-toast";
 import {Provider} from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,6 +15,10 @@ root.render(
                 <App/>
             </BrowserRouter>
         </Provider>
+        <Toaster
+            position="top-right"
+            reverseOrder={true}
+        />
     </React.StrictMode>
 );
 

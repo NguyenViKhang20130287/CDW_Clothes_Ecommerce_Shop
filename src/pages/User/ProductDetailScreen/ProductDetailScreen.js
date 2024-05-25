@@ -7,7 +7,7 @@ import RecentItem from "../../../components/ProductDetailComponents/RecentItem";
 import SimilarItem from "../../../components/ProductDetailComponents/SimilarItem";
 import "../../../assets/style/ProductDetail.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import APIService from "../../../services/APIService";
+import APIService from "../../../services/APIService1";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
