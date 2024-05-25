@@ -1,55 +1,40 @@
-import axios from "axios";
-class ApiService {
-    constructor(accessToken = null) {
-        this.api = axios.create({
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
+import axios from 'axios'
 
-        if (accessToken) {
-            this.api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-        }
-    }
+const BASE_URL = 'http://localhost:8080/api/v1'
 
-    async fetchData(endpoint) {
-        try {
-            const response = await this.api.get(endpoint);
-            return response.data;
-        } catch (error) {
-            console.error('Error fetching data:', error);
-            throw error;
-        }
+const apiService = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+        "Content-Type": "application/json"
     }
+})
 
-    async sendData(endpoint, data = {}) {
-        try {
-            const response = await this.api.post(endpoint, data);
-            return response.data;
-        } catch (error) {
-            console.error('Error sending data:', error);
-            throw error;
-        }
+const postRequest = async (endpoint, data = null, params = {}) => {
+    try {
+        const res = await apiService.post(endpoint, data, {params});
+        return res.data;
+    } catch (error) {
+        console.error(error);
+        throw error;  // Optionally rethrow the error after logging it
     }
+};
 
-    async updateData(endpoint, data) {
-        try {
-            const response = await this.api.put(endpoint, data);
-            return response.data;
-        } catch (error) {
-            console.error('Error updating data:', error);
-            throw error;
-        }
-    }
-    async deleteData(endpoint) {
-        try {
-            const response = await this.api.delete(endpoint);
-            return response.data;
-        } catch (error) {
-            console.error('Error deleting data:', error);
-            throw error;
-        }
-    }
+export const register = async (userEmail) => {
+    return postRequest(`/auth/register`, null, {email: userEmail})
 }
 
-export default ApiService;
+export const forgotPassword = async (userEmail) => {
+    return postRequest(`/auth/forgot-password`, null, {email: userEmail})
+}
+
+export const registerConfirm = async (userData) => {
+    return postRequest(`/auth/register/confirm`, userData)
+}
+
+export const resetPassword = async (data) =>{
+    return postRequest(`/auth/forgot-password/reset`, data)
+}
+
+export const login = async (userData) => {
+    return postRequest(`/auth/login`, userData)
+}
