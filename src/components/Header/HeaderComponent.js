@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 // import {Link} from 'react-router-dom'
 import LOGO from '../../assets/img/logo.webp'
-import AVATAR from '../../assets/img/user.png'
+import AVATAR_DEFAULT from '../../assets/img/user.png'
 // icons
 import {IoCartOutline, IoSearchOutline, IoPersonOutline, IoCloseOutline} from "react-icons/io5";
 import {HiBars3BottomLeft} from "react-icons/hi2";
@@ -11,16 +11,16 @@ import './HeaderComponent.css'
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
+import {loadDataUser} from "../../services/apiService";
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
     const [sidebarToggleStatus, setSidebarToggleStatus] = useState(false)
-    const token = localStorage.getItem("token");
     const [avatar, setAvatar] = useState('')
     const navigate = useNavigate()
-
-    // console.log('Token: ', token)
-    // console.log('Avt: ', avatar)
+    // const token = localStorage.getItem('token')
+    const [token, setToken] = useState(localStorage.getItem('token'))
+    let hasShownToast = false;
 
     const handleShowHideSearch = (e) => {
         e.preventDefault()
@@ -29,6 +29,33 @@ const HeaderComponent = () => {
         else setSearchPopupShowStatus(false)
     }
 
+    useEffect(() => {
+        // console.log('Token: ', token);
+
+        const fetchAvatar = async () => {
+            if (token) {
+                try {
+                    const data = await loadDataUser(token);
+                    setAvatar(data.userInformation.avatar);
+                } catch (error) {
+                    localStorage.removeItem('token');
+                    setToken(null);
+                    if (!hasShownToast) {
+                        toast.error('Phiên đăng nhập đã hết hạn !');
+                        hasShownToast = true; // Đánh dấu rằng toast đã được hiển thị
+                    }
+                    navigate('/');
+                }
+            }
+        };
+
+        if (token) fetchAvatar();
+
+        return () => {
+            hasShownToast = false; // Reset biến cờ khi component unmount
+        };
+    }, [navigate, token, avatar])
+
     const handleToggleSidebar = (e) => {
         e.preventDefault()
         if (sidebarToggleStatus === false)
@@ -36,7 +63,7 @@ const HeaderComponent = () => {
         else setSidebarToggleStatus(false)
     }
 
-    const handleLogout = (e) =>{
+    const handleLogout = (e) => {
         e.preventDefault()
         localStorage.removeItem('token')
         toast.success('Tài khoản đã đăng xuất')
@@ -183,7 +210,7 @@ const HeaderComponent = () => {
                                         :
                                         <div className={'avatarIcon'}>
                                             <div className={'avatarIconWrapper'}>
-                                                <img src={AVATAR} alt={''}/>
+                                                <img src={AVATAR_DEFAULT} alt={''}/>
                                             </div>
                                             <div className={'avatarOption'}>
                                                 <Link to={'/account-detail'} className={'myAccountLink'}>

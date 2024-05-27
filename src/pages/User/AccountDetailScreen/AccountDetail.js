@@ -1,56 +1,54 @@
 import React, {useEffect, useState} from "react";
-import {TextField} from "@mui/material";
-import {makeStyles} from '@mui/styles';
-
+import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
+//
+import AVATAR_DEFAULT from '../../../assets/img/user.png'
+// services
+import {loadDataUser} from "../../../services/apiService";
 // components
 import HeaderComponent from "../../../components/Header/HeaderComponent";
 import FooterComponent from "../../../components/Footer/FooterComponent";
+import AccountDetailContentComponent from "../../../components/AccountDetailContent/AccountDetailContentComponent";
 // icons
 import {FaPen, FaRegUser} from "react-icons/fa";
 import {BiPurchaseTag} from "react-icons/bi";
-import {MdNotificationsNone} from "react-icons/md";
 // css
 import './AccountDetail.css'
-import IMG from '../../../assets/img/avt.jpg'
-import AccountDetailContentComponent from "../../../components/AccountDetailContent/AccountDetailContentComponent";
-
-const useStyles = makeStyles({
-    root: {
-        '& .MuiInputLabel-root': {
-            fontSize: '14px'
-        },
-        '& .MuiInputBase-input': {
-            fontSize: '14px',
-        },
-    }
-});
 
 const AccountDetail = () => {
-    const [user, setUser] = useState({
-        username: 'vikang',
-        fullName: 'Nguyen Vi Khang',
-        email: 'vik08080817@gmail.com',
-        phone: '0943382248',
-        avatar: IMG
-    })
+    const [user, setUser] = useState(null)
     const [isShow, setIsShow] = useState('profile')
-    const [isHiddenPopup, setIsHiddenPopup] = useState(true)
+    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
+    let hasShownToast = false;
+
 
     const handleSelectShow = (isShow) => {
         setIsShow(isShow)
     }
 
-    const handleHideShowPopup = (e) => {
-        if (isHiddenPopup === false)
-            setIsHiddenPopup(true)
-        else setIsHiddenPopup(false)
-    }
-
-    const classes = useStyles();
-
     useEffect(() => {
+        const loadData = async () => {
+            try {
+                const data = await loadDataUser(token);
+                setUser(data)
+            } catch (error) {
+                localStorage.removeItem('token');
+                if (!hasShownToast) {
+                    toast.error('Phiên đăng nhập đã hết hạn !');
+                    // eslint-disable-next-line react-hooks/exhaustive-deps
+                    hasShownToast = true; // Đánh dấu rằng toast đã được hiển thị
+                }
+                navigate('/');
+            }
+        }
 
-    }, [isShow])
+        // console.log()
+        // if (user === null)
+            loadData()
+
+    }, [user, token, isShow])
+
     return (
         <div className={'AccountDetailContainer'}>
             <HeaderComponent/>
@@ -58,10 +56,13 @@ const AccountDetail = () => {
                 <div className={'AccountDetailSideBar'}>
                     <div className={'accountDetailImg'}>
                         <div className={'imgWrapper'}>
-                            <img src={IMG} alt={''}/>
+                            <img
+                                src={user?.userInformation?.avatar || AVATAR_DEFAULT}
+                                alt={'avatar'}
+                            />
                         </div>
                         <div className={'info'}>
-                            <span className={'username'}>vikang</span>
+                            <span className={'username'}>{user?.username || null}</span>
                             <div className={'editProfile'}>
                                 <FaPen style={{fontSize: '12px', marginRight: '5px'}}/>
                                 <span>Sửa hồ sơ</span>
@@ -84,6 +85,7 @@ const AccountDetail = () => {
                                           onClick={event => handleSelectShow('profile')}
                                 >Hồ sơ</button>
                             }
+                            {/**/}
                             {isShow === 'address' ?
                                 <button
                                     className={'address'}
@@ -96,6 +98,7 @@ const AccountDetail = () => {
                                     onClick={event => handleSelectShow('address')}
                                 >Địa chỉ</button>
                             }
+                            {/**/}
                             {isShow === 'changePassword' ?
                                 <button
                                     className={'changePass'}
@@ -114,7 +117,7 @@ const AccountDetail = () => {
                     {isShow === 'purchaseOrder' ?
                         <div
                             className={'accountDetailItem purchaseOrder'}
-                            style={{color:'red'}}
+                            style={{color: 'red'}}
                             onClick={e => handleSelectShow('purchaseOrder')}>
                             <BiPurchaseTag className={'icons'}/>
                             <span>Đơn mua</span>
@@ -128,82 +131,36 @@ const AccountDetail = () => {
                         </div>
                     }
 
-                {/*    */}
+                    {/*  Content  */}
                 </div>
-                <div className={'AccountDetailContent'}>
-                    <AccountDetailContentComponent
-                        nameShow={isShow}
-                        user={user}
-                        onClickUpdateAddress={e => setIsHiddenPopup(false)}
-                    />
-                </div>
+                {user ?
+                    (<div className={'AccountDetailContent'}>
+                        <AccountDetailContentComponent
+                            nameShow={isShow}
+                            user={user}
+                            updateUser={setUser}
+                        />
+                    </div>)
+                    :
+                    <div className={'AccountDetailContent'}
+                         style={{
+                             display: 'flex',
+                             justifyContent: 'center',
+                             alignItems: 'center'
+                         }}>
+                        <span>Loading...</span>
+                    </div>
+                }
             </div>
             {/* popup edit address*/}
-            <div className={'editAddressPopup'} hidden={isHiddenPopup}>
-                <div className={'editAddressPopupWrapper'}>
-                    <div className={'title'}>
-                        <span>Cập nhật địa chỉ</span>
-                    </div>
-                    <form action="">
-                        <div className={'editFullNamePhone'}>
-                            <div className={'editFullName'}>
-                                <TextField
-                                    id={'editFullName'}
-                                    label={'Họ và tên'}
-                                    variant={'outlined'}
-                                    fullWidth={true}
-                                    className={classes.root + ' editFullNameInput'}
-                                    size={'small'}
-                                />
-                            </div>
-                            <div className={'editPhone'}>
-                                <TextField
-                                    id={'editPhone'}
-                                    label={'Số điện thoại'}
-                                    variant={'outlined'}
-                                    fullWidth={true}
-                                    className={classes.root}
-                                    size={'small'}
-
-                                />
-                            </div>
-                        </div>
-                        <div className={'editAddress'}>
-                            <TextField
-                                id={'editAddress'}
-                                label={'Tỉnh/Thành phố, Quận/Huyện, Phường/Xã'}
-                                variant={'outlined'}
-                                fullWidth={true}
-                                className={classes.root}
-                                size={'small'}
-                            />
-                        </div>
-                        <div className={'editAddressDetail'}>
-                            <TextField
-                                id={'editAddressDetail'}
-                                label={'Địa chỉ cụ thể'}
-                                variant={'outlined'}
-                                fullWidth={true}
-                                className={classes.root}
-                                size={'small'}
-                            />
-                        </div>
-                        <div className={'addressDefault'}>
-                            <input type="checkbox" id={'addressDefault'}/>
-                            <label htmlFor={'addressDefault'}>Đặt làm địa chỉ mặc định</label>
-                        </div>
-                        <div className={'action'}>
-                            <button
-                                className={'backBtn'}
-                                type={'button'}
-                                onClick={(e) => setIsHiddenPopup(true)}
-                            >Trở về
-                            </button>
-                            <button className={'saveBtn'} type={'button'}>Lưu</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            {/*<PopupAddress*/}
+            {/*    title={'Cập nhật địa chỉ'}*/}
+            {/*    isHiddenPopup={isHiddenPopup}*/}
+            {/*    user={user}*/}
+            {/*    onClickHiddenPopup={e=>setIsHiddenPopup(true)}*/}
+            {/*    handleSubmit={handleUpdateAddress}*/}
+            {/*    ref={childRef}*/}
+            {/*/>*/}
             <FooterComponent/>
         </div>
     )
