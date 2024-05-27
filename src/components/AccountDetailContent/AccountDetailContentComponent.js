@@ -1,34 +1,135 @@
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import './AccountDetailContentComponent.css'
-import IMG from '../../assets/img/avt.jpg'
+import AVATAR_DEFAULT from '../../assets/img/user.png'
 import PRODUCT from '../../assets/img/shirt1.webp'
-import {FaEye, FaEyeSlash, FaPlus, FaShippingFast} from "react-icons/fa";
+import {FaEye, FaEyeSlash, FaPlus} from "react-icons/fa";
 import {IoSearchSharp} from "react-icons/io5";
 import {LiaShippingFastSolid} from "react-icons/lia";
+import {editUser} from "../../services/apiService";
+import toast from "react-hot-toast";
+import PopupAddress from "../PopupAddress/PopupAddress";
+import {addNewAddress} from "../../services/addressApiService";
 
-const AccountDetailContentComponent = ({nameShow, user, onClickUpdateAddress}) => {
-    const [fullName, setFullName] = useState(user.fullName)
-    const [email, setEmail] = useState(user.email)
-    const [phone, setPhone] = useState(user.phone)
-    const [avatarLink, setAvatarLink] = useState(user.avatar)
+const AccountDetailContentComponent = ({
+                                           nameShow,
+                                           user,
+                                           onClickUpdateAddress,
+                                           updateUser,
+                                           setAddress,
+                                           setIsShowPopup
+                                       }) => {
+    const [username, setUsername] = useState('')
+    const [fullName, setFullName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [avatarLink, setAvatarLink] = useState('');
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
     const [showOldPassword, setShowOldPassword] = useState(false)
+
     const [showNewPassword, setShowNewPassword] = useState(false)
+    const [addresses, setAddresses] = useState([])
+    const [isHiddenPopup, setIsHiddenPopup] = useState(true)
+    const [showNamePopup, setShowNamePopup] = useState('')
+    const [addressData, setAddressData] = useState(null)
+    const childRef = useRef()
 
-
-    const handleChangeAvatar = (e) => {
-        const file = e.target.files[0]
+    const handleChangeAvatar = async (e) => {
+        const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const imgUrl = reader.result;
-                setAvatarLink(imgUrl)
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await
+                    fetch('https://api.imgbb.com/1/upload?key=8c2c7c5c94797f04504f969ec51749a4',
+                        {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                const result = await response.json();
+                if (result.success) {
+                    setAvatarLink(result.data.url);
+                } else {
+                    console.error("Error uploading image to ImgBB", result);
+                }
+            } catch (error) {
+                console.error("Error uploading image to ImgBB", error);
             }
-            reader.readAsDataURL(file)
+        }
+        console.log('AvatarLink: ', avatarLink)
+    }
+
+    const handleEditDataUser = async (e) => {
+        e.preventDefault()
+        console.log('Clicked')
+        const userData = {
+            username: user.username,
+            fullName: fullName,
+            email: email,
+            phone: phone,
+            avatarLink: avatarLink
+        }
+        // console.log('User data: ', userData)
+        try {
+            const res = await editUser(userData);
+            // console.log('Response edit user: ', res)
+            if (res.statusCodeValue === 400) {
+                toast.error('Lỗi thao tác')
+                return
+            }
+            toast.success('Thay đổi thông tin thành công')
+
+        } catch (error) {
+            console.log(error)
         }
     }
+
+    const handleAddNewAddress = async (e) => {
+        e.preventDefault()
+        const data = childRef.current.getData();
+        // console.log('Data from child:', data);
+        // console.log(user.username)
+        try {
+            const res = await addNewAddress(user.username, data)
+            console.log('res: ', res)
+            toast.success('Thêm địa chỉ thành công')
+            setIsHiddenPopup(true)
+            // setAddresses(prevAddresses => [...prevAddresses, res]);
+            updateUser(prevUser => ({
+                ...prevUser,
+                addresses: [...prevUser.addresses, res]
+            }));
+        } catch (error) {
+            console.log(error)
+            toast.error('Lỗi thao tác !')
+        }
+    }
+
+    const handleShowPopup = (showNamePopup, address) => {
+        setShowNamePopup(showNamePopup)
+        setIsHiddenPopup(false)
+        if (showNamePopup === 'update'){
+            setAddressData(address)
+        }
+    }
+
+
+    useEffect(() => {
+        if (user) {
+            setUsername(user.username)
+            setFullName(user.userInformation.fullName);
+            setEmail(user.userInformation.email);
+            setPhone(user.userInformation.phone);
+            setAvatarLink(user.userInformation.avatar);
+            // setAddresses(user.addresses)
+            setAddresses([...user.addresses].sort((a, b) => b.default - a.default))
+        }
+
+    }, [user, isHiddenPopup, addresses]);
+    // console.log('Addresses: ', addresses)
 
     return (
         <div className={'accountDetailContentWrapper'}>
@@ -47,52 +148,44 @@ const AccountDetailContentComponent = ({nameShow, user, onClickUpdateAddress}) =
                                        id={'username'}
                                        disabled={true}
                                 />
-                                <button className={'editBtn'}></button>
                             </div>
                             <div className={'editControl fullName'}>
                                 <label htmlFor={'fullName'}>Họ và tên</label>
                                 <input
-                                    value={fullName}
+                                    value={fullName ? fullName : ''}
                                     type={"text"}
                                     id={'fullName'}
-                                    // style={{border: borderStyle}}
                                     onChange={event => setFullName(event.target.value)}
                                 />
-                                <button className={'editBtn'}></button>
                             </div>
                             <div className={'editControl'}>
                                 <label htmlFor={'email'}>Email</label>
                                 <input
-                                    value={email}
+                                    value={email ? email : ''}
                                     type={"email"}
                                     id={'email'}
-                                    disabled={true}
+                                    // disabled={true}
                                     onChange={event => setEmail(event.target.value)}
                                 />
-                                <button className={'editBtn'}
-                                        type={'button'}
-                                >Thay đổi
-                                </button>
                             </div>
                             <div className={'editControl'}>
                                 <label htmlFor={'phone'}>Số điện thoại</label>
                                 <input
-                                    value={phone}
+                                    value={phone ? phone : ''}
                                     type={"tel"}
                                     id={'phone'}
-                                    disabled={true}
                                     onChange={event => setPhone(event.target.value)}
                                 />
-                                <button className={'editBtn'}>Thay đổi</button>
                             </div>
-                            <button className={'saveBtn'} type={"submit"}>
+                            <button className={'saveBtn'} type={"submit"}
+                                    onClick={e => handleEditDataUser(e)}>
                                 Lưu
                             </button>
                         </form>
                         <div className={'editAvatarWrapper'}>
                             <form className={'editAvatar'}>
                                 <div className={'avatarWrapper'}>
-                                    <img src={avatarLink} alt={''}/>
+                                    <img src={avatarLink ? avatarLink : AVATAR_DEFAULT} alt={''}/>
                                 </div>
                                 <input
                                     className={'uploadImage'}
@@ -111,50 +204,74 @@ const AccountDetailContentComponent = ({nameShow, user, onClickUpdateAddress}) =
                 <div className={'addressContainer'}>
                     <div className={'title headerAddress'}>
                         <h3>Địa chỉ của tôi</h3>
-                        <button className={'addAddressBtn'}>
+                        <button className={'addAddressBtn'}
+                            // onClick={handleShowPopup}
+                        >
                             <FaPlus/>
-                            <span>Thêm địa chỉ mới</span>
+                            <span onClick={e => handleShowPopup('add')}>
+                                    Thêm địa chỉ mới
+                                </span>
                         </button>
                     </div>
                     <div className={'addressListWrapper'}>
-                        <div className={'addressList'}>
-                            <div className={'addressItem'}>
-                                <div className={'addressInfo'}>
-                                    <div className={'fullNamePhone'}>
-                                        <h3>{user.fullName}</h3>
-                                        <span>{user.phone}</span>
+                        <div className={'addressList'}
+                             style={{
+                                 overflowY: 'scroll',
+                                 height: '400px'
+                             }}
+                        >
+                            {addresses.length > 0 ?
+                                addresses.map((address, index) => (
+                                    <div className={'addressItem'} key={address.id}>
+                                        <div className={'addressInfo'}>
+                                            <div className={'fullNamePhone'}>
+                                                <h3>{address.fullName ? address.fullName : ''}</h3>
+                                                <h3>{address.phone ? address.phone : ''}</h3>
+                                            </div>
+                                            <div className={'address'}>
+                                        <span className={'street'}>
+                                            {address.street}
+                                        </span>
+                                                <span className={'detail'}>
+                                            {
+                                                address.ward + ', '
+                                                + address.district + ', '
+                                                + address.province
+                                            }
+                                        </span>
+                                            </div>
+                                        </div>
+                                        <div className={'addressAction'}>
+                                            <button
+                                                className={'updateAddress'}
+                                                type={'button'}
+                                                onClick={e => handleShowPopup('update', address)}
+                                            >Cập nhật
+                                            </button>
+
+                                            {address.default ?
+                                                <button className={'setDefaultAddress defaulted'} disabled={true}
+                                                >
+                                                    Thiết lập mặc định
+                                                </button>
+                                                :
+                                                <button className={'setDefaultAddress'}>Thiết lập mặc định</button>
+
+                                            }
+                                        </div>
                                     </div>
-                                    <div className={'address'}>
-                                        <span className={'street'}>2/7c, Đường Số 106</span>
-                                        <span className={'detail'}>Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, TP. Hồ Chí Minh</span>
-                                    </div>
+                                ))
+                                :
+                                <div style={
+                                    {
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }
+                                }>
+                                    <span>Chưa có địa chỉ nào...</span>
                                 </div>
-                                <div className={'addressAction'}>
-                                    <button
-                                        className={'updateAddress'}
-                                        type={'button'}
-                                        onClick={onClickUpdateAddress}
-                                    >Cập nhật
-                                    </button>
-                                    <button className={'setDefaultAddress'}>Thiết lập mặc định</button>
-                                </div>
-                            </div>
-                            <div className={'addressItem'}>
-                                <div className={'addressInfo'}>
-                                    <div className={'fullNamePhone'}>
-                                        <h3>{user.fullName}</h3>
-                                        <span>{user.phone}</span>
-                                    </div>
-                                    <div className={'address'}>
-                                        <span className={'street'}>2/7c, Đường Số 106</span>
-                                        <span className={'detail'}>Phường Tăng Nhơn Phú A, Thành Phố Thủ Đức, TP. Hồ Chí Minh</span>
-                                    </div>
-                                </div>
-                                <div className={'addressAction'}>
-                                    <button className={'updateAddress'}>Cập nhật</button>
-                                    <button className={'setDefaultAddress'}>Thiết lập mặc định</button>
-                                </div>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -256,7 +373,7 @@ const AccountDetailContentComponent = ({nameShow, user, onClickUpdateAddress}) =
                                          }}/>
                                     <span>Đang vận chuyển</span>
                                     </span>
-                                   <span className={'status'}>hoàn thành</span>
+                                    <span className={'status'}>hoàn thành</span>
                                 </div>
                             </div>
                             <div className={'orderProducts'}>
@@ -347,6 +464,15 @@ const AccountDetailContentComponent = ({nameShow, user, onClickUpdateAddress}) =
 
                 </div>
             }
+            <PopupAddress
+                showNamePopup={showNamePopup}
+                addressData={addressData}
+                title={showNamePopup === 'add' ? 'Thêm địa chỉ mới' : 'Cập nhật địa chỉ'}
+                isHiddenPopup={isHiddenPopup}
+                onClickHiddenPopup={e => setIsHiddenPopup(true)}
+                handleSubmit={e => handleAddNewAddress(e)}
+                ref={childRef}
+            />
         </div>
     )
 }
