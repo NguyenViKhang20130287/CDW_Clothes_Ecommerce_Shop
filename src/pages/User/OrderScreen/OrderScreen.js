@@ -101,7 +101,6 @@ const OrderScreen = () => {
     ];
     return (
         <>
-            <HeaderComponent/>
             <div className="container">
                 <div className={'order-wrap'}>
                     <div className={'order-main'}>
@@ -455,7 +454,6 @@ const OrderScreen = () => {
                     </div>
                 </div>
             </div>
-            <FooterComponent/>
         </>
     );
 }

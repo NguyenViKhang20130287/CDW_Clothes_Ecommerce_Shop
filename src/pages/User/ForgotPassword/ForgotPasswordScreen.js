@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
+import {useState, useEffect} from "react";
 // components
 import HeaderComponent from "../../../components/Header/HeaderComponent";
 import FooterComponent from "../../../components/Footer/FooterComponent";
@@ -45,7 +46,6 @@ const ForgotPasswordScreen =() =>{
 
     return(
         <div className={'forgotPasswordContainer'}>
-            <HeaderComponent/>
             <FormEmailComponent
                 title={'LẤY LẠI MẬT KHẨU'}
                 onChange={(e) => setEmail(e.target.value)}
@@ -53,7 +53,6 @@ const ForgotPasswordScreen =() =>{
                 onClick={handleRegister}
                 borderColor={errorColor}
             />
-            <FooterComponent/>
         </div>
     )
 }

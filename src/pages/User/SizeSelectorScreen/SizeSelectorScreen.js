@@ -8,7 +8,6 @@ import FooterComponent from "../../../components/Footer/FooterComponent";
 const SizeSelectorScreen = () => {
     return (
         <div>
-            <HeaderComponent/>
             <section className="page">
                 <div className="container">
                     <div className="row">
@@ -24,7 +23,6 @@ const SizeSelectorScreen = () => {
                     </div>
                 </div>
             </section>
-            <FooterComponent/>
         </div>
     );
 }

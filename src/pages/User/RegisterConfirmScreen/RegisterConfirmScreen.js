@@ -78,7 +78,6 @@ const RegisterConfirmScreen = () => {
 
     return (
         <div className={'registerConfirmContainer'}>
-            <HeaderComponent/>
             <div className={'registerConfirmWrapper'}>
                 <div className={'registerConfirmBox'}>
                     <h3 className={'title'}>XÁC NHẬN ĐĂNG KÍ</h3>
@@ -136,7 +135,6 @@ const RegisterConfirmScreen = () => {
                     </div>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     )
 }

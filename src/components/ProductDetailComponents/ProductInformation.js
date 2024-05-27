@@ -1,15 +1,197 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import policy1 from "../../assets/img/ProductDetailSlider/Policy/product_poli_1.webp";
 import policy2 from "../../assets/img/ProductDetailSlider/Policy/product_poli_3.webp";
-import color1 from "../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp";
-import color2 from "../../assets/img/ProductDetailSlider/BigSlider/BigSlider4.webp";
 import cup from "../../assets/img/ProductDetailSlider/Policy/cup.webp";
+import {useDispatch, useSelector} from "react-redux";
 
-const ProductInformation = () => {
+const ColorSwatch = ({colors, selectedColor, setSelectedColor}) => {
+    return (
+        <div className="swatch-color swatch clearfix">
+            <div className="options-title">
+                Màu sắc: <span className="var">{selectedColor}</span>
+            </div>
+            {colors.map((color, index) => (
+                <div
+                    key={index}
+                    data-value={color.value}
+                    className={`swatch-element color ${color.value.toLowerCase()} available`}
+                >
+                    <input
+                        id={`swatch-0-${color.value.toLowerCase()}`}
+                        type="radio"
+                        name="color"
+                        value={color.value}
+                        checked={selectedColor === color.value}
+                        onChange={() => setSelectedColor(color.value)}
+                    />
+                    <label
+                        htmlFor={`swatch-0-${color.value.toLowerCase()}`}
+                        title={color.value}
+                        style={{
+                            backgroundColor: color.code, // Set background color directly
+                            width: '32px',
+                            height: '32px',
+                            display: 'block'
+                        }}
+                    />
+                </div>
+            ))}
+        </div>
+    );
+};
+
+const SizeSwatch = ({sizes, selectedSize, setSelectedSize, selectedColor, product}) => {
+    return (
+        <div className="swatch clearfix" data-option-index="1">
+            <div className="options-title">
+                Kích thước: <span className="var">{selectedSize}</span>
+            </div>
+            {sizes.map((size, index) => (
+                <div
+                    key={index}
+                    data-value={size.value}
+                    className={`swatch-element ${size.value.toLowerCase()} available`}
+                >
+                    <input
+                        id={`swatch-1-${size.value.toLowerCase()}`}
+                        type="radio"
+                        name="size"
+                        value={size.value}
+                        checked={selectedSize === size.value}
+                        onChange={() => setSelectedSize(size.value)}
+                        disabled={!size.available} // Disable if size is not available for selected color
+                    />
+                    <label
+                        htmlFor={`swatch-1-${size.value.toLowerCase()}`}
+                        title={size.value}
+                        style={{opacity: size.available ? 1 : 0.5}} // Dim unavailable sizes
+                    >
+                        {size.value}
+                    </label>
+                </div>
+            ))}
+        </div>
+    );
+};
+
+
+const ProductInformation = ({product}) => {
+    const colorMapping = {
+        'Trắng': '#fff',
+        'Đen': '#000000',
+        'Xanh ve chai': '#306249',
+        'Ghi': '#808080',
+        'Be': '#F5F5DC',
+        'Xám khói': '#F5F5F5',
+        'Nâu': '#964B00',
+        'Xám chì': '#696969',
+        'Xanh rêu': '#11452F'
+    };
+    const [selectedColor, setSelectedColor] = useState('');
+    const [selectedSize, setSelectedSize] = useState('');
+    const [availableSizes, setAvailableSizes] = useState([]);
+
+    useEffect(() => {
+        if (selectedColor) {
+            const sizes = product.colorSizes
+                .filter(item => item.color.name === selectedColor)
+                .map(item => ({value: item.size.name, available: true}));
+            setAvailableSizes(sizes);
+            if (!sizes.find(size => size.value === selectedSize)) {
+                setSelectedSize(sizes.length > 0 ? sizes[0].value : '');
+            }
+        }
+    }, [selectedColor, selectedSize, product.colorSizes]);
+
+    useEffect(() => {
+        if (product.colorSizes && product.colorSizes.length > 0) {
+            setSelectedColor(product.colorSizes[0].color.name);
+        }
+    }, [product.colorSizes]);
+    const colorSet = new Set();
+
+    const colors = product.colorSizes ? product.colorSizes.reduce((acc, item) => {
+        if (!colorSet.has(item.color.name)) {
+            colorSet.add(item.color.name);
+            acc.push({
+                value: item.color.name,
+                code: colorMapping[item.color.name]
+            });
+        }
+        return acc;
+    }, []) : [];
+
+    const [selectedColorSize, setSelectedColorSize] = useState(null);
+    useEffect(() => {
+        if (product.colorSizes) {
+            const colorSize = product.colorSizes.find(cs => cs.color.name === selectedColor && cs.size.name === selectedSize);
+            if (colorSize) {
+                setSelectedColorSize(colorSize);
+            } else {
+                setSelectedColorSize(null);
+            }
+        }
+    }, [selectedColor, selectedSize, product.colorSizes]);
+
+    const [quantity, setQuantity] = useState(1);
+
+    const increaseQuantity = () => {
+        if (selectedColorSize && quantity < selectedColorSize.quantity) {
+            setQuantity(prevQuantity => prevQuantity + 1);
+        } else {
+            console.log('Hết hàng');
+        }
+    };
+
+    const setSelectedColorAndResetQuantity = (color) => {
+        setSelectedColor(color);
+        setQuantity(1);
+    };
+
+    const setSelectedSizeAndResetQuantity = (size) => {
+        setSelectedSize(size);
+        setQuantity(1);
+    };
+
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(prevQuantity => prevQuantity - 1);
+        }
+    };
+
+    const dispatch = useDispatch();
+    const addToCart = () => {
+        dispatch({
+            type: 'cart/add',
+            payload: {
+                product: product,
+                selectedColor: selectedColor,
+                selectedSize: selectedSize,
+                quantity: quantity,
+                selectedColorSize: selectedColorSize
+            }
+        });
+    };
+
+    const cartItems = useSelector(state => state.root.cart);
+    console.log(cartItems);
+
+    const currentDate = new Date();
+    const hasValidPromotion = product.productPromotions && product.productPromotions.length > 0 && new Date(product.productPromotions[0].promotion.start_date) <= currentDate && currentDate <= new Date(product.productPromotions[0].promotion.end_date);
+    const discountedPrice = hasValidPromotion ? product.price - (product.price * product.productPromotions[0].promotion.discount_rate / 100) : product.price;
+    const formatter = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        currencyDisplay: 'narrowSymbol'
+    });
+
+
+    const formattedPrice = formatter.format(product.price).replace(/\s/g, '');
+    const formattedDiscountedPrice = formatter.format(discountedPrice).replace(/\s/g, '');
     return (
         <div className="col-12 col-md-12 col-lg-4 details-pro">
             <div className="wrapright-content">
-                <h1 className="title-head">Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228</h1>
+                <h1 className="title-head">{product.name}</h1>
             </div>
             <div className="group-power">
                 <div className="inventory_quantity d-none">
@@ -18,16 +200,25 @@ const ProductInformation = () => {
                     </span>
                 </div>
                 <div className="price-box clearfix">
-                    <span className="special-price">
-                        <span className="price product-price">185.000đ</span>
-                    </span>
-                    <span className="old-price">
-                        <del className="price product-price-old">350.000đ</del>
-                    </span>
-                    <span className="save-price">-
-                        <span className="price product-price-save">47%</span>
-                    </span>
+                    {hasValidPromotion ?
+                        <>
+                        <span className="special-price">
+                            <span className="price product-price">{formattedDiscountedPrice}</span>
+                            </span>
+                            <span className="old-price">
+                            <del className="price product-price-old">{formattedPrice}</del>
+                            </span>
+                            <span className="save-price">-
+                            <span
+                                className="price product-price-save">{product.productPromotions[0].promotion.discount_rate}%</span>
+                             </span>
+                        </> :
+                        <span className="special-price">
+                            <span className="price product-price">{formattedPrice}</span>
+                        </span>
+                    }
                 </div>
+
             </div>
             <div className="product-policy">
                 <div className="item">
@@ -56,90 +247,74 @@ const ProductInformation = () => {
                   className="wishItem MultiFile-intercepted" method="post">
                 <div className="form-product">
                     <div className="select-swatch">
-                        <div className="swatch-color swatch clearfix" data-option-index="0">
-                            <div className="options-title">Màu sắc: <span className="var">Trắng</span></div>
-                            <div data-value="Trắng" className="swatch-element color trang available">
-                                <input id="swatch-0-trang" type="radio" name="option-0" value="Trắng" checked=""/>
-                                <label htmlFor="swatch-0-trang" title="Trắng"
-                                       style={{
-                                           backgroundImage: `url(${color1})`,
-                                           backgroundSize: '32px',
-                                           backgroundRepeat: 'no-repeat',
-                                           backgroundPosition: 'center'
-                                       }}>
-                                </label>
+                        <ColorSwatch
+                            colors={colors}
+                            selectedColor={selectedColor}
+                            setSelectedColor={setSelectedColorAndResetQuantity}
+                        />
 
-                            </div>
-                            <div data-value="Đen" className="swatch-element color trang available">
-                                <input id="swatch-0-trang" type="radio" name="option-1" value="Đen" checked=""/>
-                                <label htmlFor="swatch-0-trang" title="Đen"
-                                       style={{
-                                           backgroundImage: `url(${color2})`,
-                                           backgroundSize: '32px',
-                                           backgroundRepeat: 'no-repeat',
-                                           backgroundPosition: 'center'
-                                       }}>
-                                </label>
-
-                            </div>
-                        </div>
-                        <div className=" swatch clearfix" data-option-index="1">
-                            <div className="options-title">Kích thước:
-                                <span className="var"> M</span></div>
-                            <div data-value="M" className="swatch-element m available">
-                                <input id="swatch-1-m" type="radio" name="option-1" value="M" checked=""/>
-                                <label title="M" htmlFor="swatch-1-m">
-                                    <span>M</span>
-                                </label>
-                            </div>
-                            <div data-value="L" className="swatch-element l available">
-                                <input id="swatch-1-l" type="radio" name="option-1" value="L"/>
-
-                                <label title="L" htmlFor="swatch-1-l">
-                                    <span>L</span>
-                                </label>
-                            </div>
-                            <div data-value="XL" className="swatch-element xl available">
-                                <input id="swatch-1-xl" type="radio" name="option-1" value="XL"/>
-                                <label title="XL" htmlFor="swatch-1-xl">
-                                    <span>XL</span>
-                                </label>
-                            </div>
-                            <div className="size-guide-box size-popup ">
-                                + Hướng dẫn chọn size
-                            </div>
+                        <SizeSwatch
+                            sizes={availableSizes}
+                            selectedSize={selectedSize}
+                            setSelectedSize={setSelectedSizeAndResetQuantity}
+                            selectedColor={selectedColor}
+                            product={product}
+                        />
+                        <div className="size-guide-box size-popup ">
+                            + Hướng dẫn chọn size
                         </div>
                     </div>
                     <div className="clearfix from-action-addcart">
                         <div className="qty-ant clearfix custom-btn-number">
-                            <label>Số lượng</label>
+                            <div className="quantity-label-container">
+                                <label>Số lượng</label>
+                                {selectedColorSize &&
+                                    <span
+                                        className="color-size-quantity">({selectedColorSize.quantity} sản phẩm có sẵn)</span>}
+                            </div>
                             <div className="custom custom-btn-numbers clearfix input_number_product">
                                 <button
-                                    // var result = document.getElementById('qty'); var qty = result.value; if( !isNaN(qty) &amp; qty > 1 ) result.value--;return false;
-                                    onClick=""
-                                    className="btn-minus btn-cts" type="button">–
+                                    className="btn-minus btn-cts"
+                                    type="button"
+                                    onClick={decreaseQuantity}
+                                >–
                                 </button>
-                                <input aria-label="Số lượng" type="text" className="qty input-text" id="qty"
-                                       name="quantity" size="4" value="1" maxLength="3"
-                                    // if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;
-                                       onKeyPress=""
-                                       onChange="if(this.value == 0)this.value=1;"/>
+                                <input
+                                    aria-label="Số lượng: "
+                                    type="text"
+                                    className="qty input-text"
+                                    id="qty"
+                                    name="quantity"
+                                    size="4"
+                                    value={quantity}
+                                    readOnly
+                                />
                                 <button
-                                    // var result = document.getElementById('qty'); var qty = result.value; if( !isNaN(qty)) result.value++;return false;
-                                    onClick=""
-                                    className="btn-plus btn-cts" type="button">+
+                                    className="btn-plus btn-cts"
+                                    type="button"
+                                    onClick={increaseQuantity}
+                                >+
                                 </button>
+
                             </div>
                             <div className="inventory_quantity">
-                                <span className="a-stock"><span className="a-stock">Còn hàng</span></span>
+                               <span className="a-stock">
+                                    <span className="a-stock"
+                                          style={{color: selectedColorSize && selectedColorSize.quantity > 0 ? 'black' : 'red'}}>
+                                        {selectedColorSize && selectedColorSize.quantity > 0 ? 'Còn hàng' : 'Hết hàng'}
+                                    </span>
+                                </span>
                             </div>
                         </div>
-                        <div className="btn-mua">
-                            <button type="submit" data-role="addtocart"
-                                    className="btn btn-lg btn-gray btn-cart btn_buy add_to_cart">Thêm vào giỏ
-                            </button>
-                            <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now">Mua ngay</button>
 
+                        <div className="btn-mua"
+                             style={{display: selectedColorSize && selectedColorSize.quantity > 0 ? 'block' : 'none'}}>
+                            <button type="button"
+                                    className="btn btn-lg btn-gray btn-cart btn_buy add_to_cart" onClick={addToCart}
+                            >Thêm vào giỏ
+                            </button>
+                            <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now">Mua ngay
+                            </button>
                         </div>
 
                     </div>

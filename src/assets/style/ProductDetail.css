@@ -1,15 +1,18 @@
 
+.product-detail-screen {
+    font-family: var(--font-family-monospace);
+}
+
 .product-image-detail {
     position: relative;
 }
 
 
 @media (max-width: 767px) {
-    body {
+    .product-detail-screen {
         font-size: 14px;
     }
 }
-
 .swiper-container {
     margin-left: auto;
     margin-right: auto;
@@ -20,18 +23,17 @@
     z-index: 1;
 }
 
-@media (max-width: 991px)
-
-.product-image-detail .gallery-top {
-    height: 345px;
-    margin-bottom: 15px;
+@media (max-width: 991px) {
+    .product-image-detail .gallery-top {
+        height: 345px;
+        margin-bottom: 15px;
+    }
 }
 
 .product-image-detail .gallery-top {
     position: relative;
     display: block;
     height: 790px;
-
 }
 
 .swiper-wrapper {
@@ -39,24 +41,13 @@
     width: 100%;
     height: 100%;
     z-index: 1;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
-    -webkit-transition-property: -webkit-transform;
-    -moz-transition-property: -moz-transform;
-    -o-transition-property: -o-transform;
-    -ms-transition-property: -ms-transform;
     transition-property: transform;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
     box-sizing: content-box;
 }
 
-
 .product-image-detail .big-swiper img {
-    width: 790px;
+    width: 100%;
     max-height: 100%;
     object-fit: cover;
 }
@@ -66,6 +57,9 @@
     margin-right: 12px;
 }
 
+.small-swiper .swiper-button-prev , .small-swiper .swiper-button-next {
+    font-size: 10px;
+}
 
 @media (min-width: 240px) {
     .bigger-swiper .swiper-slide {
@@ -79,7 +73,6 @@
 
     .product-image-detail .gallery-top {
         height: 400px;
-        /*display: block;*/
     }
 
     .product-image-detail .big-swiper img {
@@ -101,7 +94,6 @@
 
     .product-image-detail .gallery-top {
         height: 600px;
-        /*display: block;*/
     }
 
     .product-image-detail .big-swiper img {
@@ -109,12 +101,20 @@
         max-height: 100%;
         object-fit: cover;
     }
+    .small-swiper .swiper-button-next {
+        margin-right: 10px;
+
+    }
 }
 
 @media (min-width: 1200px) {
     .mini-swiper {
         width: 80%;
-        /*margin-right: 12px;*/
+        margin: 0 auto;
+    }
+    .small-swiper .swiper-button-next {
+        margin-right: 20px;
+
     }
 }
 
@@ -125,17 +125,8 @@
 
     .mini-swiper {
         width: 80%;
+        margin: 0 auto;
     }
-
-}
-
-
-.swiper-button-prev {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%234c71ae'%2F%3E%3C%2Fsvg%3E") !important;
-}
-
-.swiper-button-next {
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%234c71ae'%2F%3E%3C%2Fsvg%3E") !important;
 }
 
 .swiper-slide-thumb-active {
@@ -143,8 +134,21 @@
     transition: border-color 0.2s ease; /* Add a transition for smooth effect */
 }
 
+.mini-swiper img {
+    width: 80px;
+    margin-right: 12px;
+    cursor: pointer;
+}
+
+/* Ensuring other swiper-slide do not have border */
+.mini-swiper .swiper-slide {
+    border: none;
+}
+
+
 .details-pro h1 {
     font-size: 22px;
+    font-family: var(--font-family-monospace);
     border-bottom: 1px #000 solid;
     padding-bottom: 10px;
     margin-bottom: 10px;
@@ -158,6 +162,7 @@
 
 .details-pro .price-box .special-price {
     font-size: 30px;
+    font-family: "Futura", sans-serif;
     color: #F81F1F;
 }
 
@@ -167,6 +172,7 @@
 
 .details-pro .price-box .old-price .product-price-old {
     font-size: 20px;
+    font-family: "Futura", sans-serif;
     font-weight: 500;
     text-decoration: line-through;
     color: #949494;
@@ -180,6 +186,7 @@
 .details-pro .price-box .save-price {
     margin-left: 15px;
     font-size: 10px;
+    font-family: "Futura", sans-serif;
     color: #fff;
     background: #d0011b;
     padding: 3px 5px;
@@ -205,6 +212,7 @@
 .product-policy .item {
     padding: 10px 0;
     font-size: 12px;
+    font-family: "Futura", sans-serif;
     font-weight: lighter;
     white-space: nowrap;
     max-width: 100%;
@@ -234,20 +242,23 @@
     margin-top: 10px;
 }
 
+
 .swatch label {
-    float: left;
-    min-width: 35px !important;
-    height: 30px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    height: 35px;
     margin: 0;
     border: 1px solid #f4f4f4;
     background-color: #fff;
-    font-size: em(13px);
+    font-size: 13px;
+    font-family: "Futura", sans-serif;
     text-align: center;
-    line-height: 27px;
-    white-space: nowrap;
     font-weight: 500;
-    padding: 0;
-    border-radius: 7px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-sizing: border-box; /* Ensure padding and border are included in the width and height */
 }
 
 .swatch {
@@ -274,33 +285,23 @@
     position: relative;
 }
 
+.swatch-element input[type="radio"] {
+    display: none; /* Hide the original radio button */
+}
+
+.swatch-element input[type="radio"]:checked + label {
+    background-color: #000; /* Background color when selected */
+    color: #fff; /* Text color when selected */
+    border: 1px solid #ff0037;
+}
+
+
 input[type="checkbox"], input[type="radio"] {
     display: inline;
     margin: 0;
     padding: 0;
 }
 
-.swatch input {
-    display: none !important;
-}
-
-.swatch .color input:checked + label {
-    position: relative;
-}
-
-.details-pro .form-product .swatch label {
-    min-width: 32px !important;
-    height: 32px !important;
-    padding: initial;
-    line-height: 30px;
-    border-radius: 50%;
-    font-size: 14px;
-    padding: 0 5px;
-    cursor: pointer;
-    text-align: center;
-    white-space: nowrap;
-    font-weight: 500;
-}
 
 .clearfix::after {
     display: block;
@@ -308,38 +309,12 @@ input[type="checkbox"], input[type="radio"] {
     content: "";
 }
 
-.swatch input:checked + label {
-    color: #000;
-    /*border: 1px solid #000;*/
-    position: relative;
-}
-
 input[type="checkbox"], input[type="radio"] {
     display: inline;
     margin: 0;
     padding: 0;
 }
 
-.details-pro .form-product .swatch:not(.swatch-color) input:checked + label span {
-    position: relative;
-    color: #FFF;
-    z-index: 9;
-}
-
-.swatch .clearfix {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-}
-
-.details-pro .form-product .swatch:not(.swatch-color) input:checked + label:before {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    background: #000;
-    width: 33px;
-    height: 33px;
-    border-radius: 50%;
-}
 
 a.product-banchay {
     color: red;
@@ -356,6 +331,7 @@ a.product-banchay {
     color: #d61c1f;
     margin-bottom: 3px;
     font-size: 14px;
+    font-family: "Futura", sans-serif;
     text-decoration-line: none;
     cursor: pointer;
 }
@@ -532,6 +508,15 @@ ul.tabs li {
 
 .product-tab .tab-content .rte {
     font-size: 14px;
+    font-family: "Futura", sans-serif;
 }
 
+.quantity-label-container {
+    display: flex;
+    align-items: center;
+}
+.color-size-quantity {
+    margin-left: 10px;
+    margin-bottom: 10px;
 
+}

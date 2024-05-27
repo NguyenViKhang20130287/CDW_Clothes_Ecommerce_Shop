@@ -62,7 +62,6 @@ const CollectionScreen = () => {
 
     return (
         <div className={'collectionScreenContainer'}>
-            <HeaderComponent/>
             <div className={'collectionScreenWrapper'}>
                 <div className={'optionShowWrapper'}>
                     <div className={'collection'}>
@@ -152,7 +151,6 @@ const CollectionScreen = () => {
                         originPrice={'350.000'}/>
                 </div>
             </div>
-            <FooterComponent/>
         </div>
     )
 }
