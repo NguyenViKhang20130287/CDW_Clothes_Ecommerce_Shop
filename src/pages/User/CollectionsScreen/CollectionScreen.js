@@ -1,21 +1,17 @@
-import React, {useState} from "react";
-// components
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
+import React, {useEffect, useState} from "react";
 import CheckBoxComponent from "../../../components/Checkbox/CheckBoxComponent";
-import CategoryComponent from "../../../components/Category/CategoryComponent";
 import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxComponent";
-// icon
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
-// img
-import SHIRT_IMG from "../../../assets/img/shirt1.webp";
-// css
 import './CollectionScreen.css'
+import {useParams} from "react-router-dom";
+import APIService from "../../../services/APIService1";
+import ProductCardComponent from "../../../components/ProductCard/ProductCardComponent";
+import {MdNavigateNext} from "react-icons/md";
+import {MdNavigateBefore} from "react-icons/md";
 
 const CollectionScreen = () => {
     const [selectOptionSort, setSelectOptionSort] = useState('newest')
     const [colorIsChecked, setColorIsChecked] = useState({})
-
     const optionsSort = [
         {
             id: 'newest',
@@ -54,12 +50,47 @@ const CollectionScreen = () => {
         }
     ]
     const colors = ['Red', 'Green', 'Blue', 'Yellow']
-
     const handleCheckboxChange = (event) => {
         const {name, checked} = event.target;
         setColorIsChecked({...colorIsChecked, [name]: checked});
     };
+    const {id} = useParams();
+    const [products, setProducts] = useState([{}])
+    const [categoryName, setCategoryName] = useState('')
+    const [page, setPage] = useState(0); // Add this line
+    const [totalPages, setTotalPages] = useState(0);
+    const fetchProducts = async (category) => {
+        try {
+            let url = `http://localhost:8080/api/v1/product`;
+            if (category !== 'all') {
+                url += `/category/${category}`;
+            }
+            url += `?page=${page}&perPage=16`;
+            const response = await new APIService().fetchData(url);
+            setProducts(response.content);
+            setTotalPages(response.totalPages);
+            setCategoryName(response.content[0].category.name)
+            console.log(response.content)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        fetchProducts(id === 'all' ? 'all' : id);
+    }, [id, page]);
 
+    const handlePageChange = (newPage) => {
+        setPage(newPage);
+    }
+    const handleNext = () => {
+        setPage(page + 1);
+    }
+
+    const handlePrev = () => {
+        if (page > 0) {
+            setPage(page - 1);
+        }
+    }
     return (
         <div className={'collectionScreenContainer'}>
             <div className={'collectionScreenWrapper'}>
@@ -142,13 +173,49 @@ const CollectionScreen = () => {
                     </div>
                 </div>
                 <div className={'productShowWrapper'}>
-                    <CategoryComponent
-                        isHome={false}
-                        categoryName={'Áo thun'}
-                        image={SHIRT_IMG}
-                        name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
-                        price={'185.000'}
-                        originPrice={'350.000'}/>
+                    <div className={'categoryContainer'}>
+                        <h3 className={'title'}>{categoryName}</h3>
+                        <div className={'categoriesWrapper'}>
+                            {products && products.length > 0 && products.map((product, index) => {
+                                let price = product.price;
+                                let originPrice = null;
+                                if (product.productPromotions && product.productPromotions.length > 0) {
+                                    originPrice = product.price;
+                                    price = product.price - product.price * product.productPromotions[0].promotion.discount_rate / 100;
+                                }
+                                return (
+                                    <ProductCardComponent
+                                        key={product.id}
+                                        image={product.thumbnail}
+                                        name={product.name}
+                                        price={price}
+                                        originPrice={originPrice}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+                    <nav className="woocommerce-pagination">
+                        <ul className="pagination pagination__custom justify-content-md-center flex-nowrap flex-md-wrap overflow-auto overflow-md-visble">
+                            <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Previous">
+                                <button disabled={page === 0} onClick={handlePrev} className="prev page-link">
+                                    <MdNavigateBefore/>
+                                </button>
+                            </li>
+                            {[...Array(totalPages).keys()].map(i => (
+                                <li key={i}
+                                    className={`flex-shrink-0 flex-md-shrink-1 page-item ${page === i ? 'active' : ''}`}>
+                                    <button onClick={() => handlePageChange(i)} className="page-link">{i + 1}</button>
+                                </li>
+                            ))}
+                            <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Next">
+                                <button disabled={page === totalPages - 1} onClick={handleNext}
+                                        className="next page-link">
+                                    <MdNavigateNext/>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

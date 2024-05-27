@@ -33,7 +33,7 @@ const Router = () => {
                 <Route path={'/exchange'} element={<ExchangeScreen/>}/>
                 <Route path={'/cart'} element={<CartScreen/>}/>
                 <Route path={'/order'} element={<OrderScreen/>}/>
-                <Route path={'/categories'} element={<CollectionScreen/>}/>
+                <Route path={'/category/:id'} element={<CollectionScreen/>}/>
                 <Route path={'/account-detail'} element={<AccountDetail/>}/>
                 <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
                 <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
