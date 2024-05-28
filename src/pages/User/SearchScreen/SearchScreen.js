@@ -5,6 +5,7 @@ import './SearchScreen.css'
 const SearchScreen = () => {
     const location = useLocation();
     const keyword = location.state ? location.state.keyword : '';
+    console.log('keyword', keyword)
 
     return (
         <div className={'collectionScreenContainer'}>

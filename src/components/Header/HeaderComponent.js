@@ -12,6 +12,8 @@ import ProductCardComponent from "../ProductCard/ProductCardComponent";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
 import {loadDataUser} from "../../services/APIService";
+import {useSelector} from "react-redux";
+import APIService from "../../services/APIService1";
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
@@ -19,6 +21,10 @@ const HeaderComponent = () => {
     const [avatar, setAvatar] = useState('')
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
+    const [totalQuantity, setTotalQuantity] = useState(0);
+    const cartItems = useSelector(state => state.root.cart);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchResult, setSearchResult] = useState([]);
     let hasShownToast = false;
 
     const handleShowHideSearch = (e) => {
@@ -55,6 +61,39 @@ const HeaderComponent = () => {
         };
     }, [navigate, token, avatar])
 
+    const handleInputChange = (event) => {
+        setSearchKeyword(event.target.value);
+    }
+    const findProduct = async () => {
+        if (searchKeyword.trim() === '') {
+            setSearchResult([]);
+        } else {
+            try {
+                const searchResult = await new APIService().fetchData(`http://localhost:8080/api/v1/product/search?name=${searchKeyword}`);
+                setSearchResult(searchResult);
+            } catch (error) {
+                console.error('Error fetching product', error);
+            }
+        }
+    }
+    useEffect(() => {
+        findProduct();
+    }, [searchKeyword])
+
+
+    useEffect(() => {
+        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setTotalQuantity(newTotalQuantity);
+    }, [cartItems]);
+
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchKeyword.trim()) {
+            navigate('/search', { state: { keyword: searchKeyword } });
+            setSearchPopupShowStatus(false);
+        }
+    };
     const handleToggleSidebar = (e) => {
         e.preventDefault()
         if (sidebarToggleStatus === false)
@@ -80,31 +119,28 @@ const HeaderComponent = () => {
                         </button>
                         <h3 className={'searchTitle'}>TÌM KIẾM</h3>
                         <div className={'searchInput'}>
-                            <input placeholder={'Tìm kiếm sản phẩm...'}/>
-                            <button className={'searchBtn'} type={'button'}>Tìm kiếm</button>
+                            <input placeholder={'Tìm kiếm sản phẩm...'}
+                                   value={searchKeyword}
+                                   onChange={handleInputChange}
+                                   onKeyDown={(e) => e.key === 'Enter' && handleSearch(e)}
+                            />
+                            <button className={'searchBtn'} type={'button'} onClick={handleSearch}>Tìm kiếm</button>
                         </div>
                         <div className={'searchResult'}>
                             <div className={'searchResultList'}>
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
-                                {/*<ProductCardComponent image={SHIRT_IMG}*/}
-                                {/*             name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}*/}
-                                {/*             price={'150.000'}*/}
-                                {/*             originPrice={'350.000'}/>*/}
+                                {searchResult.slice(0, 7).map((product, index) => (
+                                    <ProductCardComponent image={product.thumbnail}
+                                                          name={product.name}
+                                                          price={product.price}
+                                                          originPrice={product.price}/>
+                                ))}
+                                {searchResult.length > 7 && (
+                                    <div className={'productCardItem'}>
+                                        <div className={'itemImage'}>
+                                            <span>Xem thêm</span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -187,7 +223,10 @@ const HeaderComponent = () => {
                                 <IoSearchOutline className={'icons'}/>
                             </button>
                             <button className={'btnIcons'} type={"button"}>
-                                <IoCartOutline className={'icons'}/>
+                                <Link to={'/cart'}>
+                                    <IoCartOutline className={'icons'}/>
+                                    <span className={'cart-quantity'}>{totalQuantity}</span>
+                                </Link>
                             </button>
                             {token ?
                                 (avatar ?
