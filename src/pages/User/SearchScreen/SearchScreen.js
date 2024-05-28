@@ -1,5 +1,4 @@
 import React from "react";
-import SHIRT_IMG from "../../../assets/img/shirt1.webp";
 import SearchComponent from "../../../components/SearchComponent/SearchComponent";
 import {useLocation} from "react-router-dom";
 import './SearchScreen.css'

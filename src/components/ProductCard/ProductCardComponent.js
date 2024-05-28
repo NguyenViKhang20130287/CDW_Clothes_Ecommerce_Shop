@@ -1,20 +1,31 @@
 import React from "react";
 import './ProductCardComponent.css'
+import {Link, useNavigate} from "react-router-dom";
 
-const ProductCardComponent = ({image, name, price, originPrice}) => {
+const ProductCardComponent = ({id, image, name, price, originPrice}) => {
+    let formattedPrice = price ? price.toLocaleString('vi-VN') : 'N/A';
+    let formattedOriginPrice = originPrice ? originPrice.toLocaleString('vi-VN') : 'N/A';
+    const navigate = useNavigate();
+    // const handleCardClick = () => {
+    //     navigate(`/product-detail/${id}`);
+    // };
     return (
+
         <div className={'productCardItem'}>
-            <div className={'itemImage'}>
-                <img src={image} alt={''}/>
-            </div>
-            <div className={'itemName'}>
-                <span>{name}</span>
-            </div>
-            <div className={'itemPrice'}>
-                <span className={'price'}>{price.toLocaleString('vi-VN') + 'đ'}</span>
-                {originPrice ? <span className={'originPrice'}>{originPrice.toLocaleString('vi-VN') + 'đ'}</span> : null}
-            </div>
+            <Link to={`/product-detail/${id}`}>
+                <div className={'itemImage'}>
+                    <img src={image} alt={''}/>
+                </div>
+                <div className={'itemName'}>
+                    <span>{name}</span>
+                </div>
+                <div className={'itemPrice'}>
+                    <span className={'price'}>{formattedPrice + 'đ'}</span>
+                    {originPrice ? <span className={'originPrice'}>{formattedOriginPrice + 'đ'}</span> : null}
+                </div>
+            </Link>
         </div>
+
     )
 }
 

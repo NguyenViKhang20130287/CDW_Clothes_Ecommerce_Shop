@@ -37,7 +37,6 @@ const CategoryComponent = ({className, categoryName, image, name, price, originP
                         <span>Xem Thêm</span>
                     </div>
                 }
-
             </div>
         </div>
     )
