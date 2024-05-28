@@ -8,7 +8,7 @@ import {CiLock, CiUser, CiMail} from "react-icons/ci";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
 //
-import {registerConfirm} from '../../../services/apiService'
+import { registerConfirm } from '../../../services/APIService';
 import toast from "react-hot-toast";
 
 const RegisterConfirmScreen = () => {

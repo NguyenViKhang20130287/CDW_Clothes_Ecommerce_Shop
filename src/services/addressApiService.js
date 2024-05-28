@@ -1,5 +1,5 @@
 import axios from "axios";
-import {postRequest} from '../services/apiService'
+import {postRequest} from './APIService'
 
 const BASE_URL = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/'
 
