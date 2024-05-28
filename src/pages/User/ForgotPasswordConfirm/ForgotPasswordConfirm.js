@@ -1,12 +1,10 @@
 import React, {useState} from "react";
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
 import {CiLock, CiMail} from "react-icons/ci";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
 import './ForgotPasswordConfirm.css'
 import toast from "react-hot-toast";
-import {resetPassword} from "../../../services/apiService";
+import {resetPassword} from "../../../services/APIService";
 
 const ForgotPasswordConfirm = () => {
     const [typePassword, setTypePassword] = useState('password')

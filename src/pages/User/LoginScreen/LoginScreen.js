@@ -1,9 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {login} from '../../../services/apiService'
-// components
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
+import {login} from '../../../services/APIService'
 // icons
 import {CiUser, CiLock} from "react-icons/ci";
 import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";

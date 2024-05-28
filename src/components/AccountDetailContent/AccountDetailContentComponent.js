@@ -5,7 +5,7 @@ import PRODUCT from '../../assets/img/shirt1.webp'
 import {FaEye, FaEyeSlash, FaPlus} from "react-icons/fa";
 import {IoSearchSharp} from "react-icons/io5";
 import {LiaShippingFastSolid} from "react-icons/lia";
-import {editUser} from "../../services/apiService";
+import {editUser} from "../../services/APIService";
 import toast from "react-hot-toast";
 import PopupAddress from "../PopupAddress/PopupAddress";
 import {addNewAddress} from "../../services/addressApiService";

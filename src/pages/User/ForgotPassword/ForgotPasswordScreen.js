@@ -1,11 +1,8 @@
 import React from "react";
 import {useState, useEffect} from "react";
-// components
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
 import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
 import {useNavigate} from "react-router-dom";
-import {forgotPassword} from "../../../services/apiService";
+import {forgotPassword} from "../../../services/APIService";
 import toast from "react-hot-toast";
 // CSS
 

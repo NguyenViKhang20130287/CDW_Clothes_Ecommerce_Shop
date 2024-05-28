@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
-import { register } from '../../../services/apiService';
+import { register } from '../../../services/APIService';
 
 const RegisterScreen = () => {
     const navigate = useNavigate()
