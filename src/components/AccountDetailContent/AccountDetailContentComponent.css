@@ -37,6 +37,12 @@
     padding: 10px;
 }
 
+.accountDetailContentWrapper .profileWrapper .editControl .editControlWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-silver-white);
+}
+
 .accountDetailContentWrapper .profileWrapper .editForm .editControl label {
     width: 30%;
     text-align: right;
@@ -59,7 +65,7 @@
 }
 
 
-.accountDetailContentWrapper .profileWrapper .editForm .fullName input:focus {
+.accountDetailContentWrapper .profileWrapper .editForm input:focus {
     border: 1px solid #dadada;
 }
 
@@ -210,10 +216,19 @@
     border-bottom: 0;
 }
 
-.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone span {
-    font-size: 16px;
-    color: var(--color-silver);
+/*.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone h3 {*/
+/*    font-size: 16px;*/
+/*    color: var(--color-silver);*/
+/*    padding-left: 10px;*/
+/*    margin-bottom: 0;*/
+/*    font-weight: normal;*/
+/*}*/
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressInfo .fullNamePhone h3:last-child {
+    border: none;
+    font-weight: normal;
     padding-left: 10px;
+    color: var(--color-silver);
 }
 
 .addressContainer .addressListWrapper .addressList .addressItem .addressInfo .address {
@@ -260,6 +275,16 @@
     color: var(--color-silver-white);
 }
 
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction .defaulted {
+    border-color: #cccccc;
+    color: #cccccc;
+}
+
+.addressContainer .addressListWrapper .addressList .addressItem .addressAction .defaulted:hover {
+    background: #FFFFFF;
+    color: #cccccc;
+}
+
 /* change password */
 .changePasswordContainer {
 }
@@ -281,7 +306,7 @@
     width: 100%;
 }
 
-.changePasswordContainer .changePasswordWrapper form .passwordControl label{
+.changePasswordContainer .changePasswordWrapper form .passwordControl label {
     font-family: var(--font-family-sans-serif);
     font-size: 16px;
     color: var(--color-silver);
@@ -290,14 +315,14 @@
     text-align: right;
 }
 
-.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper{
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper {
     border: 1px solid var(--color-silver);
     display: flex;
     align-items: center;
     width: 50%;
 }
 
-.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper input{
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper input {
     border: none;
     background: none;
     outline: none;
@@ -312,11 +337,11 @@
     display: none;
 }
 
-.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper:focus-within{
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper:focus-within {
     border: 1px solid var(--color-black);
 }
 
-.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper button{
+.changePasswordContainer .changePasswordWrapper form .passwordControl .inputWrapper button {
     border: none;
     background: none;
     outline: none;
@@ -327,15 +352,16 @@
 }
 
 /* order */
-.purchaseOrderContainer{
+.purchaseOrderContainer {
     background: #f5f5f5;
 }
-.purchaseOrderContainer .listStatusWrapper{
+
+.purchaseOrderContainer .listStatusWrapper {
     display: flex;
     background: #FFFFFF;
 }
 
-.purchaseOrderContainer .listStatusWrapper .statusBtn{
+.purchaseOrderContainer .listStatusWrapper .statusBtn {
     width: 14%;
     border: none;
     background: none;
@@ -344,20 +370,20 @@
     transition: all .3s;
 }
 
-.purchaseOrderContainer .listStatusWrapper .statusBtn:hover{
+.purchaseOrderContainer .listStatusWrapper .statusBtn:hover {
     color: var(--color-silver);
 }
 
-.purchaseOrderContainer .listStatusWrapper .active{
+.purchaseOrderContainer .listStatusWrapper .active {
     border-bottom: 3px solid var(--color-black);
 }
 
-.purchaseOrderContainer .searchOrderContainer{
+.purchaseOrderContainer .searchOrderContainer {
     background: #f5f5f5;
     padding: 10px 0;
 }
 
-.purchaseOrderContainer .searchOrderContainer .searchOrderWrapper{
+.purchaseOrderContainer .searchOrderContainer .searchOrderWrapper {
     display: flex;
     align-items: center;
     background: #dadada;
@@ -366,7 +392,7 @@
     padding: 0 10px;
 }
 
-.purchaseOrderContainer .searchOrderWrapper input{
+.purchaseOrderContainer .searchOrderWrapper input {
     box-sizing: border-box;
     width: 100%;
     border: none;
@@ -377,16 +403,16 @@
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderContainer{
+.purchaseOrderContainer .orderContainer {
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper{
+.purchaseOrderContainer .orderContainer .orderWrapper {
     background: #FFFFFF;
     padding: 20px;
     margin-bottom: 20px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader {
     padding: 10px;
     border-bottom: 1px solid #dadada;
     display: flex;
@@ -394,12 +420,12 @@
     align-items: center;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus {
     display: flex;
     align-items: center;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .detail{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .detail {
     font-size: 14px;
     font-family: var(--font-family-sans-serif);
     font-weight: 400;
@@ -410,7 +436,7 @@
     border-right: 1px solid var(--color-silver);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .status{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .status {
     text-transform: uppercase;
     font-size: 14px;
     color: red;
@@ -418,57 +444,62 @@
 }
 
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts {
     padding: 10px;
 }
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct{
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct {
     display: flex;
     padding: 10px;
 }
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper{
+
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper {
     width: 100px;
     height: 100px;
     overflow: hidden;
     margin-right: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper img{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper {
     display: flex;
     flex-direction: column;
     line-height: 2;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .nameProduct{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .nameProduct {
     font-size: 16px;
     font-family: var(--font-family-sans-serif);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .colorSize{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .colorSize {
     font-size: 14px;
     font-family: var(--font-family-sans-serif);
     color: var(--color-silver);
 }
 
 .purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice,
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice {
     font-size: 16px;
     font-family: var(--font-family-sans-serif);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice{
+.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice {
     margin-right: 10px;
     color: var(--color-silver);
     text-decoration: line-through;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action{text-align: right}
-.purchaseOrderContainer .orderContainer .orderWrapper .action button{
+.purchaseOrderContainer .orderContainer .orderWrapper .action {
+    text-align: right
+}
+
+.purchaseOrderContainer .orderContainer .orderWrapper .action button {
     width: 150px;
     font-size: 14px;
     font-weight: bold;
@@ -479,7 +510,8 @@
     border-radius: 4px;
     transition: all .3s;
 }
-.purchaseOrderContainer .orderContainer .orderWrapper .action button:hover{
+
+.purchaseOrderContainer .orderContainer .orderWrapper .action button:hover {
     background: #FFFFFF;
     color: var(--color-black);
 }

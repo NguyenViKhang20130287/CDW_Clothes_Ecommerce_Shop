@@ -5,36 +5,20 @@ import {makeStyles} from '@mui/styles';
 // components
 import HeaderComponent from "../../../components/Header/HeaderComponent";
 import FooterComponent from "../../../components/Footer/FooterComponent";
+import AccountDetailContentComponent from "../../../components/AccountDetailContent/AccountDetailContentComponent";
 // icons
 import {FaPen, FaRegUser} from "react-icons/fa";
 import {BiPurchaseTag} from "react-icons/bi";
-import {MdNotificationsNone} from "react-icons/md";
 // css
 import './AccountDetail.css'
-import IMG from '../../../assets/img/avt.jpg'
-import AccountDetailContentComponent from "../../../components/AccountDetailContent/AccountDetailContentComponent";
-
-const useStyles = makeStyles({
-    root: {
-        '& .MuiInputLabel-root': {
-            fontSize: '14px'
-        },
-        '& .MuiInputBase-input': {
-            fontSize: '14px',
-        },
-    }
-});
 
 const AccountDetail = () => {
-    const [user, setUser] = useState({
-        username: 'vikang',
-        fullName: 'Nguyen Vi Khang',
-        email: 'vik08080817@gmail.com',
-        phone: '0943382248',
-        avatar: IMG
-    })
+    const [user, setUser] = useState(null)
     const [isShow, setIsShow] = useState('profile')
-    const [isHiddenPopup, setIsHiddenPopup] = useState(true)
+    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
+    let hasShownToast = false;
+
 
     const handleSelectShow = (isShow) => {
         setIsShow(isShow)
@@ -53,6 +37,7 @@ const AccountDetail = () => {
     }, [isShow])
     return (
         <div className={'AccountDetailContainer'}>
+            <HeaderComponent/>
             <div className={'AccountDetailWrapper'}>
                 <div className={'AccountDetailSideBar'}>
                     <div className={'accountDetailImg'}>
@@ -203,6 +188,15 @@ const AccountDetail = () => {
                     </form>
                 </div>
             </div>
+            {/*<PopupAddress*/}
+            {/*    title={'Cập nhật địa chỉ'}*/}
+            {/*    isHiddenPopup={isHiddenPopup}*/}
+            {/*    user={user}*/}
+            {/*    onClickHiddenPopup={e=>setIsHiddenPopup(true)}*/}
+            {/*    handleSubmit={handleUpdateAddress}*/}
+            {/*    ref={childRef}*/}
+            {/*/>*/}
+            <FooterComponent/>
         </div>
     )
 }
