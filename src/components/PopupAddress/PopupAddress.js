@@ -1,4 +1,4 @@
-import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useState} from "react";
+import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import {Box, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import {makeStyles} from "@mui/styles";
@@ -124,10 +124,6 @@ const PopupAddress = forwardRef((props, ref) => {
 
     }
 
-    const handleFetchDistrictCallBack = useCallback((provinceId) => {
-        handleChangeProvince(provinceId)
-    }, [handleChangeProvince])
-
     const fetchDataAddress = () => {
 
         if (showNamePopup !== 'update' && !addressData) return
@@ -138,22 +134,17 @@ const PopupAddress = forwardRef((props, ref) => {
             if (newProvinceId !== '') {
                 setProvinceId(String(newProvinceId))
                 console.log('Province id: ', provinceId)
-                handleChangeProvince(provinceId)
-                console.log('List district: ', districts)
 
-                // handleChangeProvince(newProvinceId)
-                // console.log('List district: ', districts)
-                // setDistrictId(String(fetchId('district', districts, addressData.district)))
-                // console.log('District id: ', districtId)
-                // console.log('loaded...')
+                if (districts.length < 0){
+                    handleChangeProvince(newProvinceId)
+                    console.log('List district NOT NULL: ', districts)
+                    let newDistrictId = fetchId('district', districts, addressData.district)
+                    console.log('New district id: ', newDistrictId)
+                    setDistrictId(String(newDistrictId))
+                    console.log('District id: ', districtId)
+                }
+
             }
-        }
-    }
-
-    const fetchDataDistrict = () =>{
-        if (provinceId !== ''){
-            handleChangeProvince(provinceId)
-            console.log('List district: ', districts)
         }
     }
 
@@ -180,10 +171,7 @@ const PopupAddress = forwardRef((props, ref) => {
         if (provinces.length === 0)
             fetchDataProvince()
 
-        fetchDataAddress()
-        if (districtId === ''){
-            fetchDataDistrict()
-        }
+        // fetchDataAddress()
 
     }, [user, showNamePopup, provinces, provinceId, districtId])
 
