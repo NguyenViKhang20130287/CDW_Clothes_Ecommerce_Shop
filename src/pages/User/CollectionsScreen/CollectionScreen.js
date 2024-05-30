@@ -230,9 +230,9 @@ const CollectionScreen = () => {
                             {products.map((product, index) => {
                                 let price = product.price;
                                 let originPrice = null;
-                                if (product.productPromotions && product.productPromotions.length > 0) {
+                                if (product.promotions && product.promotions.length > 0) {
                                     originPrice = product.price;
-                                    price = product.price - product.price * product.productPromotions[0].promotion.discount_rate / 100;
+                                    price = product.price - product.price * product.promotions[0].discount_rate / 100;
                                 }
                                 return (
                                     <ProductCardComponent

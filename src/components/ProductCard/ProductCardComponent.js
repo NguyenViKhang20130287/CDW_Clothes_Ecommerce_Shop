@@ -5,10 +5,6 @@ import {Link, useNavigate} from "react-router-dom";
 const ProductCardComponent = ({id, image, name, price, originPrice}) => {
     let formattedPrice = price ? price.toLocaleString('vi-VN') : 'N/A';
     let formattedOriginPrice = originPrice ? originPrice.toLocaleString('vi-VN') : 'N/A';
-    const navigate = useNavigate();
-    // const handleCardClick = () => {
-    //     navigate(`/product-detail/${id}`);
-    // };
     return (
 
         <div className={'productCardItem'}>
