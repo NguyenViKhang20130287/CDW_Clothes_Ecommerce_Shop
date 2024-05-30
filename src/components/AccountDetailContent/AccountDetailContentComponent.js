@@ -5,7 +5,7 @@ import PRODUCT from '../../assets/img/shirt1.webp'
 import {FaEye, FaEyeSlash, FaPlus} from "react-icons/fa";
 import {IoSearchSharp} from "react-icons/io5";
 import {LiaShippingFastSolid} from "react-icons/lia";
-import {editUser} from "../../services/APIService";
+import {changePassword, editUser} from "../../services/userService";
 import toast from "react-hot-toast";
 import PopupAddress from "../PopupAddress/PopupAddress";
 import {addNewAddress} from "../../services/addressApiService";
@@ -23,6 +23,7 @@ const AccountDetailContentComponent = ({
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [avatarLink, setAvatarLink] = useState('');
+    const [password, setPassword] = useState('')
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
@@ -108,10 +109,37 @@ const AccountDetailContentComponent = ({
         }
     }
 
+    const handleChangePassword = async (e) => {
+        e.preventDefault()
+        const userData = {
+            username: username,
+            password: oldPassword,
+            newPassword: newPassword
+        }
+
+        console.log('data: ', userData)
+
+        if (reNewPassword !== newPassword){
+            toast.error('Mật khẩu nhập lại không chính xác !')
+            return
+        }
+        try {
+            const res = await changePassword(userData);
+            console.log('res: ', res)
+            toast.success(res)
+            setOldPassword('')
+            setNewPassword('')
+            setReNewPassword('')
+        }catch (error){
+            toast.error(error.response.data)
+            console.log(error)
+        }
+    }
+
     const handleShowPopup = (showNamePopup, address) => {
         setShowNamePopup(showNamePopup)
         setIsHiddenPopup(false)
-        if (showNamePopup === 'update'){
+        if (showNamePopup === 'update') {
             setAddressData(address)
         }
     }
@@ -120,6 +148,7 @@ const AccountDetailContentComponent = ({
     useEffect(() => {
         if (user) {
             setUsername(user.username)
+            setPassword(user.password);
             setFullName(user.userInformation.fullName);
             setEmail(user.userInformation.email);
             setPhone(user.userInformation.phone);
@@ -335,6 +364,13 @@ const AccountDetailContentComponent = ({
                                     }
                                 </div>
                             </div>
+
+                            <button className={'changePassBtn'}
+                                    onClick={e => handleChangePassword(e)}
+                            >
+                                Đổi Mật Khẩu
+                            </button>
+
                         </form>
                     </div>
 

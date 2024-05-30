@@ -11,7 +11,7 @@ import './HeaderComponent.css'
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
 import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
-import {loadDataUser} from "../../services/APIService";
+import {loadDataUser} from "../../services/userService";
 import {useSelector} from "react-redux";
 import APIService from "../../services/APIService1";
 
@@ -35,17 +35,17 @@ const HeaderComponent = () => {
     }
 
     useEffect(() => {
-        console.log('Token: ', token);
+        // console.log('Token: ', token);
 
         const fetchAvatar = async () => {
             if (token) {
                 try {
                     const data = await loadDataUser(token);
-                    console.log(data)
+                    // console.log(data)
                     setAvatar(data.userInformation.avatar);
                 } catch (error) {
                     localStorage.removeItem('token');
-                    if (!hasShownToast) {
+                    if (!hasShownToast && token === null) {
                         toast.error('Phiên đăng nhập đã hết hạn !');
                         hasShownToast = true; // Đánh dấu rằng toast đã được hiển thị
                     }

@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 //
 import AVATAR_DEFAULT from '../../../assets/img/user.png'
 // services
-import {loadDataUser} from "../../../services/APIService";
+import {loadDataUser} from "../../../services/userService";
 // components
 import HeaderComponent from "../../../components/Header/HeaderComponent";
 import FooterComponent from "../../../components/Footer/FooterComponent";

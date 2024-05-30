@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {login} from '../../../services/APIService'
+import {login} from '../../../services/userService'
 // icons
 import {CiUser, CiLock} from "react-icons/ci";
 import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";
@@ -46,7 +46,7 @@ const LoginScreen = () => {
         } catch (error) {
             console.log(error)
         }
-        console.log('clicked')
+        // console.log('clicked')
     }
 
     useEffect(() => {
