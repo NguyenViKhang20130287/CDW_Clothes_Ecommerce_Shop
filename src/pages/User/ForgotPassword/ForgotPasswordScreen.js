@@ -2,7 +2,7 @@ import React from "react";
 import {useState, useEffect} from "react";
 import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
 import {useNavigate} from "react-router-dom";
-import {forgotPassword} from "../../../services/APIService";
+import {forgotPassword} from "../../../services/userService";
 import toast from "react-hot-toast";
 // CSS
 

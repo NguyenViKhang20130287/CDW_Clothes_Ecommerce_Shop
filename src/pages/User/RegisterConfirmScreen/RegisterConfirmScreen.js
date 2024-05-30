@@ -8,7 +8,7 @@ import {CiLock, CiUser, CiMail} from "react-icons/ci";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
 //
-import { registerConfirm } from '../../../services/APIService';
+import { registerConfirm } from '../../../services/userService';
 import toast from "react-hot-toast";
 
 const RegisterConfirmScreen = () => {
@@ -50,7 +50,7 @@ const RegisterConfirmScreen = () => {
             password: password,
             otp: otp
         }
-        console.log('Data user: ', userData)
+        // console.log('Data user: ', userData)
         try {
             const res = await registerConfirm(userData)
             if (res.statusCodeValue === 200) {
@@ -61,6 +61,7 @@ const RegisterConfirmScreen = () => {
                         }, 10000);
                     }
                 });
+                navigate('/login');
             } else {
                 toast.error(res.body)
                 // setMessage(res.body)

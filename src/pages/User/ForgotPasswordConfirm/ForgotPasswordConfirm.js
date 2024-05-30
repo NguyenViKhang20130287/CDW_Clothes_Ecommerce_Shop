@@ -4,7 +4,7 @@ import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
 import './ForgotPasswordConfirm.css'
 import toast from "react-hot-toast";
-import {resetPassword} from "../../../services/APIService";
+import {resetPassword} from "../../../services/userService";
 
 const ForgotPasswordConfirm = () => {
     const [typePassword, setTypePassword] = useState('password')
