@@ -172,13 +172,11 @@ const ProductInformation = ({product}) => {
             }
         });
     };
-
-    const cartItems = useSelector(state => state.root.cart);
-    console.log(cartItems);
-
+    console.log(product.promotions);
     const currentDate = new Date();
-    const hasValidPromotion = product.productPromotions && product.productPromotions.length > 0 && new Date(product.productPromotions[0].promotion.start_date) <= currentDate && currentDate <= new Date(product.productPromotions[0].promotion.end_date);
-    const discountedPrice = hasValidPromotion ? product.price - (product.price * product.productPromotions[0].promotion.discount_rate / 100) : product.price;
+    const hasValidPromotion = product.promotions && product.promotions.length > 0 && new Date(product.promotions[0].startDate) <= currentDate && currentDate <= new Date(product.promotions[0].endDate);
+    const discountedPrice = hasValidPromotion ? product.price - (product.price * product.promotions[0].discount_rate / 100) : product.price;
+    console.log(discountedPrice);
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -210,7 +208,7 @@ const ProductInformation = ({product}) => {
                             </span>
                             <span className="save-price">-
                             <span
-                                className="price product-price-save">{product.productPromotions[0].promotion.discount_rate}%</span>
+                                className="price product-price-save">{product.promotions[0].discount_rate}%</span>
                              </span>
                         </> :
                         <span className="special-price">

@@ -8,10 +8,10 @@ const ProductCard2Component = ({product}) => {
     let discountRate = null;
     let promotion = null; // Define promotion here
     const currentDate = new Date();
-    if (product.productPromotions && product.productPromotions.length > 0) {
-        promotion = product.productPromotions[0].promotion;
-        const startDate = new Date(promotion.start_date);
-        const endDate = new Date(promotion.end_date);
+    if (product.promotions && product.promotions.length > 0) {
+        promotion = product.promotions[0];
+        const startDate = new Date(promotion.startDate);
+        const endDate = new Date(promotion.endDate);
 
         if (promotion.status && currentDate >= startDate && currentDate <= endDate) {
             discountRate = `- ${promotion.discount_rate}%`;
