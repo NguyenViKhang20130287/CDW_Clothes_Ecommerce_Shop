@@ -83,10 +83,17 @@ const HeaderComponent = () => {
         findProduct();
     }, [searchKeyword])
 
+
+    useEffect(() => {
+        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setTotalQuantity(newTotalQuantity);
+    }, [cartItems]);
+
+
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchKeyword.trim()) {
-            navigate('/search', {state: {keyword: searchKeyword}});
+            navigate('/search', { state: { keyword: searchKeyword } });
             setSearchPopupShowStatus(false);
         }
     };
@@ -155,18 +162,24 @@ const HeaderComponent = () => {
                         </div>
                         <div className={'searchResult'}>
                             <div className={'searchResultList'}>
-                                {searchResult.slice(0, 7).map((product, index) => (
-                                    <ProductCardComponent image={product.thumbnail}
-                                                          name={product.name}
-                                                          price={product.price}
-                                                          originPrice={product.price}
-                                                          key={index}/>
-                                ))}
-                                {searchResult.length > 7 && (
-                                    <div className={'productCardItem find-more'}>
-                                        <span>Xem Thêm</span>
-                                    </div>
-                                )}
+                                {searchResult.slice(0, 7).map((product, index) => {
+                                    let price = product.price;
+                                    let originPrice = null;
+
+                                    if (product.promotions && product.promotions.length > 0) {
+                                        originPrice = product.price;
+                                        price = product.price - product.price * product.promotions[0].discount_rate/100;
+                                    }
+                                    return (
+                                        <ProductCardComponent
+                                            key={index}
+                                            image={product.thumbnail}
+                                            name={product.name}
+                                            price={price}
+                                            originPrice={originPrice}
+                                        />
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
