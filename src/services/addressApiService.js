@@ -38,3 +38,7 @@ export const fetchDataDistrict = async (provinceId) => {
 export const addNewAddress = async (username, data)=>{
     return postRequest('/user/user-details/add-new-address', data, {username: username})
 }
+
+export const editAddress = async (username, data)=>{
+    return postRequest('/user/user-details/edit-address', data, {username: username})
+}

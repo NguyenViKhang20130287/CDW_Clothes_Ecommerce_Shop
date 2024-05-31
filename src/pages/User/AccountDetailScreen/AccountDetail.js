@@ -45,9 +45,9 @@ const AccountDetail = () => {
 
         // console.log()
         // if (user === null)
-            loadData()
+        loadData()
 
-    }, [user, token, isShow])
+    }, [token, isShow])
 
     return (
         <div className={'AccountDetailContainer'}>

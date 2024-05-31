@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 import {loadDataUser} from "../../services/userService";
 import {useSelector} from "react-redux";
 import APIService from "../../services/APIService1";
+import {loadAllCategoryIsActive} from "../../services/APIService";
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
@@ -25,6 +26,8 @@ const HeaderComponent = () => {
     const cartItems = useSelector(state => state.root.cart);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResult, setSearchResult] = useState([]);
+    const [categories, setCategories] = useState(null)
+
     let hasShownToast = false;
 
     const handleShowHideSearch = (e) => {
@@ -80,17 +83,10 @@ const HeaderComponent = () => {
         findProduct();
     }, [searchKeyword])
 
-
-    useEffect(() => {
-        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
-        setTotalQuantity(newTotalQuantity);
-    }, [cartItems]);
-
-
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchKeyword.trim()) {
-            navigate('/search', { state: { keyword: searchKeyword } });
+            navigate('/search', {state: {keyword: searchKeyword}});
             setSearchPopupShowStatus(false);
         }
     };
@@ -107,6 +103,37 @@ const HeaderComponent = () => {
         toast.success('Tài khoản đã đăng xuất')
         navigate('/')
     }
+
+
+    // fetch data cate
+    const fetchDataCategoryIsActive = async () => {
+        try {
+            const res = await loadAllCategoryIsActive()
+            setCategories(res)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchDataCategoryIsActive();
+
+    }, []);
+
+    useEffect(() => {
+        // Kiểm tra nếu categories null thì fetch lại
+        if (categories === null) {
+            fetchDataCategoryIsActive();
+        }
+    }, [categories]);
+
+    //
+    useEffect(() => {
+        const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setTotalQuantity(newTotalQuantity);
+
+        //
+    }, [cartItems]);
 
     return (
         <div className={'main'}>
@@ -132,19 +159,20 @@ const HeaderComponent = () => {
                                     <ProductCardComponent image={product.thumbnail}
                                                           name={product.name}
                                                           price={product.price}
-                                                          originPrice={product.price}/>
+                                                          originPrice={product.price}
+                                                          key={index}/>
                                 ))}
                                 {searchResult.length > 7 && (
-                                    <div className={'productCardItem'}>
-                                        <div className={'itemImage'}>
-                                            <span>Xem thêm</span>
-                                        </div>
+                                    <div className={'productCardItem find-more'}>
+                                        <span>Xem Thêm</span>
                                     </div>
                                 )}
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/**/}
                 <div className={`sidebarPopupResponsive ${sidebarToggleStatus ? 'sidebarResponsiveToggle' : ''}`}>
                     <button className={'closeBtn'}
                             onClick={event => handleToggleSidebar(event)}
@@ -193,6 +221,8 @@ const HeaderComponent = () => {
                         </div>
                     </div>
                 </div>
+                {/**/}
+
                 <div className={'headerWrapper'}>
                     <div className={'leftContentResponsive'}>
                         <button className={'sideBar'}
@@ -277,33 +307,11 @@ const HeaderComponent = () => {
                     <div className={'categoryItem'}>
                         <span>Tất cả sản phẩm</span>
                     </div>
-                    <div className={'categoryItem'}>
-                        <span>Áo thun</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Baby Tee</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Áo polo</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Áo sơ mi</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Áo khoác</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Hoodie</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Quần</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Quần nữ</span>
-                    </div>
-                    <div className={'categoryItem'}>
-                        <span>Phụ kiện</span>
-                    </div>
+                    {categories && categories.slice(0, 7).map((c, index) => (
+                        <div className={'categoryItem'} key={c.id}>
+                            <span>{c.name}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
 

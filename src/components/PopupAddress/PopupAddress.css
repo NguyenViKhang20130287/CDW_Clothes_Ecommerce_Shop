@@ -1,4 +1,3 @@
-
 /*address edit popup*/
 .editAddressPopup {
     position: absolute;
@@ -66,16 +65,17 @@
     margin-right: 5px;
 }
 
-.editAddressPopup .editAddressPopupWrapper form .addressDefault label{
+.editAddressPopup .editAddressPopupWrapper form .addressDefault label {
     font-size: 14px;
     font-family: var(--font-family-sans-serif);
 }
 
-.editAddressPopup .editAddressPopupWrapper form .action{
+.editAddressPopup .editAddressPopupWrapper form .action {
     padding: 10px;
     text-align: right;
 }
-.editAddressPopup .editAddressPopupWrapper form .action button{
+
+.editAddressPopup .editAddressPopupWrapper form .action button {
     width: 100px;
     border: 1px solid var(--color-black);
     background: var(--color-black);
@@ -88,7 +88,13 @@
     transition: all .3s;
 }
 
-.editAddressPopup .editAddressPopupWrapper form .action button:hover{
+.editAddressPopup .editAddressPopupWrapper form .action button:hover {
     background: #FFFFFF;
+    color: var(--color-black);
+}
+
+.editAddressPopup .editAddressPopupWrapper form .action button:disabled {
+    background: var(--color-silver);
+    border: var(--color-silver);
     color: var(--color-black);
 }

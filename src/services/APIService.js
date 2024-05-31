@@ -38,4 +38,7 @@ export const putRequest = async (endpoint, data = {}) => {
     }
 };
 
+export const loadAllCategoryIsActive = async () =>{
+    return getRequest("/category/active")
+}
 

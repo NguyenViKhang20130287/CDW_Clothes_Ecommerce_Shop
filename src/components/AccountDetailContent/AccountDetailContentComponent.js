@@ -8,7 +8,8 @@ import {LiaShippingFastSolid} from "react-icons/lia";
 import {changePassword, editUser} from "../../services/userService";
 import toast from "react-hot-toast";
 import PopupAddress from "../PopupAddress/PopupAddress";
-import {addNewAddress} from "../../services/addressApiService";
+import {addNewAddress, editAddress} from "../../services/addressApiService";
+import {useNavigate} from "react-router-dom";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -23,7 +24,6 @@ const AccountDetailContentComponent = ({
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
     const [avatarLink, setAvatarLink] = useState('');
-    const [password, setPassword] = useState('')
     const [oldPassword, setOldPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
@@ -35,6 +35,7 @@ const AccountDetailContentComponent = ({
     const [showNamePopup, setShowNamePopup] = useState('')
     const [addressData, setAddressData] = useState(null)
     const childRef = useRef()
+    const navigate = useNavigate()
 
     const handleChangeAvatar = async (e) => {
         const file = e.target.files[0];
@@ -82,6 +83,7 @@ const AccountDetailContentComponent = ({
                 return
             }
             toast.success('Thay đổi thông tin thành công')
+            navigate('/account-detail')
 
         } catch (error) {
             console.log(error)
@@ -91,7 +93,7 @@ const AccountDetailContentComponent = ({
     const handleAddNewAddress = async (e) => {
         e.preventDefault()
         const data = childRef.current.getData();
-        // console.log('Data from child:', data);
+        console.log('Data from child:', data);
         // console.log(user.username)
         try {
             const res = await addNewAddress(user.username, data)
@@ -109,6 +111,31 @@ const AccountDetailContentComponent = ({
         }
     }
 
+    const handleEditAddress = async (e) => {
+        e.preventDefault()
+        const data = childRef.current.getData();
+        console.log('Data from child ediit:', data);
+        try {
+            const res = await editAddress(user.username, data)
+            console.log('res: ', res)
+            toast.success('Cập nhật địa chỉ thành công')
+            setIsHiddenPopup(true)
+            // updateUser(prevUser => ({
+            //     ...prevUser,
+            //     addresses: [...prevUser.addresses, res]
+            // }));
+            updateUser(prevUser => ({
+                ...prevUser,
+                addresses: prevUser.addresses.map(address =>
+                    address.id === res.id ? { ...address, ...res } : address
+                )
+            }));
+        } catch (error) {
+            console.log(error)
+            toast.error('Lỗi thao tác !')
+        }
+    }
+
     const handleChangePassword = async (e) => {
         e.preventDefault()
         const userData = {
@@ -117,15 +144,13 @@ const AccountDetailContentComponent = ({
             newPassword: newPassword
         }
 
-        console.log('data: ', userData)
-
         if (reNewPassword !== newPassword){
             toast.error('Mật khẩu nhập lại không chính xác !')
             return
         }
         try {
             const res = await changePassword(userData);
-            console.log('res: ', res)
+            // console.log('res: ', res)
             toast.success(res)
             setOldPassword('')
             setNewPassword('')
@@ -144,11 +169,17 @@ const AccountDetailContentComponent = ({
         }
     }
 
+    const handleOnClickHiddenPopup = (e) =>{
+        e.preventDefault()
+        setIsHiddenPopup(true)
+        setShowNamePopup('')
+        setAddressData(null)
+    }
+
 
     useEffect(() => {
         if (user) {
             setUsername(user.username)
-            setPassword(user.password);
             setFullName(user.userInformation.fullName);
             setEmail(user.userInformation.email);
             setPhone(user.userInformation.phone);
@@ -157,8 +188,8 @@ const AccountDetailContentComponent = ({
             setAddresses([...user.addresses].sort((a, b) => b.default - a.default))
         }
 
-    }, [user, isHiddenPopup, addresses]);
-    // console.log('Addresses: ', addresses)
+        // console.log(fullName)
+    }, [isHiddenPopup]);
 
     return (
         <div className={'accountDetailContentWrapper'}>
@@ -190,7 +221,7 @@ const AccountDetailContentComponent = ({
                             <div className={'editControl'}>
                                 <label htmlFor={'email'}>Email</label>
                                 <input
-                                    value={email ? email : ''}
+                                    value={email}
                                     type={"email"}
                                     id={'email'}
                                     // disabled={true}
@@ -505,8 +536,9 @@ const AccountDetailContentComponent = ({
                 addressData={addressData}
                 title={showNamePopup === 'add' ? 'Thêm địa chỉ mới' : 'Cập nhật địa chỉ'}
                 isHiddenPopup={isHiddenPopup}
-                onClickHiddenPopup={e => setIsHiddenPopup(true)}
+                onClickHiddenPopup={e => handleOnClickHiddenPopup(e)}
                 handleSubmit={e => handleAddNewAddress(e)}
+                handleEditAddress={e=>handleEditAddress(e)}
                 ref={childRef}
             />
         </div>
