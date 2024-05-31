@@ -25,31 +25,29 @@ const PopupAddress = forwardRef((props, ref) => {
         isHiddenPopup,
         user,
         onClickHiddenPopup,
-        handleSubmit
+        handleSubmit,
+        handleEditAddress
     } = props;
     const classes = useStyles();
     const [provinces, setProvinces] = useState([])
     const [districts, setDistricts] = useState([])
     const [wards, setWards] = useState([])
 
-    const [province, setProvince] = useState([])
-    const [district, setDistrict] = useState([])
-    const [ward, setWard] = useState([])
+    const [selectedProvince, setSelectedProvince] = useState({})
+    const [selectedDistrict, setSelectedDistrict] = useState({})
+    const [selectedWard, setSelectedWard] = useState({})
+
     const [street, setStreet] = useState('')
     const [isDefault, setIsDefault] = useState(false)
 
     const [fullName, setFullName] = useState('')
     const [phone, setPhone] = useState('')
 
-    const [provinceId, setProvinceId] = useState('')
-    const [districtId, setDistrictId] = useState('')
-    const [wardId, setWardId] = useState('')
-
-    // console.log('Hidden status: ', isHiddenPopup)
     const handleChangeProvince = async (provinceId) => {
         // console.log(provinceId)
-        const selectedProvince = provinces.find(province => province.ProvinceID === provinceId);
-        setProvince(selectedProvince?.ProvinceName || '');
+        const selected = provinces.find(province => province.ProvinceID === provinceId);
+        setSelectedProvince(selected ? selected : null)
+        setProvinceId(String(provinceId))
         try {
             const data = await fetchData('district', {
                 province_id: provinceId
@@ -64,8 +62,9 @@ const PopupAddress = forwardRef((props, ref) => {
 
     const handleChangeDistrict = async (districtId) => {
         // console.log('District id: ', districtId)
-        const selectedDistrict = districts.find(district => district.DistrictID === districtId);
-        setDistrict(selectedDistrict?.DistrictName || '');
+        const selected = districts.find(district => district.DistrictID === districtId);
+        setSelectedDistrict(selected ? selected : null)
+        setDistrictId(districtId)
         try {
             const data = await fetchData('ward', {
                 district_id: districtId
@@ -77,106 +76,119 @@ const PopupAddress = forwardRef((props, ref) => {
         }
     }
 
-    const handleChangeWard = (wardId) => {
-        const selectedWard = wards.find(ward => ward.WardCode === wardId);
-        setWard(selectedWard?.WardName || '');
+    const handleChangeWard = async (wardId) => {
+        const selected = await wards.find(ward => ward.WardCode === wardId);
+        setSelectedWard(selected ? selected : null)
+        setWardId(wardId)
     }
 
     const handleFormSubmit = () => {
         const formData = {
             fullName: fullName,
             phone: phone,
-            province: province,
-            district: district,
-            ward: ward,
             street: street,
             isDefault: isDefault
         };
-        handleSubmit(formData);
+
+        showNamePopup === 'add' ? handleSubmit(formData) : handleEditAddress(formData);
     };
 
     useImperativeHandle(ref, () => ({
         getData: () => ({
-            fullName: fullName,
-            phone: phone,
-            province: province,
-            district: district,
-            ward: ward,
+            id: addressData.id,
+            fullName: showNamePopup === 'update' ? addressData.fullName : fullName,
+            phone: showNamePopup === 'update' ? addressData.phone : phone,
+            provinceId: selectedProvince.ProvinceID,
+            province: selectedProvince.ProvinceName,
+            districtId: selectedDistrict.DistrictID,
+            district: selectedDistrict.DistrictName,
+            wardId: selectedWard.WardCode,
+            ward: selectedWard.WardName,
             street: street,
             default: isDefault
         })
     }));
 
-    // console.log(addressData)
-    const fetchId = (listName, listItem, keyword) => {
-        if (listName === 'province') {
-            const result = listItem.find(r => r.ProvinceName === keyword)
-            return result ? result.ProvinceID : null
-        }
-        if (listName === 'district' && listItem.length > 0) {
-            const result = listItem.find(r => r.DistrictName === keyword)
-            return result ? result.DistrictID : null
-        }
-        if (listName === 'ward' && listItem.length > 0) {
-            const result = listItem.find(r => r.WardName === keyword)
-            return result ? result.WardCode : null
+    const fetchDataProvince = async () => {
+
+        try {
+            // console.log('Loading...')
+            const data = await fetchData('province')
+            // console.log('Data province: ', data)
+            setProvinces(data)
+        } catch (error) {
+            console.log(error)
         }
 
-    }
-
-    const fetchDataAddress = () => {
-
-        if (showNamePopup !== 'update' && !addressData) return
-
-        if (provinces.length > 0) {
-            let newProvinceId = fetchId('province', provinces, addressData.province)
-            console.log('New Province id: ', newProvinceId)
-            if (newProvinceId !== '') {
-                setProvinceId(String(newProvinceId))
-                console.log('Province id: ', provinceId)
-
-                if (districts.length < 0){
-                    handleChangeProvince(newProvinceId)
-                    console.log('List district NOT NULL: ', districts)
-                    let newDistrictId = fetchId('district', districts, addressData.district)
-                    console.log('New district id: ', newDistrictId)
-                    setDistrictId(String(newDistrictId))
-                    console.log('District id: ', districtId)
-                }
-
-            }
-        }
     }
 
     useEffect(() => {
 
-        // console.log(addressData)
         if (user) {
             setFullName(user.userInformation.fullName);
             setPhone(user.userInformation.phone)
         }
 
-        const fetchDataProvince = async () => {
+        fetchDataProvince()
 
-            try {
-                // console.log('Loading...')
-                const data = await fetchData('province')
-                // console.log('Data province: ', data)
-                setProvinces(data)
-            } catch (error) {
-                console.log(error)
-            }
-        }
 
-        if (provinces.length === 0)
+    }, [user, isHiddenPopup])
+
+
+    const [provinceId, setProvinceId] = useState('')
+    const [districtId, setDistrictId] = useState('')
+    const [wardId, setWardId] = useState('')
+    const [disable, setDisable] = useState(false)
+
+    useEffect(() => {
+        if (showNamePopup === 'add') {
             fetchDataProvince()
+            // setDistricts(null)
+            // setWards(null)
+            setFullName('')
+            setPhone('')
+            setProvinceId('')
+            setDistrictId('')
+            setWardId('')
+        }
+    }, [showNamePopup]);
 
-        // fetchDataAddress()
+    const fetchDataAddressDetail = async () => {
+        if (showNamePopup === 'update' && addressData) {
+            // console.log('Data: ', addressData)
+            // setProvinceId(String(addressData.provinceId))
+            setFullName(addressData.fullName)
+            setPhone(addressData.phone)
 
-    }, [user, showNamePopup, provinces, provinceId, districtId])
+            await handleChangeProvince(addressData.provinceId)
+            // setDistrictId(String(addressData.districtId))
 
+            await handleChangeDistrict(addressData.districtId)
+            // setWardId(String(addressData.wardId))
+
+            await handleChangeWard(addressData.wardId)
+
+            setStreet(addressData.street)
+            setIsDefault(addressData.isDefault)
+        }
+    }
+
+    useEffect(() => {
+        fetchDataAddressDetail()
+
+    }, [showNamePopup, addressData]);
+
+
+    useEffect(() => {
+        if (selectedProvince === null || selectedDistrict === null || selectedWard === null){
+            setDisable(true)
+        }else{
+            setDisable(false)
+        }
+    }, [selectedDistrict, selectedProvince, selectedWard]);
 
     return (
+
         <div className={'editAddressPopup'} hidden={isHiddenPopup}>
             <div className={'editAddressPopupWrapper'}>
                 <div className={'titleAddress'}>
@@ -200,7 +212,7 @@ const PopupAddress = forwardRef((props, ref) => {
                                 className={classes.root + ' editFullNameInput'}
                                 size={'small'}
                                 // defaultValue={''}
-                                value={showNamePopup === 'update' ? addressData.fullName : fullName}
+                                value={fullName}
                                 onChange={e => setFullName(e.target.value)}
                             />
                         </div>
@@ -214,7 +226,7 @@ const PopupAddress = forwardRef((props, ref) => {
                                 fullWidth={true}
                                 className={classes.root}
                                 size={'small'}
-                                value={showNamePopup === 'update' ? addressData.phone : phone}
+                                value={phone}
                                 onChange={e => setPhone(e.target.value)}
                             />
                         </div>
@@ -227,12 +239,11 @@ const PopupAddress = forwardRef((props, ref) => {
                             name={'province'}
                             select
                             defaultValue={''}
+                            value={provinceId}
                             variant={'outlined'}
                             fullWidth={true}
                             className={classes.root}
                             size={'small'}
-                            value={provinceId}
-                            // value={addressData.province}
                             onChange={e => handleChangeProvince(e.target.value)}
                         >
                             {provinces.map((province) => (
@@ -251,11 +262,11 @@ const PopupAddress = forwardRef((props, ref) => {
                             name={'district'}
                             select
                             defaultValue={''}
+                            value={districtId}
                             variant={'outlined'}
                             fullWidth={true}
                             className={classes.root}
                             size={'small'}
-                            value={districtId}
                             onChange={e => handleChangeDistrict(e.target.value)}
                         >
                             {districts.map((dis) => (
@@ -274,11 +285,11 @@ const PopupAddress = forwardRef((props, ref) => {
                             name={'ward'}
                             select
                             defaultValue={''}
+                            value={wardId}
                             variant={'outlined'}
                             fullWidth={true}
                             className={classes.root}
                             size={'small'}
-                            value={wardId}
                             onChange={e => handleChangeWard(e.target.value)}
                         >
                             {wards.map((ward) => (
@@ -318,7 +329,8 @@ const PopupAddress = forwardRef((props, ref) => {
                         >Trở về
                         </button>
                         <button className={'saveBtn'} type={'submit'}
-                                onClick={handleSubmit}
+                                onClick={showNamePopup === 'add' ? handleSubmit : handleEditAddress}
+                                disabled={disable}
                         >Lưu
                         </button>
                     </div>
