@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+//
 import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
-import { register } from '../../../services/userService';
+// services
+import ApiService from "../../../services/APIService";
 
 const RegisterScreen = () => {
     const navigate = useNavigate()
@@ -20,7 +22,7 @@ const RegisterScreen = () => {
             return;
         }
         try {
-            const data = await register(email);
+            const data = await new ApiService().sendData("/register", null, {email: email});
             if (data.statusCodeValue === 200) {
                 localStorage.setItem("emailRegistered", email);
                 toast.success("OTP đã gửi về email của bạn", {

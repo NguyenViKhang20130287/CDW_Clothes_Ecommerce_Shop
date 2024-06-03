@@ -7,7 +7,7 @@ import RecentItem from "../../../components/ProductDetailComponents/RecentItem";
 import SimilarItem from "../../../components/ProductDetailComponents/SimilarItem";
 import "../../../assets/style/ProductDetail.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import APIService from "../../../services/APIService1";
+import APIService from "../../../services/APIService";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -23,7 +23,7 @@ const ProductDetailScreen = () => {
 
     const fetchData = async () => {
         try {
-            const result = await new APIService().fetchData(`http://localhost:8080/api/v1/product/${id}`);
+            const result = await new APIService().fetchData(`/product/${id}`);
             setProduct(result);
             setCategoryId(result.category.id);
             dispatch({type: 'recent/add', payload: result});
@@ -34,7 +34,7 @@ const ProductDetailScreen = () => {
     // dispatch({type: 'recent/add', payload: product});
     const fetchSimilarProducts = async () => {
         try {
-            const result = await apiService.fetchData(`http://localhost:8080/api/v1/product/${id}/related`);
+            const result = await apiService.fetchData(`/product/${id}/related`);
             setSimilarProducts(result);
         } catch (error) {
             console.error('Error fetching similar products', error);

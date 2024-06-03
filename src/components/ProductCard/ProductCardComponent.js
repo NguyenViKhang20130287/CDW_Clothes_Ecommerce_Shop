@@ -13,7 +13,7 @@ const ProductCardComponent = ({id, image, name, price, originPrice}) => {
                     <img src={image} alt={''}/>
                 </div>
                 <div className={'itemName'}>
-                    <span>{name}</span>
+                    <span title={name}>{name}</span>
                 </div>
                 <div className={'itemPrice'}>
                     <span className={'price'}>{formattedPrice + 'đ'}</span>

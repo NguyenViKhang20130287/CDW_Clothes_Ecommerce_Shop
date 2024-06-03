@@ -2,9 +2,11 @@ import React, {useState} from "react";
 import {CiLock, CiMail} from "react-icons/ci";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
-import './ForgotPasswordConfirm.css'
 import toast from "react-hot-toast";
-import {resetPassword} from "../../../services/userService";
+//
+import './ForgotPasswordConfirm.css'
+// services
+import APIService from "../../../services/APIService";
 
 const ForgotPasswordConfirm = () => {
     const [typePassword, setTypePassword] = useState('password')
@@ -37,10 +39,10 @@ const ForgotPasswordConfirm = () => {
             otp: otp,
             newPassword: password
         }
-        console.log('Data: ', data)
+        // console.log('Data: ', data)
         try {
-            const res = await resetPassword(data)
-            console.log('Response reset password: ', res)
+            const res = await new APIService().sendData("/auth/forgot-password/reset", data)
+            // console.log('Response reset password: ', res)
             if (res.statusCodeValue === 200) {
                 toast.success('Thay đổi mật khẩu thành công')
                 localStorage.removeItem('emailForgot')

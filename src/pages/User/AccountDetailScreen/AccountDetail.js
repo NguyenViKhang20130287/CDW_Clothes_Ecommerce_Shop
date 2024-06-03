@@ -4,10 +4,8 @@ import {useNavigate} from "react-router-dom";
 //
 import AVATAR_DEFAULT from '../../../assets/img/user.png'
 // services
-import {loadDataUser} from "../../../services/userService";
+import ApiService from "../../../services/APIService";
 // components
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
 import AccountDetailContentComponent from "../../../components/AccountDetailContent/AccountDetailContentComponent";
 // icons
 import {FaPen, FaRegUser} from "react-icons/fa";
@@ -30,7 +28,8 @@ const AccountDetail = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const data = await loadDataUser(token);
+                const data =
+                    await new ApiService().fetchData("/user/user-details", null, {token: token});
                 setUser(data)
             } catch (error) {
                 localStorage.removeItem('token');
@@ -43,8 +42,6 @@ const AccountDetail = () => {
             }
         }
 
-        // console.log()
-        // if (user === null)
         loadData()
 
     }, [token, isShow])
