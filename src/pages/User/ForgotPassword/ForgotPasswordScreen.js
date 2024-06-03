@@ -1,12 +1,13 @@
 import React from "react";
 import {useState, useEffect} from "react";
-import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
 import {useNavigate} from "react-router-dom";
-import {forgotPassword} from "../../../services/userService";
 import toast from "react-hot-toast";
-// CSS
+// components
+import FormEmailComponent from "../../../components/FormEmail/FormEmailComponent";
+// services
+import ApiService from "../../../services/APIService";
 
-const ForgotPasswordScreen =() =>{
+const ForgotPasswordScreen = () => {
 
     const navigate = useNavigate()
     const [email, setEmail] = useState("");
@@ -22,12 +23,12 @@ const ForgotPasswordScreen =() =>{
             return;
         }
         try {
-            const data = await forgotPassword(email);
+            console.log(email)
+            const data =
+                await new ApiService().sendData("/auth/forgot-password", null, {email: email})
             if (data.statusCodeValue === 200) {
                 localStorage.setItem("emailForgot", email);
-                toast.success("OTP xác nhận quên mật khẩu đã gửi về email của bạn", {
-                    onClose: () => navigate("/forgot-password-confirm")
-                });
+                toast.success("OTP xác nhận quên mật khẩu đã gửi về email của bạn");
                 navigate("/forgot-password-confirm");
             } else {
                 toast.error('Email không tồn tại!')
@@ -41,7 +42,7 @@ const ForgotPasswordScreen =() =>{
         setErrorColor("#999999FF");
     }, [email]);
 
-    return(
+    return (
         <div className={'forgotPasswordContainer'}>
             <FormEmailComponent
                 title={'LẤY LẠI MẬT KHẨU'}

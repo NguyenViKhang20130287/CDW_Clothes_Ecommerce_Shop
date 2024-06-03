@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {login} from '../../../services/userService'
+// services
+import ApiService from '../../../services/APIService'
 // icons
 import {CiUser, CiLock} from "react-icons/ci";
 import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";
@@ -28,7 +29,7 @@ const LoginScreen = () => {
                 password: password
             }
             // console.log('User data: ', userData)
-            const res = await login(userData)
+            const res = await new ApiService().sendData("/auth/login", userData)
             // console.log('Login Data: ', res)
             if (res.statusCodeValue === 200) {
                 localStorage.setItem("token", res.body.token)

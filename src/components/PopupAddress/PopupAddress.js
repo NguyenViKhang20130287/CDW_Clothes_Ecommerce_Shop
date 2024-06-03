@@ -2,7 +2,7 @@ import React, {forwardRef, useEffect, useImperativeHandle, useState} from "react
 import {Box, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import {makeStyles} from "@mui/styles";
-import {fetchData} from "../../services/addressApiService";
+import {fetchData} from "../../services/AddressApiService";
 import './PopupAddress.css'
 
 
@@ -95,7 +95,7 @@ const PopupAddress = forwardRef((props, ref) => {
 
     useImperativeHandle(ref, () => ({
         getData: () => ({
-            id: addressData.id,
+            id: showNamePopup === 'update' ? addressData.id : '',
             fullName: showNamePopup === 'update' ? addressData.fullName : fullName,
             phone: showNamePopup === 'update' ? addressData.phone : phone,
             provinceId: selectedProvince.ProvinceID,

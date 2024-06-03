@@ -1,44 +1,62 @@
-import axios from 'axios'
+import axios from "axios";
 
 const BASE_URL = 'http://localhost:8080/api/v1'
 
-const apiService = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
+class ApiService {
+    constructor(accessToken = null) {
+        this.api = axios.create({
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-export const getRequest = async (endpoint, params = {}) => {
+        if (accessToken) {
+            this.api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+        }
+    }
+
+    async fetchData(endpoint, data, params) {
         try {
-            const res = await apiService.get(endpoint, {params})
-            return res.data;
+            const response = await this.api.get(BASE_URL + endpoint, {
+                data: data,
+                params: params
+            });
+            return response.data;
         } catch (error) {
+            console.error('Error fetching data:', error);
             throw error;
         }
     }
-;
 
-export const postRequest = async (endpoint, data = null, params = {}) => {
-    try {
-        const res = await apiService.post(endpoint, data, {params});
-        return res.data;
-    } catch (error) {
-        console.error(error);
-        throw error;
+    async sendData(endpoint, data, params) {
+        try {
+            const response = await this.api.post(BASE_URL + endpoint, data, {params:params})
+            return response.data;
+        } catch (error) {
+            console.error('Error sending data:', error);
+            throw error;
+        }
     }
-};
 
-export const putRequest = async (endpoint, data = {}) => {
-    try {
-        const res = await apiService.put(endpoint, data);
-        return res.data;
-    } catch (error) {
-        throw error;
+    async updateData(endpoint, data) {
+        try {
+            const response = await this.api.put(BASE_URL + endpoint, data);
+            return response.data;
+        } catch (error) {
+            console.error('Error updating data:', error);
+            throw error;
+        }
     }
-};
 
-export const loadAllCategoryIsActive = async () =>{
-    return getRequest("/category/active")
+    async deleteData(endpoint) {
+        try {
+            const response = await this.api.delete(BASE_URL + endpoint);
+            return response.data;
+        } catch (error) {
+            console.error('Error deleting data:', error);
+            throw error;
+        }
+    }
 }
 
+export default ApiService;

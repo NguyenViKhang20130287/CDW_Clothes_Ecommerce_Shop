@@ -1,5 +1,4 @@
 import axios from "axios";
-import {postRequest} from './APIService'
 
 const BASE_URL = 'https://online-gateway.ghn.vn/shiip/public-api/master-data/'
 
@@ -33,12 +32,4 @@ export const fetchDataDistrict = async (provinceId) => {
     } catch (error) {
         console.log(error)
     }
-}
-
-export const addNewAddress = async (username, data)=>{
-    return postRequest('/user/user-details/add-new-address', data, {username: username})
-}
-
-export const editAddress = async (username, data)=>{
-    return postRequest('/user/user-details/edit-address', data, {username: username})
 }

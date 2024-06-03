@@ -8,8 +8,8 @@
     transition: all .3s;
 }
 
-.productCardItem:hover{
- transform: scale(1.1);
+.productCardItem:hover {
+    transform: scale(1.1);
 }
 
 .productCardItem .itemImage {
@@ -27,6 +27,10 @@
     font-size: 14px;
     transition: all .3s;
     height: 15%;
+    width: 100%;
+    white-space: pre-wrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .productCardItem .itemName:hover {

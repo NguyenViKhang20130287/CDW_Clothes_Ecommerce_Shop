@@ -1,5 +1,8 @@
 import React, {useEffect, useState} from "react";
-// import {Link} from 'react-router-dom'
+import {Link, useNavigate} from "react-router-dom";
+import toast from "react-hot-toast";
+import {useSelector} from "react-redux";
+//
 import LOGO from '../../assets/img/logo.webp'
 import AVATAR_DEFAULT from '../../assets/img/user.png'
 // icons
@@ -9,12 +12,8 @@ import {HiBars3BottomLeft} from "react-icons/hi2";
 import './HeaderComponent.css'
 // components
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
-import {Link, useNavigate} from "react-router-dom";
-import toast from "react-hot-toast";
-import {loadDataUser} from "../../services/userService";
-import {useSelector} from "react-redux";
-import APIService from "../../services/APIService1";
-import {loadAllCategoryIsActive} from "../../services/APIService";
+// services
+import APIService from "../../services/APIService";
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
@@ -43,7 +42,8 @@ const HeaderComponent = () => {
         const fetchAvatar = async () => {
             if (token) {
                 try {
-                    const data = await loadDataUser(token);
+                    const data =
+                        await new APIService().fetchData("/user/user-details", null, {token:token});
                     // console.log(data)
                     setAvatar(data.userInformation.avatar);
                 } catch (error) {
@@ -72,7 +72,8 @@ const HeaderComponent = () => {
             setSearchResult([]);
         } else {
             try {
-                const searchResult = await new APIService().fetchData(`http://localhost:8080/api/v1/product/search?name=${searchKeyword}`);
+                const searchResult =
+                    await new APIService().fetchData(`/product/search?name=${searchKeyword}`);
                 setSearchResult(searchResult);
             } catch (error) {
                 console.error('Error fetching product', error);
@@ -115,7 +116,7 @@ const HeaderComponent = () => {
     // fetch data cate
     const fetchDataCategoryIsActive = async () => {
         try {
-            const res = await loadAllCategoryIsActive()
+            const res = await new APIService().fetchData("/category/active")
             setCategories(res)
         } catch (error) {
             console.log(error)
@@ -318,11 +319,11 @@ const HeaderComponent = () => {
             <div className={'categoriesContainer'}>
                 <div className={'categoriesWrapper'}>
                     <div className={'categoryItem'}>
-                        <span>Tất cả sản phẩm</span>
+                        <Link to={'/category/all'}>Tất cả sản phẩm</Link>
                     </div>
                     {categories && categories.slice(0, 7).map((c, index) => (
                         <div className={'categoryItem'} key={c.id}>
-                            <span>{c.name}</span>
+                            <Link to={`/category/${c.id}`}>{c.name}</Link>
                         </div>
                     ))}
                 </div>

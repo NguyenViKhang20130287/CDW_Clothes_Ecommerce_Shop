@@ -1,15 +1,18 @@
 import React, {useEffect, useRef, useState} from "react";
+import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
+// components
 import './AccountDetailContentComponent.css'
+import PopupAddress from "../PopupAddress/PopupAddress";
+// img
 import AVATAR_DEFAULT from '../../assets/img/user.png'
 import PRODUCT from '../../assets/img/shirt1.webp'
+// icons
 import {FaEye, FaEyeSlash, FaPlus} from "react-icons/fa";
 import {IoSearchSharp} from "react-icons/io5";
 import {LiaShippingFastSolid} from "react-icons/lia";
-import {changePassword, editUser} from "../../services/userService";
-import toast from "react-hot-toast";
-import PopupAddress from "../PopupAddress/PopupAddress";
-import {addNewAddress, editAddress} from "../../services/addressApiService";
-import {useNavigate} from "react-router-dom";
+// services
+import APIService from "../../services/APIService";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -76,7 +79,7 @@ const AccountDetailContentComponent = ({
         }
         // console.log('User data: ', userData)
         try {
-            const res = await editUser(userData);
+            const res = await new APIService().sendData("/user-details/edit", userData);
             // console.log('Response edit user: ', res)
             if (res.statusCodeValue === 400) {
                 toast.error('Lỗi thao tác')
@@ -96,7 +99,9 @@ const AccountDetailContentComponent = ({
         console.log('Data from child:', data);
         // console.log(user.username)
         try {
-            const res = await addNewAddress(user.username, data)
+            const res =
+                await new APIService().sendData("/user-details/add-new-address",
+                    data, {username: user.username})
             console.log('res: ', res)
             toast.success('Thêm địa chỉ thành công')
             setIsHiddenPopup(true)
@@ -116,7 +121,9 @@ const AccountDetailContentComponent = ({
         const data = childRef.current.getData();
         console.log('Data from child ediit:', data);
         try {
-            const res = await editAddress(user.username, data)
+            const res =
+                await new APIService().sendData("/user-details/edit-address",
+                    data, {username: user.username})
             console.log('res: ', res)
             toast.success('Cập nhật địa chỉ thành công')
             setIsHiddenPopup(true)
@@ -127,7 +134,7 @@ const AccountDetailContentComponent = ({
             updateUser(prevUser => ({
                 ...prevUser,
                 addresses: prevUser.addresses.map(address =>
-                    address.id === res.id ? { ...address, ...res } : address
+                    address.id === res.id ? {...address, ...res} : address
                 )
             }));
         } catch (error) {
@@ -144,18 +151,19 @@ const AccountDetailContentComponent = ({
             newPassword: newPassword
         }
 
-        if (reNewPassword !== newPassword){
+        if (reNewPassword !== newPassword) {
             toast.error('Mật khẩu nhập lại không chính xác !')
             return
         }
         try {
-            const res = await changePassword(userData);
+            const res =
+                await new APIService().sendData("/user-details/change-password", userData)
             // console.log('res: ', res)
             toast.success(res)
             setOldPassword('')
             setNewPassword('')
             setReNewPassword('')
-        }catch (error){
+        } catch (error) {
             toast.error(error.response.data)
             console.log(error)
         }
@@ -169,7 +177,7 @@ const AccountDetailContentComponent = ({
         }
     }
 
-    const handleOnClickHiddenPopup = (e) =>{
+    const handleOnClickHiddenPopup = (e) => {
         e.preventDefault()
         setIsHiddenPopup(true)
         setShowNamePopup('')
@@ -538,7 +546,7 @@ const AccountDetailContentComponent = ({
                 isHiddenPopup={isHiddenPopup}
                 onClickHiddenPopup={e => handleOnClickHiddenPopup(e)}
                 handleSubmit={e => handleAddNewAddress(e)}
-                handleEditAddress={e=>handleEditAddress(e)}
+                handleEditAddress={e => handleEditAddress(e)}
                 ref={childRef}
             />
         </div>

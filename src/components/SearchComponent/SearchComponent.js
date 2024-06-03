@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
-import APIService from "../../services/APIService1";
+import APIService from "../../services/APIService";
 const SearchComponent = ({keyword}) => {
 
     const [searchKeyword, setSearchKeyword] = useState(keyword);
@@ -15,7 +15,7 @@ const SearchComponent = ({keyword}) => {
             setSearchResult([]);
         } else {
             try {
-                const searchResult = await new APIService().fetchData(`http://localhost:8080/api/v1/product/search?name=${searchKeyword}`);
+                const searchResult = await new APIService().fetchData(`/product/search?name=${searchKeyword}`);
                 setSearchResult(searchResult);
             } catch (error) {
                 console.error('Error fetching product', error);

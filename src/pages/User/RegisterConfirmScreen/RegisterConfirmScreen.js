@@ -1,15 +1,12 @@
 import React, {useEffect, useState} from "react";
-// components
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
-// css
-import './RegisterConfirmScreen.css'
-import {CiLock, CiUser, CiMail} from "react-icons/ci";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
-//
-import { registerConfirm } from '../../../services/userService';
+import {CiLock, CiUser, CiMail} from "react-icons/ci";
 import toast from "react-hot-toast";
+// components
+import './RegisterConfirmScreen.css'
+// services
+import ApiService from "../../../services/APIService";
 
 const RegisterConfirmScreen = () => {
     const [username, setUserName] = useState("")
@@ -17,7 +14,6 @@ const RegisterConfirmScreen = () => {
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
     const [otp, setOtp] = useState('')
-    const [errorColor, setErrorColor] = useState('#999999FF')
     const navigate = useNavigate()
 
 
@@ -52,7 +48,7 @@ const RegisterConfirmScreen = () => {
         }
         // console.log('Data user: ', userData)
         try {
-            const res = await registerConfirm(userData)
+            const res = await new ApiService().sendData("/register/confirm", userData)
             if (res.statusCodeValue === 200) {
                 toast.success('Đăng kí tài khoản thành công', {
                     onClose: () => {

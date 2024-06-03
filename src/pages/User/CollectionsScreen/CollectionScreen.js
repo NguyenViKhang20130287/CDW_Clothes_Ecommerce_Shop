@@ -4,7 +4,7 @@ import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxCom
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
 import './CollectionScreen.css';
 import {useParams} from "react-router-dom";
-import APIService from "../../../services/APIService1";
+import APIService from "../../../services/APIService";
 import ProductCardComponent from "../../../components/ProductCard/ProductCardComponent";
 import {MdNavigateNext, MdNavigateBefore} from "react-icons/md";
 
@@ -23,7 +23,7 @@ const CollectionScreen = () => {
 
     const fetchProducts = async (categoryId ,currentPage, sortOption) => {
         try {
-            let url = `http://localhost:8080/api/v1/product`;
+            let url = `/product`;
             const { sortBy, order } = getSortParams(sortOption);
             if (categoryId !== 'all') {
                 url += `/category/${categoryId}`;
@@ -49,7 +49,7 @@ const CollectionScreen = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await new APIService().fetchData('http://localhost:8080/api/v1/category?sort=name&order=acs');
+            const response = await new APIService().fetchData('/category?sort=name&order=acs');
             setCategories(response.content);
         } catch (error) {
             console.error(error);
@@ -61,7 +61,7 @@ const CollectionScreen = () => {
             setCategory(null);
         } else {
             try {
-                const response = await new APIService().fetchData(`http://localhost:8080/api/v1/category/${categoryId}`);
+                const response = await new APIService().fetchData(`/category/${categoryId}`);
                 setCategory(response);
             } catch (error) {
                 console.error(error);
