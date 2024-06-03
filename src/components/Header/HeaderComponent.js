@@ -43,7 +43,7 @@ const HeaderComponent = () => {
             if (token) {
                 try {
                     const data =
-                        await new APIService().fetchData("/user/user-details", null, {token:token});
+                        await new APIService().fetchData("/user/user-details", null, {token: token});
                     // console.log(data)
                     setAvatar(data.userInformation.avatar);
                 } catch (error) {
@@ -94,7 +94,7 @@ const HeaderComponent = () => {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchKeyword.trim()) {
-            navigate('/search', { state: { keyword: searchKeyword } });
+            navigate('/search', {state: {keyword: searchKeyword}});
             setSearchPopupShowStatus(false);
         }
     };
@@ -117,6 +117,7 @@ const HeaderComponent = () => {
     const fetchDataCategoryIsActive = async () => {
         try {
             const res = await new APIService().fetchData("/category/active")
+            // console.log(res)
             setCategories(res)
         } catch (error) {
             console.log(error)
@@ -169,7 +170,7 @@ const HeaderComponent = () => {
 
                                     if (product.promotions && product.promotions.length > 0) {
                                         originPrice = product.price;
-                                        price = product.price - product.price * product.promotions[0].discount_rate/100;
+                                        price = product.price - product.price * product.promotions[0].discount_rate / 100;
                                     }
                                     return (
                                         <ProductCardComponent
@@ -318,14 +319,16 @@ const HeaderComponent = () => {
             </div>
             <div className={'categoriesContainer'}>
                 <div className={'categoriesWrapper'}>
-                    <div className={'categoryItem'}>
-                        <Link to={'/category/all'}>Tất cả sản phẩm</Link>
-                    </div>
                     {categories && categories.slice(0, 7).map((c, index) => (
                         <div className={'categoryItem'} key={c.id}>
                             <Link to={`/category/${c.id}`}>{c.name}</Link>
                         </div>
                     ))}
+                    {categories && categories.length > 7 &&
+                        <div className={'categoryItem'}>
+                            <Link to={'/category/all'}>Xem Thêm</Link>
+                        </div>
+                    }
                 </div>
             </div>
 
