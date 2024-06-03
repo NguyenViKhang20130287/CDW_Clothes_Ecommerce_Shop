@@ -1,11 +1,9 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import {Link} from "react-router-dom";
 // com
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
 import CategoryComponent from "../../../components/Category/CategoryComponent";
 
 // images
@@ -25,11 +23,13 @@ import FEEDBACK_7 from '../../../assets/findoutmore/feedback_7.webp'
 import FEEDBACK_8 from '../../../assets/findoutmore/feedback_8.webp'
 // css
 import './HomeScreen.css'
+import ApiService from "../../../services/APIService";
 
 const HomeScreen = () => {
     const images = [SLIDER_1, SLIDER_2, SLIDER_3, SLIDER_4, SLIDER_5]
     const imagesFeedback = [FEEDBACK_1, FEEDBACK_2, FEEDBACK_3, FEEDBACK_4,
         FEEDBACK_5, FEEDBACK_6, FEEDBACK_7, FEEDBACK_8]
+    const [products, setProducts] = useState(null)
 
     const settings = {
         dots: true,
@@ -40,6 +40,19 @@ const HomeScreen = () => {
         autoplay: true,
         autoplaySpeed: 2000
     };
+
+    const fetchDataTop5ProductNewest = async () => {
+        try {
+            const res = await new ApiService().fetchData("/product/top-7-newest")
+            setProducts(res)
+        } catch (error) {
+            console.log('Err fetch top 5: ', error)
+        }
+    }
+
+    useEffect(() => {
+        fetchDataTop5ProductNewest()
+    }, []);
 
     return (
         <div className={'homeContainer'}>
@@ -67,14 +80,17 @@ const HomeScreen = () => {
                 <CategoryComponent
                     className={'categoriesWrapper'}
                     isHome={true}
-                    categoryName={'Áo thun'}
+                    title={'Sản Phẩm Mới Nhất'}
                     image={SHIRT_IMG}
                     name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
                     price={'185.000'}
-                    originPrice={'350.000'}/>
+                    originPrice={'350.000'}
+                    products={products}
+                />
+                {/**/}
                 <CategoryComponent
                     className={'categoriesWrapper'}
-                    categoryName={'Áo Polo'}
+                    categoryName={'Sản Phẩm Bán Chạy'}
                     image={SHIRT_IMG}
                     name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
                     price={'185.000'}
