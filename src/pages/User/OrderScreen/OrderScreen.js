@@ -1,456 +1,411 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
-// com
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
-import img from "../../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp";
+import React, {useEffect, useState} from "react";
 // icon
 import {MdOutlinePayment} from "react-icons/md";
+import {TbLoader3} from "react-icons/tb";
 // css
 import "./OrderScreen.css";
+import {Box, TextField} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import {makeStyles} from "@mui/styles";
+import VNPAY_IMG from '../../../assets/img/vnpay-seeklogo.svg'
+import P_IMG from '../../../assets/img/shirt1.webp'
+import {fetchData} from "../../../services/AddressApiService";
+
+const useStyles = makeStyles({
+    root: {
+        '& .MuiInputLabel-root': {
+            fontSize: '14px'
+        },
+        '& .MuiInputBase-input': {
+            fontSize: '14px',
+        },
+    }
+});
 
 const OrderScreen = () => {
-    const [focusedField, setFocusedField] = useState('');
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
-    const [note, setNote] = useState('');
-    const [province, setProvince] = useState('');
-    const [district, setDistrict] = useState('');
-    const [ward, setWard] = useState('');
-    const [isPaymentMethodSelected, setIsPaymentMethodSelected] = useState(false);
+    const classes = useStyles();
+    const [selectedMethod, setSelectedMethod] = useState('cod')
+    const [selectedShippingCost, setSelectedShippingCost] = useState('1')
+    const [fullName, setFullName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [street, setStreet] = useState('')
+    const [provinces, setProvinces] = useState([])
+    const [province, setProvince] = useState({})
+    const [districts, setDistricts] = useState([])
+    const [district, setDistrict] = useState({})
+    const [wards, setWards] = useState([])
+    const [ward, setWard] = useState({})
+    const [userLogged, setUserLogged] = useState(null)
+    const token = localStorage.getItem('token')
+    const [inputIsValid, setInputIsValid] = useState(false)
+    const [loading, setLoading] = useState(true)
 
-    const handlePaymentMethodClick = () => {
-        setIsPaymentMethodSelected(!isPaymentMethodSelected);
-    };
 
-    const handleFocus = (event) => {
-        setFocusedField(event.target.name);
-    };
+    // fetch data province
+    const fetchDataProvince = async () => {
+        try {
+            const data = await fetchData('province')
+            setProvinces(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-    const handleBlur = (event) => {
-        if (event.target.value === '') {
-            setFocusedField('');
+    const handleOnChangeProvince = async (provinceId) => {
+        console.log('Id selected: ', provinceId)
+        const selected = provinces.find(province => province.ProvinceID === provinceId);
+        setProvince(selected)
+        try {
+            const res = await fetchData('district', {
+                province_id: provinceId
+            })
+            // console.log('Districts: ', res)
+            setDistricts(res)
+        } catch (error) {
+            console.log(error)
         }
-    };
+    }
 
-    const handleChange = (event) => {
-        if (event.target.name === 'billingName') {
-            setName(event.target.value);
+    const handleOnChangeDistrict = async (districtId) => {
+        // console.log('id selected: ', districtId)
+        const selected = districts.find(dis => dis.DistrictID === districtId);
+        setDistrict(selected)
+        try {
+            const data = await fetchData('ward', {
+                district_id: districtId
+            })
+            // console.log('Wards: ', data)
+            setWards(data)
+        } catch (e) {
+            console.log(e)
         }
-        if (event.target.name === 'billingPhone') {
-            setPhone(event.target.value);
+    }
+
+    const handleOnChangeWard = async (wardCode) => {
+        console.log('id selected: ', wardCode)
+        const selected = wards.find(ward => ward.WardCode === wardCode);
+        setWard(selected)
+    }
+
+    const checkValueInput = () => {
+        if (fullName !== '' && phone !== '' && street !== '' &&
+            Object.keys(province).length > 0 && Object.keys(district).length > 0 &&
+            Object.keys(ward).length > 0) {
+            setLoading(false)
+            setInputIsValid(true);
+            setTimeout(() => {
+                setLoading(true)
+            }, 1000)
+        } else {
+            setLoading(false)
+            setTimeout(() => {
+                setLoading(true)
+                setInputIsValid(false);
+            }, 1000)
         }
-        if (event.target.name === 'billingAddress') {
-            setAddress(event.target.value);
-        }
-        if (event.target.name === 'note') {
-            setNote(event.target.value);
-        }
-        if (event.target.name === 'billingProvince') {
-            setProvince(event.target.value);
-        }
-        if (event.target.name === 'billingDistrict') {
-            setDistrict(event.target.value);
-        }
-        if (event.target.name === 'billingWard') {
-            setWard(event.target.value);
-        }
-    };
-    const fakeProduct = [
-        {
-            id: 1,
-            name: 'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228',
-            image: img,
-            color: 'Đen',
-            size: 'M',
-            price: 123000,
-            discount: 47,
-            quantity: 1
-        },
-        {
-            id: 2,
-            name: 'Áo Thun Teelab Local Brand Unisex JR Baseball Tshirt TS227',
-            image: img,
-            color: 'Trắng',
-            size: 'L',
-            price: 200000,
-            discount: 25,
-            quantity: 2
-        },
-        {
-            id: 3,
-            name: 'Áo Thun Teelab Local Brand Unisex Cat on Animal Planet Tshirt TS230',
-            image: img,
-            color: 'Xanh lá',
-            size: 'S',
-            price: 300000,
-            discount: 20,
-            quantity: 10
-        },
-        {
-            id: 4,
-            name: 'Áo Thun Teelab Local Brand Unisex Las Vegas Tshirt TS226',
-            image: img,
-            color: 'Xanh dương',
-            size: 'XL',
-            price: 400000,
-            discount: 3,
-            quantity: 4
-        }
-    ];
+    }
+
+    useEffect(() => {
+        fetchDataProvince()
+    }, []);
+
+    useEffect(() => {
+        checkValueInput()
+    }, [fullName, phone, street, province, district, ward]);
+
+    // console.log('Province list: ', provinces)
+    // console.log('Province: ', Object.keys(province).length === 0)
+    // console.log('District list: ', districts)
+    // console.log('District: ', district)
+    // console.log('Ward list: ', wards)
+    // console.log('Ward: ', ward)
+    // console.log('Checked: ', inputIsValid)
+
     return (
         <>
-            <div className="container">
-                <div className={'order-wrap'}>
-                    <div className={'order-main'}>
-                        <article className={'animate-floating-labels row'}>
-                            <div className="col col-two">
-                                <section className="section">
-                                    <div className="section-header">
-                                        <div className="layout-flex">
-                                            <h2 className="section-title">
-                                                Thông tin nhận hàng
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div className="section-content">
-                                        <div className="fieldset">
-                                            <div className="field field--show-floating-label">
-                                                <div className="field-input-wrapper">
-                                                    <label htmlFor="customer-address" className="field-label">Sổ
-                                                        địa chỉ</label>
-                                                    <select size="1" className="field-input field-input-select"
-                                                            id="customer-address">
-                                                        <option value="0">Địa chỉ khác...</option>
-                                                        <option data-name="Nguyễn Huy Hiệp"
-                                                                data-address="Ký túc xá khu B Đại học Quốc Gia Hồ Chí Minh"
-                                                                data-phone="0869687410" data-province="2"
-                                                                data-district="47" data-ward="9240">
-                                                            Nguyễn Huy Hiệp, Ký túc xá khu B Đại học Quốc Gia Hồ Chí
-                                                            Minh, Phường Linh Trung, Quận Thủ Đức, TP Hồ Chí Minh
-                                                        </option>
+            <div className={'orderContainer'}>
+                <div className={'orderWrapper'}>
+                    <div className={'orderInfoUserAddress'}>
 
-                                                    </select>
-                                                </div>
-                                            </div>
+                        <div className={'title'}>
+                            <p>Thông tin nhận hàng</p>
+                        </div>
 
-                                            <div
-                                                className={`field ${name ? 'field--show-floating-label' : ''}`}
-                                                onFocus={handleFocus} onBlur={handleBlur}>
-                                                <div className="field-input-wrapper">
-                                                    <label htmlFor="billingName" className="field-label">Họ và
-                                                        tên</label>
-                                                    <input onChange={handleChange} value={name} name="billingName"
-                                                           id="billingName" type="text"
-                                                           className="field-input"/>
-                                                </div>
-                                            </div>
+                        <Box
+                            component="form"
+                            noValidate
+                            autoComplete="off"
+                            className={'boxWrapper'}
+                        >
 
-                                            <div
-                                                className={`field ${phone ? 'field--show-floating-label' : ''}`}
-                                                onFocus={handleFocus} onBlur={handleBlur}>
-                                                <div className="field-input-wrapper field-input-wrapper-connected">
-                                                    <label htmlFor="billingPhone" className="field-label">
-                                                        Số điện thoại
-                                                    </label>
-                                                    <input onChange={handleChange} name="billingPhone" id="billingPhone"
-                                                           type="tel"
-                                                           className="field-input"
-                                                           value={phone}/>
-                                                </div>
-
-                                            </div>
-                                            <div
-                                                className={`field ${address ? 'field--show-floating-label' : ''}`}
-                                                onFocus={handleFocus} onBlur={handleBlur}>
-                                                <div className="field-input-wrapper">
-                                                    <label htmlFor="billingAddress" className="field-label">
-                                                        Địa chỉ
-                                                    </label>
-                                                    <input onChange={handleChange} name="billingAddress" id="billingAddress" type="text"
-                                                           className="field-input"
-                                                           value={address}/>
-                                                </div>
-
-                                            </div>
-                                            <div className="field field--show-floating-label ">
-                                                <div className="field-input-wrapper field-input-wrapper--select2">
-                                                    <label htmlFor="billingProvince" className="field-label">Tỉnh
-                                                        thành</label>
-                                                    <select onChange={handleChange} name="billingProvince" id="billingProvince" size="1"
-                                                            className="field-input field-input-select select2-hidden-accessible"
-                                                            tabIndex="-1" aria-hidden="true">
-                                                        <option value="" hidden="">---</option>
-                                                        <option value="1">Hà Nội</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="field field--show-floating-label ">
-                                                <div className="field-input-wrapper field-input-wrapper-select2">
-                                                    <label htmlFor="billingDistrict" className="field-label">
-                                                        Quận huyện
-                                                    </label>
-                                                    <select onChange={handleChange} name="billingDistrict" id="billingDistrict" size="1"
-                                                            className="field-input field-input-select select2-hidden-accessible"
-                                                            tabIndex="-1" aria-hidden="true">
-                                                        <option value="" hidden="">---</option>
-                                                        <option value="30">Quận 1</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="field field--show-floating-label ">
-                                                <div className="field-input-wrapper field-input-wrapper-select2">
-                                                    <label htmlFor="billingWard" className="field-label">
-                                                        Phường xã
-                                                    </label>
-                                                    <select onChange={handleChange} name="billingWard" id="billingWard" size="1"
-                                                            className="field-input field-input-select select2-hidden-accessible"
-                                                            tabIndex="-1" aria-hidden="true">
-                                                        <option value="" hidden="">---</option>
-                                                        <option value="9238">Phường Linh Xuân</option>
-                                                        <option value="9239">Phường Bình Chiểu</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                                <div className="order-note">
-                                    <h3 className="visually-hidden">Ghi chú</h3>
-                                    <div
-                                        className={`field ${note ? 'field--show-floating-label' : ''}`}
-                                        onFocus={handleFocus} onBlur={handleBlur}>
-                                        <div className="field-input-wrapper">
-                                            <label htmlFor="note" className="field-label">
-                                                Ghi chú (tùy chọn)
-                                            </label>
-                                            <textarea onChange={handleChange} name="note" id="note" className="field-input"
-                                                      value={note}></textarea>
-                                        </div>
-
-                                    </div>
-                                </div>
-
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'addressBook'}
+                                    label={'Sổ địa chỉ'}
+                                    name={'addressBook'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    select
+                                >
+                                    <MenuItem>
+                                        Default
+                                    </MenuItem>
+                                </TextField>
                             </div>
-                            <div className="col col-two two">
-                                <section className="section" data-define="{shippingMethod: '643555_0,20.000 VND'}">
-                                    <div className="section-header">
-                                        <div className="layout-flex">
-                                            <h2 className="section-title layout-flex-item layout-flex-item-stretch">
-                                                <i className="fa fa-truck fa-lg section-title-icon hide-on-desktop"></i>
-                                                Vận chuyển
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div className="section-content" data-tg-refresh="refreshShipping"
-                                         id="shippingMethodList">
-                                        <div className="alert alert-retry alert-danger hide">
-                                            <span data-bind="loadingShippingErrorMessage">Không thể load phí vận chuyển. Vui lòng thử lại</span>
-                                            <i className="fa fa-refresh"></i>
-                                        </div>
-                                        <div className="content-box">
-                                            <div
-                                                className={`content-box-row ${province && district && ward ? '' : 'hide'}`}>
-                                                <div className="radio-wrapper">
-                                                    <div className="radio-input">
-                                                        <input type="radio" className="input-radio"/>
-                                                    </div>
-                                                    <label className="radio-label">
-														<span className="radio-label-primary">
-															<span>Giao hàng thông thường</span>
-														</span>
-                                                        <span className="radio-label-accessory">
-															<span className="content-box-emphasis price">
-																20.000đ
-															</span>
-														</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className={`alert alert-info ${province && district && ward ? 'hide' : ''}`}>
-                                            Vui lòng nhập thông tin giao hàng
-                                        </div>
-                                    </div>
-                                </section>
-                                <section className="section">
-                                    <div className="section-header">
-                                        <div className="layout-flex">
-                                            <h2 className="section-title layout-flex-item layout-flex-item-stretch">
-                                                <i className="fa fa-credit-card fa-lg section-title-icon hide-on-desktop"></i>
-                                                Thanh toán
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div className="section-content">
-                                        <div className="content-box" data-define="{paymentMethod: undefined}">
-                                            <div className="content-box-row">
-                                                <div className="radio-wrapper">
-                                                    <div className="radio-input">
-                                                        <input onClick={handlePaymentMethodClick} name="paymentMethod" id="paymentMethod-491325"
-                                                               type="radio" className="input-radio"
-                                                               data-bind="paymentMethod" value="491325"
-                                                               data-provider-id="4"/>
-                                                    </div>
-                                                    <label htmlFor="paymentMethod-491325" className="radio-label">
-                                                        <span className="radio-label-primary">Thanh toán khi giao hàng (COD)</span>
-                                                        <span className="radio-label-accessory">
-															<span className="radio-label-icon">
-                                                                <MdOutlinePayment
-                                                                    className={'payment-icon payment-icon--4'}></MdOutlinePayment>
-															</span>
-														</span>
 
-                                                    </label>
-                                                </div>
-
-                                                <div className={`content-box-row-desc ${isPaymentMethodSelected ? '' : 'hide'}`}
-                                                     data-bind-show="paymentMethod == 491325" data-provider-id="4">
-                                                    <p>Bạn sẽ thanh toán khi nhận được hàng</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'fullName'}
+                                    label={'Họ và Tên'}
+                                    name={'fullName'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    value={fullName}
+                                    onChange={e => setFullName(e.target.value)}
+                                />
                             </div>
-                        </article>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'phone'}
+                                    label={'Số Điện Thoại'}
+                                    name={'phone'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    value={phone}
+                                    onChange={e => setPhone(e.target.value)}
+                                />
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'street'}
+                                    label={'Địa chỉ cụ thể'}
+                                    name={'street'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    value={street}
+                                    onChange={e => setStreet(e.target.value)}
+                                />
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    select
+                                    id={'addressProvince'}
+                                    label={'Tỉnh/TP'}
+                                    name={'province'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    defaultValue={''}
+                                    onChange={e => handleOnChangeProvince(e.target.value)}
+                                >
+                                    {(provinces && provinces.length > 0) ?
+                                        provinces.map((province) => {
+                                            return (
+                                                <MenuItem key={province.ProvinceID} value={province.ProvinceID}>
+                                                    {province.ProvinceName}
+                                                </MenuItem>
+                                            )
+                                        })
+                                        :
+                                        <MenuItem>DEFULT</MenuItem>
+                                    }
+
+                                </TextField>
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'addressDistrict'}
+                                    label={'Quận/Huyện'}
+                                    name={'district'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    select
+                                    defaultValue={''}
+                                    onChange={e => handleOnChangeDistrict(e.target.value)}
+                                >
+                                    {(districts && districts.length > 0 && districts.length < 719) ?
+                                        districts.map((dis) => {
+                                            return (
+                                                <MenuItem key={dis.DistrictID} value={dis.DistrictID}>
+                                                    {dis.DistrictName}
+                                                </MenuItem>
+                                            )
+                                        }) : <MenuItem>DEFAULT</MenuItem>
+                                    }
+                                </TextField>
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'addressWard'}
+                                    label={'Phường/Xã'}
+                                    name={'ward'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    select
+                                    defaultValue={''}
+                                    onChange={e => handleOnChangeWard(e.target.value)}
+                                >
+                                    {(wards && wards.length > 0) ?
+                                        wards.map((ward) => {
+                                            return (
+                                                <MenuItem key={ward.WardCode} value={ward.WardCode}>
+                                                    {ward.WardName}
+                                                </MenuItem>
+                                            )
+                                        }) : <MenuItem>DEFAULT</MenuItem>
+                                    }
+                                </TextField>
+                            </div>
+
+                        </Box>
+
                     </div>
-                    <div className={'order-aside'}>
-                        <div className={'sidebar-header'}>
-                            <h2 className="sidebar-title">
-                                Đơn hàng (2 sản phẩm)
-                            </h2>
-                        </div>
-                        <div className={'sidebar-content'}>
-                            <div className={'order-summary-sections'}>
-                                <div className={'order-summary-section'}>
-                                    <table className={'product-table'}>
-                                        <thead className={'table-header'}>
-                                        <tr>
-                                            <td className={'visually-hidden'}>Ảnh sản phẩm</td>
-                                            <th className={'visually-hidden'}>Mô tả</th>
-                                            <th className={'visually-hidden'}>Số lượng</th>
-                                            <th className={'visually-hidden'}>Đơn giá</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {
-                                            fakeProduct.map((product, index) => {
-                                                const discountPrice = (product.price - (product.price * product.discount / 100));
-                                                const formattedDiscountPrice = discountPrice.toLocaleString('vi-VN') + 'đ';
-                                                return (
-                                                    <tr key={index}>
-                                                        <td className={'order-product-image'}>
-                                                            <div className={'order-product-thumbnail'}>
-                                                                <div className={'product-thumbnail-wrapper'}>
-                                                                    <img src={product.image} alt=""
-                                                                         className={'product-thumbnail-image'}/>
-                                                                </div>
-                                                                <span
-                                                                    className={'product-thumbnail-quantity'}>{product.quantity}</span>
-                                                            </div>
-                                                        </td>
-                                                        <th className={'order-product-description'}>
-                                                                <span className={'product-description-name'}>
-                                                                    {product.name}
-                                                                </span>
-                                                            <span className={'product-description-property'}>
-                                                                    {product.color} / {product.size}
-                                                                </span>
-                                                        </th>
-                                                        <th className={'visually-hidden'}>
-                                                            <em>Số lượng: </em>
-                                                            {product.quantity}
-                                                        </th>
-                                                        <td className={'product-price'}>
-                                                            {formattedDiscountPrice}
-                                                        </td>
-                                                    </tr>
-                                                );
-                                            })
-                                        }
-                                        </tbody>
+                    <div className={'orderPaymentMethod'}>
 
-                                    </table>
+                        <div className={'orderShipping'}>
+                            <div className={'title'}>
+                                <p>Vận chuyển</p>
+                            </div>
+
+                            <div className={'messageCheckInput'}>
+                                <div className={'messageWarning'} hidden={inputIsValid}>
+                                    <p>Vui lòng nhập đầy đủ thông tin nhận hàng !</p>
                                 </div>
-                                <div className={'order-summary-section'}>
-                                    <div className={'edit-checkout'}>
-                                        <div className="fieldset">
-                                            <div className="field">
-                                                <div className="field-input-btn-wrapper">
-                                                    <div className="field-input-wrapper">
-                                                        <label className="field-label">Nhập mã
-                                                            giảm giá</label>
-                                                        <input className={'field-input'} name="reductionCode"
-                                                               id="reductionCode" type="text"/>
-                                                    </div>
-                                                    <button className="field-input-btn btn spinner btn-disabled"
-                                                            type="button">
-                                                        <span className="spinner-label">Áp dụng</span>
-                                                    </button>
-                                                </div>
-                                            </div>
 
-                                        </div>
+                                <div className={'messageSuccess'} hidden={!inputIsValid}>
+                                    <div>
+                                        <input type={"radio"} id={'shippingChecked'}
+                                               value={'1'}
+                                               checked={selectedShippingCost === '1'}
+                                               onChange={e => setSelectedShippingCost(e.target.value)}
+                                        />
+                                        <label htmlFor={'shippingChecked'}>Giao hàng thông thường</label>
                                     </div>
-                                </div>
-                                <div className={'order-summary-section'}>
-                                    <table className={'total-line-table'}>
-                                        <thead>
-                                        <tr>
-                                            <td><span className={'visually-hidden'}>Mô tả</span></td>
-                                            <td><span className={'visually-hidden'}>Giá tiền</span></td>
-                                        </tr>
-                                        </thead>
-                                        <tbody className={'total-line-table-tbody'}>
-                                        <tr className={'total-line total-line-subtotal'}>
-                                            <th className='total-line-name'>
-                                                Tạm tính
-                                            </th>
-                                            <td className={'total-line-price'}>370.000đ</td>
-                                        </tr>
-                                        <tr className={'total-line total-line-shipping-fee'}>
-                                            <th className={'total-line-name'}>
-                                                Phí vận chuyển
-                                            </th>
-                                            <td className={'total-line-price'}
-                                                data-bind="getTextShippingPrice()">20.000đ
-                                            </td>
-                                        </tr>
+                                    <p>20.000đ</p>
 
-                                        </tbody>
-                                        <tfoot className={'total-line-table-footer'}>
-                                        <tr className={'total-line payment-due'}>
-                                            <th className={'total-line-name'}>
-													<span className={'payment-due-label-total'}>
-														Tổng cộng
-													</span>
-                                            </th>
-                                            <td className={'total-line-price'}>
-                                                <span className={'payment-due-price'}>390.000đ</span>
-                                            </td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div className={'order-summary-section'}>
-                                    <div className={'order-summary-nav'}>
-                                        <button type="submit" className="btn btn-checkout spinner">
-                                            <span className="spinner-label">ĐẶT HÀNG</span>
-                                        </button>
-                                        <Link className="previous-link" to={'/cart'}>
-                                            <i className="previous-link-arrow">❮</i>
-                                            <span className="previous-link-content">Quay về giỏ hàng</span>
-                                        </Link>
+                                    <div className={'messageSuccessLoading'} hidden={loading}>
+                                        <TbLoader3 className={'loader'}/>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
+
+                        <div className={'payment'}>
+                            <div className={'title'}>
+                                <p>Phương thức thanh toán</p>
+                            </div>
+
+                            <form className={'paymentSelector'}>
+                                <div className={'paymentWrapper'}>
+                                    <div className={'radioWrapper'}>
+                                        <input type={"radio"}
+                                               id={'cod'}
+                                               value={'cod'}
+                                               name={'payment'}
+                                               checked={selectedMethod === 'cod'}
+                                               onChange={e => setSelectedMethod(e.target.value)}
+                                        />
+                                        <label htmlFor={'cod'}>Thanh toán khi nhận hàng (COD)</label>
+                                    </div>
+                                    <MdOutlinePayment/>
+                                </div>
+                                <div className={'paymentWrapper'}>
+                                    <div className={'radioWrapper'}>
+                                        <input
+                                            type={"radio"}
+                                            id={'VNPay'}
+                                            value={'vnpay'}
+                                            name={'payment'}
+                                            checked={selectedMethod === 'vnpay'}
+                                            onChange={e => setSelectedMethod(e.target.value)}
+                                        />
+                                        <label htmlFor={'VNPay'}>Thanh toán với VNPAY</label>
+                                    </div>
+                                    <div className={'VNPayImgWrapper'}>
+                                        <img src={VNPAY_IMG} alt={''}/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div className={'orderDetails'}>
+
+                        <div className={'title'}>
+                            <p>Đơn hàng (10 sản phẩm)</p>
+                        </div>
+
+                        <div className={'orderProducts'}>
+                            <div className={'orderProductsItem'}>
+                                <div className={'orderProductsItemImgWrapper'}>
+                                    <img src={P_IMG} alt={''}/>
+                                </div>
+                                <div className={'orderProductsItemDetail'}>
+                                    <p>Áo Khoác Gió Teelab Local Brand Unisex Color Block Patchwork Logo Printed Jacket
+                                        AK107</p>
+                                    <span>x20, Đen/XL</span>
+                                </div>
+                                <div className={'orderProductsItemPrice'}>
+                                    <p>500.000đ</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className={'discountCode'}>
+                            <input type={"text"} placeholder={'Nhập mã giảm giá'}/>
+                            <button className={'applyCodeBtn'}>Áp Mã</button>
+                        </div>
+
+                        <div className={'price'}>
+                            <div className={'provisionalAmount item'}>
+                                <p>Số tiền tạm tính</p>
+                                <p>1.000.000đ</p>
+                            </div>
+                            <div className={'shippingCost item'}>
+                                <p>Phí vận chuyển</p>
+                                <p>20.000đ</p>
+                            </div>
+                            <div className={'discountPrice item'}>
+                                <p>Mã khuyến mãi</p>
+                                <p>-50.000đ</p>
+                            </div>
+                        </div>
+
+                        <div className={'totalPrice'}>
+                            <p>Tổng tiền</p>
+                            <p>11.000.000đ</p>
+                        </div>
+
+                        <div className={'orderSubmitBtn'}>
+                            <button>Đặt hàng</button>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -19,7 +19,6 @@ const CategoryComponent = ({products, title, isHome}) => {
     const checkPromotions = (promotions, originPrice, price) => {
         if (promotions && promotions.length > 0) {
             const promotion = promotions.find(promotion => promotion.status === true);
-            console.log('Check date: ', expiredDateValid(promotion.startDate, promotion.endDate))
             if (expiredDateValid(promotion.startDate, promotion.endDate)) {
                 price = originPrice * ((100 - promotion.discount_rate) / 100)
             } else {
@@ -33,9 +32,6 @@ const CategoryComponent = ({products, title, isHome}) => {
     useEffect(() => {
         setListProduct(products)
     }, [products]);
-    console.log('Products parent: ', listProduct)
-    if (listProduct && listProduct.length > 0)
-        checkPromotions(listProduct[0].promotions)
 
     return (
         <div className={'categoryContainer'}>

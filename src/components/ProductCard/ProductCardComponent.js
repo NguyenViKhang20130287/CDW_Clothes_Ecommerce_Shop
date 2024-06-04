@@ -15,7 +15,7 @@ const ProductCardComponent = ({id, image, name, price, originPrice, discountRate
                 {discountRate
                     &&
                     <div className={'discount-rate'}>
-                        <span>{discountRate}%</span>
+                        <span>-{discountRate}%</span>
                     </div>
                 }
 

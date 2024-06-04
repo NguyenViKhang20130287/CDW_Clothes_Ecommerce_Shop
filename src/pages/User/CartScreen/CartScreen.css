@@ -149,12 +149,32 @@
 .total-container .btn-checkout {
     width: 100%;
     background: #000;
+    border-radius: 6px;
     color: #fff;
     text-align: center;
     line-height: 40px;
     border: initial;
     font-size: 20px;
+    transition: all .3s;
+    border: 1px solid #000000;
 }
+
+.total-container .btn-checkout a{
+    color: #fff;
+    font-weight: 500;
+    transition: all .3s;
+    font-family: var(--font-family-sans-serif);
+    font-size: 16px;
+}
+
+.total-container .btn-checkout:hover{
+    background: var(--color-silver-white);
+}
+
+.total-container .btn-checkout:hover a{
+    color: var(--color-black);
+}
+
 @media (max-width: 576px) {
     .cart-container .main-image img {
         padding-top: 20px;
