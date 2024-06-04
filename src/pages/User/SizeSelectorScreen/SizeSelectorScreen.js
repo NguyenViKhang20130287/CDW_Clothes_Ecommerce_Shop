@@ -1,9 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./SizeSelectorScreen.css";
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
-
 
 const SizeSelectorScreen = () => {
     return (

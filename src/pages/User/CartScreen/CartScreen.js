@@ -5,6 +5,7 @@ import {useDispatch} from 'react-redux';
 import {MdDeleteOutline} from "react-icons/md";
 import {useSelector} from "react-redux";
 import {clearCart, decreaseQuantity, deleteItem, increaseQuantity} from "../../../store/actions/cartActions";
+import {Link} from "react-router-dom";
 
 const CartScreen = () => {
     const dispatch = useDispatch();
@@ -30,8 +31,10 @@ const CartScreen = () => {
             return selectedColorSize && selectedColorSize.quantity >= item.quantity;
         });
         setCanCheckout(canCheckout);
-    }, [cartItems]);
 
+        console.log('Cart item: ', cartItems)
+
+    }, [cartItems]);
 
 
     return (
@@ -137,7 +140,10 @@ const CartScreen = () => {
                         <div className="checkout">
                             <button type="button" className="btn-checkout"
                                     id="btn-proceed-checkout" title="Thanh toán"
-                                    disabled={!canCheckout}>Thanh toán
+                                    disabled={!canCheckout}>
+                                <Link to={'/order'}>
+                                    Thanh toán
+                                </Link>
                             </button>
                         </div>
                     </div>
