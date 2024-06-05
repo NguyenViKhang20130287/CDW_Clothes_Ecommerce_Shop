@@ -23,7 +23,7 @@ class ApiService {
             });
             return response.data;
         } catch (error) {
-            console.error('Error fetching data:', error);
+            // console.error('Error fetching data:', error);
             throw error;
         }
     }
