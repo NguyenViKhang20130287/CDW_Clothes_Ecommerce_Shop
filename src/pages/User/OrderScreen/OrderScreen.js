@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from "react";
 // icon
 import {MdOutlinePayment} from "react-icons/md";
-import {TbLoader3} from "react-icons/tb";
+import {TbLoader3, TbCircleCheck} from "react-icons/tb";
 // css
 import "./OrderScreen.css";
 import {Box, TextField} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import {makeStyles} from "@mui/styles";
 import VNPAY_IMG from '../../../assets/img/vnpay-seeklogo.svg'
-import P_IMG from '../../../assets/img/shirt1.webp'
 import {fetchData, fetchDataShipping} from "../../../services/AddressApiService";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import toast from "react-hot-toast";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import moment from "moment/moment";
 import ApiService from "../../../services/APIService";
+import {clearCart} from "../../../store/actions/cartActions";
 
 const useStyles = makeStyles({
     root: {
@@ -50,8 +50,11 @@ const OrderScreen = () => {
     const [discountPrice, setDiscountPrice] = useState(0)
     const [provisionalAmount, setProvisionalAmount] = useState(0)
     const [totalMoney, setTotalMoney] = useState(0)
+    const [modalStatus, setModalStatus] = useState(true)
+    const [loadingStatus, setLoadingStatus] = useState(false)
     const navigate = useNavigate()
     let hasNotify = false
+    const dispatch = useDispatch()
 
     const fetchDataProvince = async () => {
         try {
@@ -175,9 +178,58 @@ const OrderScreen = () => {
         }
     }
 
-    const handleOnClickCheckCode = async(e) =>{
+    const handleOnClickCheckCode = async (e) => {
         e.preventDefault()
         await handleCheckDiscountCode()
+    }
+
+    const handleOnClickPayment = async (e) => {
+        e.preventDefault()
+        setModalStatus(false)
+        const data = {
+            "fullName": fullName,
+            "phone": phone,
+            "address": `${street} ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`,
+            "paymentMethod": selectedMethod,
+            "paymentStatus": false,
+            "totalAmount": totalMoney,
+            "discountCode": discountCode,
+            "shippingCost": shippingCost,
+            "products": []
+        }
+        cartItems.forEach(item => {
+            const promotions = item.product.promotions
+            let price = null
+            let originPrice = item.product.price
+            price = checkPromotions(promotions, originPrice, price)
+            data.products.push({
+                "id": item.product.id,
+                "color": item.selectedColor,
+                "size": item.selectedSize,
+                "quantity": item.quantity,
+                "price": Math.round(price)
+            });
+        });
+        console.log('Data: ', data)
+        try {
+            setTimeout(async () => {
+                await new ApiService().sendData("/order/", data)
+                setLoadingStatus(true)
+            }, 1000)
+            setTimeout(() => {
+                if (cartItems.length > 0) dispatch(clearCart())
+            }, 1000 * 60)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const handleBackHomePage = (e) =>{
+        e.preventDefault()
+        setModalStatus(true)
+        setLoading(false)
+        navigate('/')
+        dispatch(clearCart())
     }
 
     useEffect(() => {
@@ -226,7 +278,7 @@ const OrderScreen = () => {
     // console.log('Ward list: ', wards)
     // console.log('Ward: ', ward)
     // console.log('Checked: ', inputIsValid)
-    console.log('ship cost: ', shippingCost)
+    // console.log('ship cost: ', shippingCost)
     // console.log('cart: ', cartItems)
     // console.log('discount money: ', discountPrice)
     // console.log('ProvisionalAmount: ', provisionalAmount)
@@ -537,9 +589,23 @@ const OrderScreen = () => {
                         </div>
 
                         <div className={'orderSubmitBtn'}>
-                            <button>Đặt hàng</button>
+                            <button onClick={e => handleOnClickPayment(e)}>Đặt hàng</button>
                         </div>
 
+                    </div>
+                </div>
+
+
+            </div>
+            <div className={'orderModalWrapper'} hidden={modalStatus}>
+                <div className={'orderModalContent'}>
+                    <div className={'loading'} hidden={loadingStatus}>
+                        <TbLoader3 className={'icon'}/>
+                    </div>
+                    <div className={'loaded'} hidden={!loadingStatus}>
+                        <TbCircleCheck className={'icon'}/>
+                        <span>Bạn đã đặt hàng thành công</span>
+                        <button className={'backHomeBtn'} onClick={e => handleBackHomePage(e)}>Về Trang Chủ</button>
                     </div>
                 </div>
             </div>
