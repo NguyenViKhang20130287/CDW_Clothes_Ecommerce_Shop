@@ -12,8 +12,6 @@ const CategoryComponent = ({products, title, isHome}) => {
         const currentDate = moment();
         const start = moment(startDate, 'YYYY-MM-DD HH:mm:ss');
         const end = moment(endDate, 'YYYY-MM-DD HH:mm:ss');
-
-
         return currentDate.isBetween(start, end, 'minutes', '[]');
     }
     const checkPromotions = (promotions, originPrice, price) => {

@@ -9,7 +9,12 @@ import MenuItem from "@mui/material/MenuItem";
 import {makeStyles} from "@mui/styles";
 import VNPAY_IMG from '../../../assets/img/vnpay-seeklogo.svg'
 import P_IMG from '../../../assets/img/shirt1.webp'
-import {fetchData} from "../../../services/AddressApiService";
+import {fetchData, fetchDataShipping} from "../../../services/AddressApiService";
+import {useSelector} from "react-redux";
+import toast from "react-hot-toast";
+import {useNavigate} from "react-router-dom";
+import moment from "moment/moment";
+import ApiService from "../../../services/APIService";
 
 const useStyles = makeStyles({
     root: {
@@ -24,7 +29,7 @@ const useStyles = makeStyles({
 
 const OrderScreen = () => {
     const classes = useStyles();
-    const [selectedMethod, setSelectedMethod] = useState('cod')
+    const [selectedMethod, setSelectedMethod] = useState('COD')
     const [selectedShippingCost, setSelectedShippingCost] = useState('1')
     const [fullName, setFullName] = useState('')
     const [phone, setPhone] = useState('')
@@ -39,9 +44,15 @@ const OrderScreen = () => {
     const token = localStorage.getItem('token')
     const [inputIsValid, setInputIsValid] = useState(false)
     const [loading, setLoading] = useState(true)
+    const [shippingCost, setShippingCost] = useState(0)
+    const cartItems = useSelector(state => state.root.cart);
+    const [discountCode, setDiscountCode] = useState('')
+    const [discountPrice, setDiscountPrice] = useState(0)
+    const [provisionalAmount, setProvisionalAmount] = useState(0)
+    const [totalMoney, setTotalMoney] = useState(0)
+    const navigate = useNavigate()
+    let hasNotify = false
 
-
-    // fetch data province
     const fetchDataProvince = async () => {
         try {
             const data = await fetchData('province')
@@ -52,7 +63,10 @@ const OrderScreen = () => {
     }
 
     const handleOnChangeProvince = async (provinceId) => {
-        console.log('Id selected: ', provinceId)
+        // console.log('Id selected: ', provinceId)
+        setDistricts([])
+        setWard([])
+        setShippingCost(0)
         const selected = provinces.find(province => province.ProvinceID === provinceId);
         setProvince(selected)
         try {
@@ -82,16 +96,17 @@ const OrderScreen = () => {
     }
 
     const handleOnChangeWard = async (wardCode) => {
-        console.log('id selected: ', wardCode)
+        // console.log('id selected: ', wardCode)
         const selected = wards.find(ward => ward.WardCode === wardCode);
         setWard(selected)
     }
 
-    const checkValueInput = () => {
+    const checkValueInput = async () => {
         if (fullName !== '' && phone !== '' && street !== '' &&
             Object.keys(province).length > 0 && Object.keys(district).length > 0 &&
             Object.keys(ward).length > 0) {
             setLoading(false)
+            await fetchShippingCost(district.DistrictID, ward.WardCode)
             setInputIsValid(true);
             setTimeout(() => {
                 setLoading(true)
@@ -105,6 +120,66 @@ const OrderScreen = () => {
         }
     }
 
+    const fetchShippingCost = async (fromDistrictId, fromWardId) => {
+        try {
+            const res = await fetchDataShipping(fromDistrictId, fromWardId)
+            // console.log('Res: ', res.data)
+            setShippingCost(res.data.total)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const expiredDateValid = (startDate, endDate) => {
+        const currentDate = moment();
+        const start = moment(startDate, 'YYYY-MM-DD HH:mm:ss');
+        const end = moment(endDate, 'YYYY-MM-DD HH:mm:ss');
+        return currentDate.isBetween(start, end, 'minutes', '[]');
+    }
+
+    const checkPromotions = (promotions, originPrice, price) => {
+        if (promotions && promotions.length > 0) {
+            const promotion = promotions.find(promotion => promotion.status === true);
+            if (expiredDateValid(promotion.startDate, promotion.endDate)) {
+                price = originPrice * ((100 - promotion.discount_rate) / 100)
+            } else {
+                price = originPrice
+            }
+        } else price = originPrice
+        return price
+    }
+
+    const formattedPrice = (price) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
+
+    const handleCheckDiscountCode = async () => {
+        try {
+            const res = await new ApiService().fetchData('/discount-code/check',
+                null, {code: discountCode})
+            // console.log('res: ', Object.keys(res).length)
+            if (Object.keys(res).length === 0) {
+                toast.error('Mã giảm giá không hợp lệ !')
+                return
+            }
+            console.log('Res: ', res)
+
+            if (res.discountRate === 0) {
+                setDiscountPrice(res.discountMoney)
+            } else {
+                setDiscountPrice(res.discountRate * provisionalAmount)
+            }
+            toast.success('Áp dụng mã giảm giá thành công')
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const handleOnClickCheckCode = async(e) =>{
+        e.preventDefault()
+        await handleCheckDiscountCode()
+    }
+
     useEffect(() => {
         fetchDataProvince()
     }, []);
@@ -113,6 +188,37 @@ const OrderScreen = () => {
         checkValueInput()
     }, [fullName, phone, street, province, district, ward]);
 
+    useEffect(() => {
+        let totalAmount = 0
+        cartItems.forEach((item, index) => {
+            console.log('Item: ', item)
+            const promotions = item.product.promotions
+            let price = null
+            let originPrice = item.product.price
+            price = checkPromotions(promotions, originPrice, price)
+            totalAmount += price * item.quantity
+        })
+        setProvisionalAmount(totalAmount)
+    }, [cartItems]);
+
+    useEffect(() => {
+        setTotalMoney(provisionalAmount + shippingCost - discountPrice)
+    }, [discountPrice, provisionalAmount, shippingCost]);
+
+    useEffect(() => {
+        // console.log(hasNotify)
+        if (!hasNotify) {
+            if (cartItems.length === 0) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                hasNotify = true
+                setTimeout(() => {
+                    toast.error('Chưa có sản phẩm nào trong giỏ hàng !')
+                    navigate('/cart');
+                }, 500)
+            }
+        }
+    }, [cartItems]);
+
     // console.log('Province list: ', provinces)
     // console.log('Province: ', Object.keys(province).length === 0)
     // console.log('District list: ', districts)
@@ -120,6 +226,11 @@ const OrderScreen = () => {
     // console.log('Ward list: ', wards)
     // console.log('Ward: ', ward)
     // console.log('Checked: ', inputIsValid)
+    console.log('ship cost: ', shippingCost)
+    // console.log('cart: ', cartItems)
+    // console.log('discount money: ', discountPrice)
+    // console.log('ProvisionalAmount: ', provisionalAmount)
+    // console.log('Total: ', totalMoney)
 
     return (
         <>
@@ -306,7 +417,11 @@ const OrderScreen = () => {
                                         />
                                         <label htmlFor={'shippingChecked'}>Giao hàng thông thường</label>
                                     </div>
-                                    <p>20.000đ</p>
+                                    {
+                                        (shippingCost && shippingCost > 0) ?
+                                            <p>{shippingCost}đ</p>
+                                            : <p>0đ</p>
+                                    }
 
                                     <div className={'messageSuccessLoading'} hidden={loading}>
                                         <TbLoader3 className={'loader'}/>
@@ -326,9 +441,9 @@ const OrderScreen = () => {
                                     <div className={'radioWrapper'}>
                                         <input type={"radio"}
                                                id={'cod'}
-                                               value={'cod'}
+                                               value={'COD'}
                                                name={'payment'}
-                                               checked={selectedMethod === 'cod'}
+                                               checked={selectedMethod === 'COD'}
                                                onChange={e => setSelectedMethod(e.target.value)}
                                         />
                                         <label htmlFor={'cod'}>Thanh toán khi nhận hàng (COD)</label>
@@ -340,9 +455,9 @@ const OrderScreen = () => {
                                         <input
                                             type={"radio"}
                                             id={'VNPay'}
-                                            value={'vnpay'}
+                                            value={'VNPAY'}
                                             name={'payment'}
-                                            checked={selectedMethod === 'vnpay'}
+                                            checked={selectedMethod === 'VNPAY'}
                                             onChange={e => setSelectedMethod(e.target.value)}
                                         />
                                         <label htmlFor={'VNPay'}>Thanh toán với VNPAY</label>
@@ -358,48 +473,67 @@ const OrderScreen = () => {
                     <div className={'orderDetails'}>
 
                         <div className={'title'}>
-                            <p>Đơn hàng (10 sản phẩm)</p>
+                            <p>Đơn hàng ({cartItems.length} sản phẩm)</p>
                         </div>
 
                         <div className={'orderProducts'}>
-                            <div className={'orderProductsItem'}>
-                                <div className={'orderProductsItemImgWrapper'}>
-                                    <img src={P_IMG} alt={''}/>
-                                </div>
-                                <div className={'orderProductsItemDetail'}>
-                                    <p>Áo Khoác Gió Teelab Local Brand Unisex Color Block Patchwork Logo Printed Jacket
-                                        AK107</p>
-                                    <span>x20, Đen/XL</span>
-                                </div>
-                                <div className={'orderProductsItemPrice'}>
-                                    <p>500.000đ</p>
-                                </div>
-                            </div>
+                            {cartItems && cartItems.length > 0 &&
+                                cartItems.map((item) => {
+                                    const promotions = item.product.promotions
+                                    let price = null
+                                    let originPrice = item.product.price
+                                    price = checkPromotions(promotions, originPrice, price)
+                                    return (
+                                        <div className={'orderProductsItem'} key={item.product.id}>
+                                            <div className={'orderProductsItemImgWrapper'}>
+                                                <img src={item.product.thumbnail} alt={''}/>
+                                            </div>
+                                            <div className={'orderProductsItemDetail'}>
+                                                <p>{item.product.name}</p>
+                                                <span>x{item.quantity}, {item.selectedColor} / {item.selectedSize}</span>
+                                            </div>
+                                            <div className={'orderProductsItemPrice'}>
+                                                <p>{formattedPrice(Math.round(price * item.quantity))}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+
                         </div>
 
                         <div className={'discountCode'}>
-                            <input type={"text"} placeholder={'Nhập mã giảm giá'}/>
-                            <button className={'applyCodeBtn'}>Áp Mã</button>
+                            <input
+                                type={"text"}
+                                placeholder={'Nhập mã giảm giá'}
+                                value={discountCode}
+                                onChange={e => setDiscountCode(e.target.value)}
+                            />
+                            <button
+                                className={'applyCodeBtn'}
+                                onClick={e => handleOnClickCheckCode(e)}
+                            >Áp Mã
+                            </button>
                         </div>
 
                         <div className={'price'}>
                             <div className={'provisionalAmount item'}>
                                 <p>Số tiền tạm tính</p>
-                                <p>1.000.000đ</p>
+                                <p>{formattedPrice(provisionalAmount)}</p>
                             </div>
                             <div className={'shippingCost item'}>
                                 <p>Phí vận chuyển</p>
-                                <p>20.000đ</p>
+                                <p>{formattedPrice(shippingCost)}</p>
                             </div>
                             <div className={'discountPrice item'}>
                                 <p>Mã khuyến mãi</p>
-                                <p>-50.000đ</p>
+                                <p>-{formattedPrice(discountPrice)}</p>
                             </div>
                         </div>
 
                         <div className={'totalPrice'}>
                             <p>Tổng tiền</p>
-                            <p>11.000.000đ</p>
+                            <p>{formattedPrice(totalMoney)}</p>
                         </div>
 
                         <div className={'orderSubmitBtn'}>
