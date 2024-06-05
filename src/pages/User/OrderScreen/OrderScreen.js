@@ -40,6 +40,9 @@ const OrderScreen = () => {
     const [district, setDistrict] = useState({})
     const [wards, setWards] = useState([])
     const [ward, setWard] = useState({})
+    const [provinceId, setProvinceId] = useState('')
+    const [districtId, setDistrictId] = useState('')
+    const [wardId, setWardId] = useState('')
     const [userLogged, setUserLogged] = useState(null)
     const token = localStorage.getItem('token')
     const [inputIsValid, setInputIsValid] = useState(false)
@@ -52,6 +55,7 @@ const OrderScreen = () => {
     const [totalMoney, setTotalMoney] = useState(0)
     const [modalStatus, setModalStatus] = useState(true)
     const [loadingStatus, setLoadingStatus] = useState(false)
+    const [addressUserLogged, setAddressUserLogged] = useState([])
     const navigate = useNavigate()
     let hasNotify = false
     const dispatch = useDispatch()
@@ -67,6 +71,7 @@ const OrderScreen = () => {
 
     const handleOnChangeProvince = async (provinceId) => {
         // console.log('Id selected: ', provinceId)
+        setProvinceId(String(provinceId))
         setDistricts([])
         setWard([])
         setShippingCost(0)
@@ -85,8 +90,11 @@ const OrderScreen = () => {
 
     const handleOnChangeDistrict = async (districtId) => {
         // console.log('id selected: ', districtId)
+        // console.log('districts selected: ', districts)
+        setDistrictId(String(districtId))
         const selected = districts.find(dis => dis.DistrictID === districtId);
         setDistrict(selected)
+
         try {
             const data = await fetchData('ward', {
                 district_id: districtId
@@ -100,6 +108,7 @@ const OrderScreen = () => {
 
     const handleOnChangeWard = async (wardCode) => {
         // console.log('id selected: ', wardCode)
+        setWardId(String(wardCode))
         const selected = wards.find(ward => ward.WardCode === wardCode);
         setWard(selected)
     }
@@ -224,12 +233,53 @@ const OrderScreen = () => {
         }
     }
 
-    const handleBackHomePage = (e) =>{
+    const handleBackHomePage = (e) => {
         e.preventDefault()
         setModalStatus(true)
         setLoading(false)
         navigate('/')
         dispatch(clearCart())
+    }
+
+    const fetchDataAddressUserLogged = async () => {
+        if (token !== null) {
+            try {
+                const res = await new ApiService().fetchData("/user/user-details/addresses", null, {token: token})
+                // console.log('Data: ', res)
+                setAddressUserLogged(res)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+
+    const handleOnChangeAddressBook = async (addressId) => {
+        if (addressUserLogged.length > 0) {
+            const addressBook = addressUserLogged.find(address => address.id === addressId)
+            console.log('Book: ', addressBook)
+            setFullName(addressBook.fullName)
+            setPhone(addressBook.phone)
+            setStreet(addressBook.street)
+            try {
+                const provinceResponse = await fetchData('province')
+                const dis = await fetchData('district', {
+                    province_id: addressBook.provinceId
+                })
+                const ward = await fetchData('ward', {
+                    district_id: addressBook.districtId
+                })
+                setProvince(provinceResponse.find(p => p.ProvinceID === addressBook.provinceId))
+                setDistricts(dis)
+                setDistrict(dis.find(d => d.DistrictID === addressBook.districtId))
+                setWards(ward)
+                setWard(ward.find(w => w.WardCode === String(addressBook.wardId)))
+            } catch (e) {
+                console.log(e)
+            }
+            setProvinceId(String(addressBook.provinceId))
+            setDistrictId(String(addressBook.districtId))
+            setWardId(String(addressBook.wardId))
+        }
     }
 
     useEffect(() => {
@@ -243,7 +293,7 @@ const OrderScreen = () => {
     useEffect(() => {
         let totalAmount = 0
         cartItems.forEach((item, index) => {
-            console.log('Item: ', item)
+            // console.log('Item: ', item)
             const promotions = item.product.promotions
             let price = null
             let originPrice = item.product.price
@@ -271,18 +321,20 @@ const OrderScreen = () => {
         }
     }, [cartItems]);
 
-    // console.log('Province list: ', provinces)
-    // console.log('Province: ', Object.keys(province).length === 0)
-    // console.log('District list: ', districts)
-    // console.log('District: ', district)
-    // console.log('Ward list: ', wards)
+    useEffect(() => {
+        fetchDataAddressUserLogged()
+    }, [token]);
+
+    useEffect(() => {
+        checkValueInput()
+    }, [inputIsValid]);
+
+
+    // console.log('Pr: ', province)
+    // console.log('Dis: ', district)
     // console.log('Ward: ', ward)
-    // console.log('Checked: ', inputIsValid)
-    // console.log('ship cost: ', shippingCost)
-    // console.log('cart: ', cartItems)
-    // console.log('discount money: ', discountPrice)
-    // console.log('ProvisionalAmount: ', provisionalAmount)
-    // console.log('Total: ', totalMoney)
+    // console.log('Fullname: ', fullName)
+    // console.log(inputIsValid)
 
     return (
         <>
@@ -300,24 +352,34 @@ const OrderScreen = () => {
                             autoComplete="off"
                             className={'boxWrapper'}
                         >
-
-                            <div className={'formControl'}>
-                                <TextField
-                                    required
-                                    id={'addressBook'}
-                                    label={'Sổ địa chỉ'}
-                                    name={'addressBook'}
-                                    variant={'outlined'}
-                                    fullWidth={true}
-                                    size={'small'}
-                                    className={classes.root}
-                                    select
-                                >
-                                    <MenuItem>
-                                        Default
-                                    </MenuItem>
-                                </TextField>
-                            </div>
+                            {token && token !== null &&
+                                <div className={'formControl'}>
+                                    <TextField
+                                        required
+                                        id={'addressBook'}
+                                        label={'Sổ địa chỉ'}
+                                        name={'addressBook'}
+                                        variant={'outlined'}
+                                        fullWidth={true}
+                                        size={'small'}
+                                        className={classes.root}
+                                        select
+                                        defaultValue={''}
+                                        onChange={e => handleOnChangeAddressBook(e.target.value)}
+                                    >
+                                        <MenuItem>Chọn địa chỉ</MenuItem>
+                                        {addressUserLogged && addressUserLogged.length > 0 &&
+                                            addressUserLogged.map(item => {
+                                                return (
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.fullName}, {item.phone}, {item.street}, {item.district}, {item.province}
+                                                    </MenuItem>
+                                                )
+                                            })
+                                        }
+                                    </TextField>
+                                </div>
+                            }
 
                             <div className={'formControl'}>
                                 <TextField
@@ -376,6 +438,7 @@ const OrderScreen = () => {
                                     size={'small'}
                                     className={classes.root}
                                     defaultValue={''}
+                                    value={provinceId}
                                     onChange={e => handleOnChangeProvince(e.target.value)}
                                 >
                                     {(provinces && provinces.length > 0) ?
@@ -405,6 +468,7 @@ const OrderScreen = () => {
                                     className={classes.root}
                                     select
                                     defaultValue={''}
+                                    value={districtId}
                                     onChange={e => handleOnChangeDistrict(e.target.value)}
                                 >
                                     {(districts && districts.length > 0 && districts.length < 719) ?
@@ -431,6 +495,7 @@ const OrderScreen = () => {
                                     className={classes.root}
                                     select
                                     defaultValue={''}
+                                    value={wards ? wardId : ''}
                                     onChange={e => handleOnChangeWard(e.target.value)}
                                 >
                                     {(wards && wards.length > 0) ?
@@ -471,7 +536,7 @@ const OrderScreen = () => {
                                     </div>
                                     {
                                         (shippingCost && shippingCost > 0) ?
-                                            <p>{shippingCost}đ</p>
+                                            <p>{formattedPrice(shippingCost)}đ</p>
                                             : <p>0đ</p>
                                     }
 
