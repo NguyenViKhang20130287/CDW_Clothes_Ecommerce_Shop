@@ -197,6 +197,7 @@ const OrderScreen = () => {
         e.preventDefault()
         setModalStatus(false)
         const data = {
+            "userId": userLogged.id,
             "fullName": fullName,
             "phone": phone,
             "address": `${street} ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`,
@@ -280,6 +281,17 @@ const OrderScreen = () => {
         }
     }
 
+    const fetchDataUserLogged = async () =>{
+        if (token !== null) {
+            try {
+                const res = await new ApiService().fetchData("/user/user-details", null, {token: token})
+                // console.log('Data: ', res)
+                setUserLogged(res)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
     const handleOnChangeAddressBook = async (addressId) => {
         if (addressUserLogged.length > 0) {
             const addressBook = addressUserLogged.find(address => address.id === addressId)
@@ -350,6 +362,7 @@ const OrderScreen = () => {
 
     useEffect(() => {
         fetchDataAddressUserLogged()
+        fetchDataUserLogged()
     }, [token]);
 
     useEffect(() => {

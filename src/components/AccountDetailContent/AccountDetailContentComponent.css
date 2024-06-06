@@ -420,16 +420,52 @@ accountDetailContentWrapper {
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderContainer {
+.purchaseOrderContainer .orderUserContainer {
+    height: 500px;
+    overflow-y: scroll;
+    position: relative;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper {
+.purchaseOrderContainer .orderUserContainer::-webkit-scrollbar {
+    width: 6px;
+    display: none;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderLoader{
+    position: sticky;
+    top: 0;
+    left: 0;
+    /*background: rgba(0, 0, 0, 0.8);*/
+    background-color: #fff;;
+    width: 100%;
+    min-height:  500px;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderLoader .icon{
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper {
     background: #FFFFFF;
     padding: 20px;
     margin-bottom: 20px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader {
     padding: 10px;
     border-bottom: 1px solid #dadada;
     display: flex;
@@ -437,23 +473,26 @@ accountDetailContentWrapper {
     align-items: center;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderId{
+    font-weight: 500;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderStatus {
     display: flex;
     align-items: center;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .detail {
-    font-size: 14px;
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderStatus span {
+    font-size: 16px;
     font-family: var(--font-family-sans-serif);
-    font-weight: 400;
+    font-weight: 500;
     color: #26aa99;
     display: flex;
     align-items: center;
     padding: 0 10px;
-    border-right: 1px solid var(--color-silver);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderHeader .orderStatus .status {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderStatus .status {
     text-transform: uppercase;
     font-size: 14px;
     color: red;
@@ -461,62 +500,64 @@ accountDetailContentWrapper {
 }
 
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts {
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct {
     display: flex;
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .imgWrapper {
     width: 100px;
     height: 100px;
     overflow: hidden;
     margin-right: 10px;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .imgWrapper img {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .imgWrapper img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper {
     display: flex;
     flex-direction: column;
     line-height: 2;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .nameProduct {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .nameProduct {
     font-size: 16px;
     font-family: var(--font-family-sans-serif);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .colorSize {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .colorSize {
     font-size: 14px;
     font-family: var(--font-family-sans-serif);
     color: var(--color-silver);
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice,
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice,
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .price .newPrice {
     font-size: 16px;
     font-family: var(--font-family-sans-serif);
+    color: red;
+    font-weight: 500;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .contentWrapper .price .oldPrice {
     margin-right: 10px;
     color: var(--color-silver);
     text-decoration: line-through;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action {
     text-align: right
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action button {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button {
     width: 150px;
     font-size: 14px;
     font-weight: bold;
@@ -528,7 +569,7 @@ accountDetailContentWrapper {
     transition: all .3s;
 }
 
-.purchaseOrderContainer .orderContainer .orderWrapper .action button:hover {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button:hover {
     background: #FFFFFF;
     color: var(--color-black);
 }
