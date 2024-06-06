@@ -15,6 +15,7 @@ import {Link, useNavigate} from "react-router-dom";
 import moment from "moment/moment";
 import ApiService from "../../../services/APIService";
 import {clearCart} from "../../../store/actions/cartActions";
+import axios from "axios";
 
 const useStyles = makeStyles({
     root: {
@@ -220,17 +221,43 @@ const OrderScreen = () => {
             });
         });
         console.log('Data: ', data)
-        try {
-            setTimeout(async () => {
-                await new ApiService().sendData("/order/", data)
-                setLoadingStatus(true)
-            }, 1000)
-            setTimeout(() => {
-                if (cartItems.length > 0) dispatch(clearCart())
-            }, 1000 * 60)
-        } catch (e) {
-            console.log(e)
+
+        console.log(selectedMethod)
+        // eslint-disable-next-line default-case
+        switch (selectedMethod) {
+            case 'COD':
+                try {
+                    setTimeout(async () => {
+                        await new ApiService().sendData("/order/", data)
+                        setLoadingStatus(true)
+                    }, 1000)
+                    setTimeout(() => {
+                        if (cartItems.length > 0) dispatch(clearCart())
+                    }, 1000 * 60)
+                } catch (e) {
+                    console.log(e)
+                }
+                break
+            case 'VNPAY':
+                data.paymentStatus = true
+                const dataPayment = {
+                    amount: totalMoney,
+                    orderInfo: 'order info'
+                }
+                setTimeout(async () => {
+                    const res = await new ApiService().sendData("/order/", data)
+                    console.log('res: ', res)
+                    dataPayment.orderInfo = res.id
+                    const resPayment = await new ApiService().sendData("/payment/create_payment", dataPayment)
+                    console.log('Payment: ', resPayment)
+                    localStorage.setItem("orderData", data)
+                    localStorage.setItem("paymentVNPay", resPayment)
+                    window.location.href = resPayment.url;
+                }, 1000)
+
+                break
         }
+
     }
 
     const handleBackHomePage = (e) => {
