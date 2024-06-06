@@ -16,6 +16,7 @@ import SizeSelectorScreen from "../pages/User/SizeSelectorScreen/SizeSelectorScr
 import OrderTrackingScreen from "../pages/User/OrderTrackingScreen/OrderTrackingScreen";
 import ProductDetailScreen from "../pages/User/ProductDetailScreen/ProductDetailScreen";
 import SearchScreen from "../pages/User/SearchScreen/SearchScreen";
+import PaymentResult from "../pages/User/PaymentResult/PaymentResult";
 
 const Router = () => {
     return (
@@ -40,6 +41,7 @@ const Router = () => {
                 <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
                 <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
                 <Route path={'/search'} element={<SearchScreen/>}/>
+                <Route path={'payment-result'} element={<PaymentResult/>}/>
             </Routes>
             <FooterComponent/>
         </div>
