@@ -429,10 +429,11 @@ label, legend {
 }
 
 .details-pro .form-product .btn-mua button {
-    height: 47px;
+    /*height: 47px;*/
     text-align: center;
     text-transform: uppercase;
     width: calc(50% - 5px);
+    font-size: 16px;
     margin-right: 9px;
     display: inline-flex;
     align-items: center;
@@ -440,14 +441,20 @@ label, legend {
     border: 1px #fff solid;
     background: #000;
     color: #fff;
-    border-radius: 3px;
+    border-radius: 6px;
     float: left;
+    transition: all .3s;
+    font-weight: 500;
+}
+
+.details-pro .form-product .btn-mua button:hover,
+.details-pro .form-product .btn-mua button.btn-buy-now:hover{
+    background-color: var(--color-silver);
 }
 
 .details-pro .form-product .btn-mua button.btn-buy-now {
     outline: none;
     background-color: #000;
-    border-color: #000;
     color: #fff;
     margin-right: 0;
 }
