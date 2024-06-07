@@ -13,6 +13,7 @@ import {IoSearchSharp} from "react-icons/io5";
 import {LiaShippingFastSolid} from "react-icons/lia";
 // services
 import APIService from "../../services/APIService";
+import {TbLoader, TbLoader3} from "react-icons/tb";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -37,7 +38,11 @@ const AccountDetailContentComponent = ({
     const [isHiddenPopup, setIsHiddenPopup] = useState(true)
     const [showNamePopup, setShowNamePopup] = useState('')
     const [addressData, setAddressData] = useState(null)
+    const [orders, setOrders] = useState([])
+    const [searchInput, setSearchInput] = useState('')
+    const [isLoaded, setIsLoaded] = useState(true)
     const childRef = useRef()
+    const token = localStorage.getItem("token")
     const navigate = useNavigate()
 
     const handleChangeAvatar = async (e) => {
@@ -184,6 +189,52 @@ const AccountDetailContentComponent = ({
         setAddressData(null)
     }
 
+    const formattedPrice = (price) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
+    const fetchDataOrdersUser = async () => {
+        if (token !== null) {
+            try {
+                const res = await new APIService().fetchData("/user/user-details/orders", null, {token: token})
+                // console.log(res)
+                setOrders(res)
+            } catch (e) {
+                console.log(e)
+            }
+        }
+    }
+
+    function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    const handleSearchOrder = () => {
+        const results = orders.filter((order) => {
+                return (
+                    order.id.toString() === searchInput ||
+                    order.orderDetails.some((detail) =>
+                        removeDiacritics(detail.product_name.toLowerCase()).includes(removeDiacritics(searchInput.toLowerCase()))
+                    )
+                );
+            }
+        )
+        setOrders(results)
+    }
+    useEffect(() => {
+        setIsLoaded(false)
+        setTimeout(async () => {
+            if (searchInput === '') {
+                await fetchDataOrdersUser();
+            } else {
+                if (orders.length === 0)
+                    await fetchDataOrdersUser();
+                handleSearchOrder()
+            }
+            setIsLoaded(true)
+        }, 1000)
+
+        console.log(removeDiacritics(searchInput))
+    }, [searchInput]);
 
     useEffect(() => {
         if (user) {
@@ -198,6 +249,12 @@ const AccountDetailContentComponent = ({
 
         // console.log(fullName)
     }, [isHiddenPopup]);
+
+    useEffect(() => {
+        fetchDataOrdersUser()
+    }, [token]);
+
+    // console.log('Orders: ', orders)
 
     return (
         <div className={'accountDetailContentWrapper'}>
@@ -432,108 +489,64 @@ const AccountDetailContentComponent = ({
                             <input
                                 type="text"
                                 placeholder={'Bạn có thể tìm kiếm theo ID hoặc Tên Sản Phẩm'}
+                                value={searchInput}
+                                onChange={e => setSearchInput(e.target.value)}
                             />
                         </div>
                     </div>
 
-                    <div className={'orderContainer'}>
-
-                        <div className={'orderWrapper'}>
-                            <div className={'orderHeader'}>
-                                <span className={'orderId'}>Ma don hang</span>
-                                <div className={'orderStatus'}>
-                                    <span className={'detail'}>
-                                         <LiaShippingFastSolid size={18} style={{
-                                             marginRight: '5px'
-                                         }}/>
-                                    <span>Đang vận chuyển</span>
-                                    </span>
-                                    <span className={'status'}>hoàn thành</span>
-                                </div>
-                            </div>
-                            <div className={'orderProducts'}>
-                                <div className={'orderProduct'}>
-                                    <div className={'imgWrapper'}>
-                                        <img src={PRODUCT} alt={""}/>
-                                    </div>
-                                    <div className={'contentWrapper'}>
-                                        <span className={'nameProduct'}>
-                                            Áo Polo Teelab Local Brand Unisex Power Team Worldwide AP050
-                                        </span>
-                                        <span className={'colorSize'}>Trắng, XXL, x2</span>
-                                        <div className={'price'}>
-                                            <span className={'oldPrice'}>350.000đ</span>
-                                            <span className={'newPrice'}>195.000đ</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className={'orderProduct'}>
-                                    <div className={'imgWrapper'}>
-                                        <img src={PRODUCT} alt={""}/>
-                                    </div>
-                                    <div className={'contentWrapper'}>
-                                        <span className={'nameProduct'}>
-                                            Áo Polo Teelab Local Brand Unisex Power Team Worldwide AP050
-                                        </span>
-                                        <span className={'colorSize'}>Trắng, XXL, x2</span>
-                                        <div className={'price'}>
-                                            <span className={'oldPrice'}>350.000đ</span>
-                                            <span className={'newPrice'}>195.000đ</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className={'action'}>
-                                <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
-                            </div>
+                    <div className={'orderUserContainer'}>
+                        <div className={'orderLoader'} hidden={isLoaded}>
+                            <TbLoader3 className={'icon'}/>
                         </div>
+                        {orders && orders.length > 0 ?
+                            orders.map(item => {
+                                const details = item.orderDetails
+                                return (
+                                    <div className={'orderUserWrapper'} key={item.id}>
+                                        <div className={'orderHeader'}>
+                                            <span className={'orderId'}>Mã đơn hàng: {item.id}</span>
+                                            <div className={'orderStatus'}>
+                                                <span>{item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.description}</span>
+                                            </div>
+                                        </div>
+                                        <div className={'orderProducts'}>
+                                            {details.length > 0 &&
+                                                details.map(de => {
+                                                    return (
+                                                        <div className={'orderProduct'}>
+                                                            <div className={'imgWrapper'}>
+                                                                <img src={de.product.thumbnail} alt={""}/>
+                                                            </div>
+                                                            <div className={'contentWrapper'}>
+                                                                    <span
+                                                                        className={'nameProduct'}>{de.product_name}</span>
+                                                                <span
+                                                                    className={'colorSize'}>{de.color.name}, {de.size.name}, x{de.quantity}</span>
+                                                                <div className={'price'}>
+                                                                    {/*<span className={'oldPrice'}>350.000đ</span>*/}
+                                                                    <span
+                                                                        className={'newPrice'}>{formattedPrice(de.price)}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
 
-                        <div className={'orderWrapper'}>
-                            <div className={'orderHeader'}>
-                                <span className={'orderId'}>Ma don hang</span>
-                                <div className={'orderStatus'}>
-                                    <LiaShippingFastSolid size={18} style={{
-                                        marginRight: '5px'
-                                    }}/>
-                                    <span>Đang vận chuyển</span>
-                                </div>
-                            </div>
-                            <div className={'orderProducts'}>
-                                <div className={'orderProduct'}>
-                                    <div className={'imgWrapper'}>
-                                        <img src={PRODUCT} alt={""}/>
-                                    </div>
-                                    <div className={'contentWrapper'}>
-                                        <span className={'nameProduct'}>
-                                            Áo Polo Teelab Local Brand Unisex Power Team Worldwide AP050
-                                        </span>
-                                        <span className={'colorSize'}>Trắng, XXL, x2</span>
-                                        <div className={'price'}>
-                                            <span className={'oldPrice'}>350.000đ</span>
-                                            <span className={'newPrice'}>195.000đ</span>
+                                        </div>
+                                        <div className={'action'}>
+                                            <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
                                         </div>
                                     </div>
-                                </div>
-                                <div className={'orderProduct'}>
-                                    <div className={'imgWrapper'}>
-                                        <img src={PRODUCT} alt={""}/>
-                                    </div>
-                                    <div className={'contentWrapper'}>
-                                        <span className={'nameProduct'}>
-                                            Áo Polo Teelab Local Brand Unisex Power Team Worldwide AP050
-                                        </span>
-                                        <span className={'colorSize'}>Trắng, XXL, x2</span>
-                                        <div className={'price'}>
-                                            <span className={'oldPrice'}>350.000đ</span>
-                                            <span className={'newPrice'}>195.000đ</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                )
+                            })
+                            :
+                            <div className={'orderUserWrapper'}>
+                                <span>Chưa có đơn hàng nào</span>
                             </div>
-                            <div className={'action'}>
-                                <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
-                            </div>
-                        </div>
+                        }
+
 
                     </div>
 

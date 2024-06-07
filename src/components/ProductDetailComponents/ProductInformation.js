@@ -3,6 +3,7 @@ import policy1 from "../../assets/img/ProductDetailSlider/Policy/product_poli_1.
 import policy2 from "../../assets/img/ProductDetailSlider/Policy/product_poli_3.webp";
 import cup from "../../assets/img/ProductDetailSlider/Policy/cup.webp";
 import {useDispatch, useSelector} from "react-redux";
+import toast from "react-hot-toast";
 
 const ColorSwatch = ({colors, selectedColor, setSelectedColor}) => {
     return (
@@ -171,6 +172,7 @@ const ProductInformation = ({product}) => {
                 selectedColorSize: selectedColorSize
             }
         });
+        toast.success("Sản phẩm đã được thêm vào giỏ hàng")
     };
     console.log(product.promotions);
     const currentDate = new Date();

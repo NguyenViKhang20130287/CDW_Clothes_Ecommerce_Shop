@@ -1,456 +1,716 @@
-import React, {useState} from "react";
-import {Link} from "react-router-dom";
-// com
-import HeaderComponent from "../../../components/Header/HeaderComponent";
-import FooterComponent from "../../../components/Footer/FooterComponent";
-import img from "../../../assets/img/ProductDetailSlider/BigSlider/BigSlider2.webp";
+import React, {useEffect, useState} from "react";
 // icon
 import {MdOutlinePayment} from "react-icons/md";
+import {TbLoader3, TbCircleCheck} from "react-icons/tb";
 // css
 import "./OrderScreen.css";
+import {Box, TextField} from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import {makeStyles} from "@mui/styles";
+import VNPAY_IMG from '../../../assets/img/vnpay-seeklogo.svg'
+import {fetchData, fetchDataShipping} from "../../../services/AddressApiService";
+import {useDispatch, useSelector} from "react-redux";
+import toast from "react-hot-toast";
+import {Link, useNavigate} from "react-router-dom";
+import moment from "moment/moment";
+import ApiService from "../../../services/APIService";
+import {clearCart} from "../../../store/actions/cartActions";
+import axios from "axios";
+
+const useStyles = makeStyles({
+    root: {
+        '& .MuiInputLabel-root': {
+            fontSize: '14px'
+        },
+        '& .MuiInputBase-input': {
+            fontSize: '14px',
+        },
+    }
+});
 
 const OrderScreen = () => {
-    const [focusedField, setFocusedField] = useState('');
-    const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
-    const [note, setNote] = useState('');
-    const [province, setProvince] = useState('');
-    const [district, setDistrict] = useState('');
-    const [ward, setWard] = useState('');
-    const [isPaymentMethodSelected, setIsPaymentMethodSelected] = useState(false);
+    const classes = useStyles();
+    const [selectedMethod, setSelectedMethod] = useState('COD')
+    const [selectedShippingCost, setSelectedShippingCost] = useState('1')
+    const [fullName, setFullName] = useState('')
+    const [phone, setPhone] = useState('')
+    const [street, setStreet] = useState('')
+    const [provinces, setProvinces] = useState([])
+    const [province, setProvince] = useState({})
+    const [districts, setDistricts] = useState([])
+    const [district, setDistrict] = useState({})
+    const [wards, setWards] = useState([])
+    const [ward, setWard] = useState({})
+    const [provinceId, setProvinceId] = useState('')
+    const [districtId, setDistrictId] = useState('')
+    const [wardId, setWardId] = useState('')
+    const [userLogged, setUserLogged] = useState(null)
+    const token = localStorage.getItem('token')
+    const [inputIsValid, setInputIsValid] = useState(false)
+    const [loading, setLoading] = useState(true)
+    const [shippingCost, setShippingCost] = useState(0)
+    const cartItems = useSelector(state => state.root.cart);
+    const [discountCode, setDiscountCode] = useState('')
+    const [discountPrice, setDiscountPrice] = useState(0)
+    const [provisionalAmount, setProvisionalAmount] = useState(0)
+    const [totalMoney, setTotalMoney] = useState(0)
+    const [modalStatus, setModalStatus] = useState(true)
+    const [loadingStatus, setLoadingStatus] = useState(false)
+    const [addressUserLogged, setAddressUserLogged] = useState([])
+    const navigate = useNavigate()
+    let hasNotify = false
+    const dispatch = useDispatch()
 
-    const handlePaymentMethodClick = () => {
-        setIsPaymentMethodSelected(!isPaymentMethodSelected);
-    };
+    const fetchDataProvince = async () => {
+        try {
+            const data = await fetchData('province')
+            setProvinces(data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-    const handleFocus = (event) => {
-        setFocusedField(event.target.name);
-    };
+    const handleOnChangeProvince = async (provinceId) => {
+        // console.log('Id selected: ', provinceId)
+        setProvinceId(String(provinceId))
+        setDistricts([])
+        setWard([])
+        setShippingCost(0)
+        const selected = provinces.find(province => province.ProvinceID === provinceId);
+        setProvince(selected)
+        try {
+            const res = await fetchData('district', {
+                province_id: provinceId
+            })
+            // console.log('Districts: ', res)
+            setDistricts(res)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-    const handleBlur = (event) => {
-        if (event.target.value === '') {
-            setFocusedField('');
-        }
-    };
+    const handleOnChangeDistrict = async (districtId) => {
+        // console.log('id selected: ', districtId)
+        // console.log('districts selected: ', districts)
+        setDistrictId(String(districtId))
+        const selected = districts.find(dis => dis.DistrictID === districtId);
+        setDistrict(selected)
 
-    const handleChange = (event) => {
-        if (event.target.name === 'billingName') {
-            setName(event.target.value);
+        try {
+            const data = await fetchData('ward', {
+                district_id: districtId
+            })
+            // console.log('Wards: ', data)
+            setWards(data)
+        } catch (e) {
+            console.log(e)
         }
-        if (event.target.name === 'billingPhone') {
-            setPhone(event.target.value);
+    }
+
+    const handleOnChangeWard = async (wardCode) => {
+        // console.log('id selected: ', wardCode)
+        setWardId(String(wardCode))
+        const selected = wards.find(ward => ward.WardCode === wardCode);
+        setWard(selected)
+    }
+
+    const checkValueInput = async () => {
+        if (fullName !== '' && phone !== '' && street !== '' &&
+            Object.keys(province).length > 0 && Object.keys(district).length > 0 &&
+            Object.keys(ward).length > 0) {
+            setLoading(false)
+            await fetchShippingCost(district.DistrictID, ward.WardCode)
+            setInputIsValid(true);
+            setTimeout(() => {
+                setLoading(true)
+            }, 1000)
+        } else {
+            setLoading(false)
+            setTimeout(() => {
+                setLoading(true)
+                setInputIsValid(false);
+            }, 1000)
         }
-        if (event.target.name === 'billingAddress') {
-            setAddress(event.target.value);
+    }
+
+    const fetchShippingCost = async (fromDistrictId, fromWardId) => {
+        try {
+            const res = await fetchDataShipping(fromDistrictId, fromWardId)
+            // console.log('Res: ', res.data)
+            setShippingCost(res.data.total)
+        } catch (e) {
+            console.log(e)
         }
-        if (event.target.name === 'note') {
-            setNote(event.target.value);
+    }
+
+    const expiredDateValid = (startDate, endDate) => {
+        const currentDate = moment();
+        const start = moment(startDate, 'YYYY-MM-DD HH:mm:ss');
+        const end = moment(endDate, 'YYYY-MM-DD HH:mm:ss');
+        return currentDate.isBetween(start, end, 'minutes', '[]');
+    }
+
+    const checkPromotions = (promotions, originPrice, price) => {
+        if (promotions && promotions.length > 0) {
+            const promotion = promotions.find(promotion => promotion.status === true);
+            if (expiredDateValid(promotion.startDate, promotion.endDate)) {
+                price = originPrice * ((100 - promotion.discount_rate) / 100)
+            } else {
+                price = originPrice
+            }
+        } else price = originPrice
+        return price
+    }
+
+    const formattedPrice = (price) => {
+        return price.toLocaleString('vi-VN') + 'đ';
+    }
+
+    const handleCheckDiscountCode = async () => {
+        try {
+            const res = await new ApiService().fetchData('/discount-code/check',
+                null, {code: discountCode})
+            // console.log('res: ', Object.keys(res).length)
+            if (Object.keys(res).length === 0) {
+                toast.error('Mã giảm giá không hợp lệ !')
+                return
+            }
+            console.log('Res: ', res)
+
+            if (res.discountRate === 0) {
+                setDiscountPrice(res.discountMoney)
+            } else {
+                setDiscountPrice(res.discountRate * provisionalAmount)
+            }
+            toast.success('Áp dụng mã giảm giá thành công')
+        } catch (e) {
+            console.log(e)
         }
-        if (event.target.name === 'billingProvince') {
-            setProvince(event.target.value);
+    }
+
+    const handleOnClickCheckCode = async (e) => {
+        e.preventDefault()
+        await handleCheckDiscountCode()
+    }
+
+    const handleOnClickPayment = async (e) => {
+        e.preventDefault()
+        setModalStatus(false)
+        const data = {
+            "userId": userLogged.id,
+            "fullName": fullName,
+            "phone": phone,
+            "address": `${street} ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`,
+            "paymentMethod": selectedMethod,
+            "paymentStatus": false,
+            "totalAmount": totalMoney,
+            "discountCode": discountCode,
+            "shippingCost": shippingCost,
+            "products": []
         }
-        if (event.target.name === 'billingDistrict') {
-            setDistrict(event.target.value);
+        cartItems.forEach(item => {
+            const promotions = item.product.promotions
+            let price = null
+            let originPrice = item.product.price
+            price = checkPromotions(promotions, originPrice, price)
+            data.products.push({
+                "id": item.product.id,
+                "color": item.selectedColor,
+                "size": item.selectedSize,
+                "quantity": item.quantity,
+                "price": Math.round(price)
+            });
+        });
+        console.log('Data: ', data)
+
+        console.log(selectedMethod)
+        // eslint-disable-next-line default-case
+        switch (selectedMethod) {
+            case 'COD':
+                try {
+                    setTimeout(async () => {
+                        await new ApiService().sendData("/order/", data)
+                        setLoadingStatus(true)
+                    }, 1000)
+                    setTimeout(() => {
+                        if (cartItems.length > 0) dispatch(clearCart())
+                    }, 1000 * 60)
+                } catch (e) {
+                    console.log(e)
+                }
+                break
+            case 'VNPAY':
+                data.paymentStatus = true
+                const dataPayment = {
+                    amount: totalMoney,
+                    orderInfo: 'order info'
+                }
+                setTimeout(async () => {
+                    const res = await new ApiService().sendData("/order/", data)
+                    console.log('res: ', res)
+                    dataPayment.orderInfo = res.id
+                    const resPayment = await new ApiService().sendData("/payment/create_payment", dataPayment)
+                    console.log('Payment: ', resPayment)
+                    localStorage.setItem("orderData", data)
+                    localStorage.setItem("paymentVNPay", resPayment)
+                    window.location.href = resPayment.url;
+                }, 1000)
+
+                break
         }
-        if (event.target.name === 'billingWard') {
-            setWard(event.target.value);
+
+    }
+
+    const handleBackHomePage = (e) => {
+        e.preventDefault()
+        setModalStatus(true)
+        setLoading(false)
+        navigate('/')
+        dispatch(clearCart())
+    }
+
+    const fetchDataAddressUserLogged = async () => {
+        if (token !== null) {
+            try {
+                const res = await new ApiService().fetchData("/user/user-details/addresses", null, {token: token})
+                // console.log('Data: ', res)
+                setAddressUserLogged(res)
+            } catch (e) {
+                console.log(e)
+            }
         }
-    };
-    const fakeProduct = [
-        {
-            id: 1,
-            name: 'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228',
-            image: img,
-            color: 'Đen',
-            size: 'M',
-            price: 123000,
-            discount: 47,
-            quantity: 1
-        },
-        {
-            id: 2,
-            name: 'Áo Thun Teelab Local Brand Unisex JR Baseball Tshirt TS227',
-            image: img,
-            color: 'Trắng',
-            size: 'L',
-            price: 200000,
-            discount: 25,
-            quantity: 2
-        },
-        {
-            id: 3,
-            name: 'Áo Thun Teelab Local Brand Unisex Cat on Animal Planet Tshirt TS230',
-            image: img,
-            color: 'Xanh lá',
-            size: 'S',
-            price: 300000,
-            discount: 20,
-            quantity: 10
-        },
-        {
-            id: 4,
-            name: 'Áo Thun Teelab Local Brand Unisex Las Vegas Tshirt TS226',
-            image: img,
-            color: 'Xanh dương',
-            size: 'XL',
-            price: 400000,
-            discount: 3,
-            quantity: 4
+    }
+
+    const fetchDataUserLogged = async () =>{
+        if (token !== null) {
+            try {
+                const res = await new ApiService().fetchData("/user/user-details", null, {token: token})
+                // console.log('Data: ', res)
+                setUserLogged(res)
+            } catch (e) {
+                console.log(e)
+            }
         }
-    ];
+    }
+    const handleOnChangeAddressBook = async (addressId) => {
+        if (addressUserLogged.length > 0) {
+            const addressBook = addressUserLogged.find(address => address.id === addressId)
+            console.log('Book: ', addressBook)
+            setFullName(addressBook.fullName)
+            setPhone(addressBook.phone)
+            setStreet(addressBook.street)
+            try {
+                const provinceResponse = await fetchData('province')
+                const dis = await fetchData('district', {
+                    province_id: addressBook.provinceId
+                })
+                const ward = await fetchData('ward', {
+                    district_id: addressBook.districtId
+                })
+                setProvince(provinceResponse.find(p => p.ProvinceID === addressBook.provinceId))
+                setDistricts(dis)
+                setDistrict(dis.find(d => d.DistrictID === addressBook.districtId))
+                setWards(ward)
+                setWard(ward.find(w => w.WardCode === String(addressBook.wardId)))
+            } catch (e) {
+                console.log(e)
+            }
+            setProvinceId(String(addressBook.provinceId))
+            setDistrictId(String(addressBook.districtId))
+            setWardId(String(addressBook.wardId))
+        }
+    }
+
+    useEffect(() => {
+        fetchDataProvince()
+    }, []);
+
+    useEffect(() => {
+        checkValueInput()
+    }, [fullName, phone, street, province, district, ward]);
+
+    useEffect(() => {
+        let totalAmount = 0
+        cartItems.forEach((item, index) => {
+            // console.log('Item: ', item)
+            const promotions = item.product.promotions
+            let price = null
+            let originPrice = item.product.price
+            price = checkPromotions(promotions, originPrice, price)
+            totalAmount += price * item.quantity
+        })
+        setProvisionalAmount(totalAmount)
+    }, [cartItems]);
+
+    useEffect(() => {
+        setTotalMoney(provisionalAmount + shippingCost - discountPrice)
+    }, [discountPrice, provisionalAmount, shippingCost]);
+
+    useEffect(() => {
+        // console.log(hasNotify)
+        if (!hasNotify) {
+            if (cartItems.length === 0) {
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+                hasNotify = true
+                setTimeout(() => {
+                    toast.error('Chưa có sản phẩm nào trong giỏ hàng !')
+                    navigate('/cart');
+                }, 500)
+            }
+        }
+    }, [cartItems]);
+
+    useEffect(() => {
+        fetchDataAddressUserLogged()
+        fetchDataUserLogged()
+    }, [token]);
+
+    useEffect(() => {
+        checkValueInput()
+    }, [inputIsValid]);
+
+
+    // console.log('Pr: ', province)
+    // console.log('Dis: ', district)
+    // console.log('Ward: ', ward)
+    // console.log('Fullname: ', fullName)
+    // console.log(inputIsValid)
+
     return (
         <>
-            <div className="container">
-                <div className={'order-wrap'}>
-                    <div className={'order-main'}>
-                        <article className={'animate-floating-labels row'}>
-                            <div className="col col-two">
-                                <section className="section">
-                                    <div className="section-header">
-                                        <div className="layout-flex">
-                                            <h2 className="section-title">
-                                                Thông tin nhận hàng
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div className="section-content">
-                                        <div className="fieldset">
-                                            <div className="field field--show-floating-label">
-                                                <div className="field-input-wrapper">
-                                                    <label htmlFor="customer-address" className="field-label">Sổ
-                                                        địa chỉ</label>
-                                                    <select size="1" className="field-input field-input-select"
-                                                            id="customer-address">
-                                                        <option value="0">Địa chỉ khác...</option>
-                                                        <option data-name="Nguyễn Huy Hiệp"
-                                                                data-address="Ký túc xá khu B Đại học Quốc Gia Hồ Chí Minh"
-                                                                data-phone="0869687410" data-province="2"
-                                                                data-district="47" data-ward="9240">
-                                                            Nguyễn Huy Hiệp, Ký túc xá khu B Đại học Quốc Gia Hồ Chí
-                                                            Minh, Phường Linh Trung, Quận Thủ Đức, TP Hồ Chí Minh
-                                                        </option>
+            <div className={'orderContainer'}>
+                <div className={'orderWrapper'}>
+                    <div className={'orderInfoUserAddress'}>
 
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div
-                                                className={`field ${name ? 'field--show-floating-label' : ''}`}
-                                                onFocus={handleFocus} onBlur={handleBlur}>
-                                                <div className="field-input-wrapper">
-                                                    <label htmlFor="billingName" className="field-label">Họ và
-                                                        tên</label>
-                                                    <input onChange={handleChange} value={name} name="billingName"
-                                                           id="billingName" type="text"
-                                                           className="field-input"/>
-                                                </div>
-                                            </div>
-
-                                            <div
-                                                className={`field ${phone ? 'field--show-floating-label' : ''}`}
-                                                onFocus={handleFocus} onBlur={handleBlur}>
-                                                <div className="field-input-wrapper field-input-wrapper-connected">
-                                                    <label htmlFor="billingPhone" className="field-label">
-                                                        Số điện thoại
-                                                    </label>
-                                                    <input onChange={handleChange} name="billingPhone" id="billingPhone"
-                                                           type="tel"
-                                                           className="field-input"
-                                                           value={phone}/>
-                                                </div>
-
-                                            </div>
-                                            <div
-                                                className={`field ${address ? 'field--show-floating-label' : ''}`}
-                                                onFocus={handleFocus} onBlur={handleBlur}>
-                                                <div className="field-input-wrapper">
-                                                    <label htmlFor="billingAddress" className="field-label">
-                                                        Địa chỉ
-                                                    </label>
-                                                    <input onChange={handleChange} name="billingAddress" id="billingAddress" type="text"
-                                                           className="field-input"
-                                                           value={address}/>
-                                                </div>
-
-                                            </div>
-                                            <div className="field field--show-floating-label ">
-                                                <div className="field-input-wrapper field-input-wrapper--select2">
-                                                    <label htmlFor="billingProvince" className="field-label">Tỉnh
-                                                        thành</label>
-                                                    <select onChange={handleChange} name="billingProvince" id="billingProvince" size="1"
-                                                            className="field-input field-input-select select2-hidden-accessible"
-                                                            tabIndex="-1" aria-hidden="true">
-                                                        <option value="" hidden="">---</option>
-                                                        <option value="1">Hà Nội</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="field field--show-floating-label ">
-                                                <div className="field-input-wrapper field-input-wrapper-select2">
-                                                    <label htmlFor="billingDistrict" className="field-label">
-                                                        Quận huyện
-                                                    </label>
-                                                    <select onChange={handleChange} name="billingDistrict" id="billingDistrict" size="1"
-                                                            className="field-input field-input-select select2-hidden-accessible"
-                                                            tabIndex="-1" aria-hidden="true">
-                                                        <option value="" hidden="">---</option>
-                                                        <option value="30">Quận 1</option>
-                                                    </select>
-                                                </div>
-
-                                            </div>
-
-                                            <div className="field field--show-floating-label ">
-                                                <div className="field-input-wrapper field-input-wrapper-select2">
-                                                    <label htmlFor="billingWard" className="field-label">
-                                                        Phường xã
-                                                    </label>
-                                                    <select onChange={handleChange} name="billingWard" id="billingWard" size="1"
-                                                            className="field-input field-input-select select2-hidden-accessible"
-                                                            tabIndex="-1" aria-hidden="true">
-                                                        <option value="" hidden="">---</option>
-                                                        <option value="9238">Phường Linh Xuân</option>
-                                                        <option value="9239">Phường Bình Chiểu</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                                <div className="order-note">
-                                    <h3 className="visually-hidden">Ghi chú</h3>
-                                    <div
-                                        className={`field ${note ? 'field--show-floating-label' : ''}`}
-                                        onFocus={handleFocus} onBlur={handleBlur}>
-                                        <div className="field-input-wrapper">
-                                            <label htmlFor="note" className="field-label">
-                                                Ghi chú (tùy chọn)
-                                            </label>
-                                            <textarea onChange={handleChange} name="note" id="note" className="field-input"
-                                                      value={note}></textarea>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div className="col col-two two">
-                                <section className="section" data-define="{shippingMethod: '643555_0,20.000 VND'}">
-                                    <div className="section-header">
-                                        <div className="layout-flex">
-                                            <h2 className="section-title layout-flex-item layout-flex-item-stretch">
-                                                <i className="fa fa-truck fa-lg section-title-icon hide-on-desktop"></i>
-                                                Vận chuyển
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div className="section-content" data-tg-refresh="refreshShipping"
-                                         id="shippingMethodList">
-                                        <div className="alert alert-retry alert-danger hide">
-                                            <span data-bind="loadingShippingErrorMessage">Không thể load phí vận chuyển. Vui lòng thử lại</span>
-                                            <i className="fa fa-refresh"></i>
-                                        </div>
-                                        <div className="content-box">
-                                            <div
-                                                className={`content-box-row ${province && district && ward ? '' : 'hide'}`}>
-                                                <div className="radio-wrapper">
-                                                    <div className="radio-input">
-                                                        <input type="radio" className="input-radio"/>
-                                                    </div>
-                                                    <label className="radio-label">
-														<span className="radio-label-primary">
-															<span>Giao hàng thông thường</span>
-														</span>
-                                                        <span className="radio-label-accessory">
-															<span className="content-box-emphasis price">
-																20.000đ
-															</span>
-														</span>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className={`alert alert-info ${province && district && ward ? 'hide' : ''}`}>
-                                            Vui lòng nhập thông tin giao hàng
-                                        </div>
-                                    </div>
-                                </section>
-                                <section className="section">
-                                    <div className="section-header">
-                                        <div className="layout-flex">
-                                            <h2 className="section-title layout-flex-item layout-flex-item-stretch">
-                                                <i className="fa fa-credit-card fa-lg section-title-icon hide-on-desktop"></i>
-                                                Thanh toán
-                                            </h2>
-                                        </div>
-                                    </div>
-                                    <div className="section-content">
-                                        <div className="content-box" data-define="{paymentMethod: undefined}">
-                                            <div className="content-box-row">
-                                                <div className="radio-wrapper">
-                                                    <div className="radio-input">
-                                                        <input onClick={handlePaymentMethodClick} name="paymentMethod" id="paymentMethod-491325"
-                                                               type="radio" className="input-radio"
-                                                               data-bind="paymentMethod" value="491325"
-                                                               data-provider-id="4"/>
-                                                    </div>
-                                                    <label htmlFor="paymentMethod-491325" className="radio-label">
-                                                        <span className="radio-label-primary">Thanh toán khi giao hàng (COD)</span>
-                                                        <span className="radio-label-accessory">
-															<span className="radio-label-icon">
-                                                                <MdOutlinePayment
-                                                                    className={'payment-icon payment-icon--4'}></MdOutlinePayment>
-															</span>
-														</span>
-
-                                                    </label>
-                                                </div>
-
-                                                <div className={`content-box-row-desc ${isPaymentMethodSelected ? '' : 'hide'}`}
-                                                     data-bind-show="paymentMethod == 491325" data-provider-id="4">
-                                                    <p>Bạn sẽ thanh toán khi nhận được hàng</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                            </div>
-                        </article>
-                    </div>
-                    <div className={'order-aside'}>
-                        <div className={'sidebar-header'}>
-                            <h2 className="sidebar-title">
-                                Đơn hàng (2 sản phẩm)
-                            </h2>
+                        <div className={'title'}>
+                            <p>Thông tin nhận hàng</p>
                         </div>
-                        <div className={'sidebar-content'}>
-                            <div className={'order-summary-sections'}>
-                                <div className={'order-summary-section'}>
-                                    <table className={'product-table'}>
-                                        <thead className={'table-header'}>
-                                        <tr>
-                                            <td className={'visually-hidden'}>Ảnh sản phẩm</td>
-                                            <th className={'visually-hidden'}>Mô tả</th>
-                                            <th className={'visually-hidden'}>Số lượng</th>
-                                            <th className={'visually-hidden'}>Đơn giá</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {
-                                            fakeProduct.map((product, index) => {
-                                                const discountPrice = (product.price - (product.price * product.discount / 100));
-                                                const formattedDiscountPrice = discountPrice.toLocaleString('vi-VN') + 'đ';
+
+                        <Box
+                            component="form"
+                            noValidate
+                            autoComplete="off"
+                            className={'boxWrapper'}
+                        >
+                            {token && token !== null &&
+                                <div className={'formControl'}>
+                                    <TextField
+                                        required
+                                        id={'addressBook'}
+                                        label={'Sổ địa chỉ'}
+                                        name={'addressBook'}
+                                        variant={'outlined'}
+                                        fullWidth={true}
+                                        size={'small'}
+                                        className={classes.root}
+                                        select
+                                        defaultValue={''}
+                                        onChange={e => handleOnChangeAddressBook(e.target.value)}
+                                    >
+                                        <MenuItem>Chọn địa chỉ</MenuItem>
+                                        {addressUserLogged && addressUserLogged.length > 0 &&
+                                            addressUserLogged.map(item => {
                                                 return (
-                                                    <tr key={index}>
-                                                        <td className={'order-product-image'}>
-                                                            <div className={'order-product-thumbnail'}>
-                                                                <div className={'product-thumbnail-wrapper'}>
-                                                                    <img src={product.image} alt=""
-                                                                         className={'product-thumbnail-image'}/>
-                                                                </div>
-                                                                <span
-                                                                    className={'product-thumbnail-quantity'}>{product.quantity}</span>
-                                                            </div>
-                                                        </td>
-                                                        <th className={'order-product-description'}>
-                                                                <span className={'product-description-name'}>
-                                                                    {product.name}
-                                                                </span>
-                                                            <span className={'product-description-property'}>
-                                                                    {product.color} / {product.size}
-                                                                </span>
-                                                        </th>
-                                                        <th className={'visually-hidden'}>
-                                                            <em>Số lượng: </em>
-                                                            {product.quantity}
-                                                        </th>
-                                                        <td className={'product-price'}>
-                                                            {formattedDiscountPrice}
-                                                        </td>
-                                                    </tr>
-                                                );
+                                                    <MenuItem key={item.id} value={item.id}>
+                                                        {item.fullName}, {item.phone}, {item.street}, {item.district}, {item.province}
+                                                    </MenuItem>
+                                                )
                                             })
                                         }
-                                        </tbody>
-
-                                    </table>
+                                    </TextField>
                                 </div>
-                                <div className={'order-summary-section'}>
-                                    <div className={'edit-checkout'}>
-                                        <div className="fieldset">
-                                            <div className="field">
-                                                <div className="field-input-btn-wrapper">
-                                                    <div className="field-input-wrapper">
-                                                        <label className="field-label">Nhập mã
-                                                            giảm giá</label>
-                                                        <input className={'field-input'} name="reductionCode"
-                                                               id="reductionCode" type="text"/>
-                                                    </div>
-                                                    <button className="field-input-btn btn spinner btn-disabled"
-                                                            type="button">
-                                                        <span className="spinner-label">Áp dụng</span>
-                                                    </button>
-                                                </div>
-                                            </div>
+                            }
 
-                                        </div>
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'fullName'}
+                                    label={'Họ và Tên'}
+                                    name={'fullName'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    value={fullName}
+                                    onChange={e => setFullName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'phone'}
+                                    label={'Số Điện Thoại'}
+                                    name={'phone'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    value={phone}
+                                    onChange={e => setPhone(e.target.value)}
+                                />
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'street'}
+                                    label={'Địa chỉ cụ thể'}
+                                    name={'street'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    value={street}
+                                    onChange={e => setStreet(e.target.value)}
+                                />
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    select
+                                    id={'addressProvince'}
+                                    label={'Tỉnh/TP'}
+                                    name={'province'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    defaultValue={''}
+                                    value={provinceId}
+                                    onChange={e => handleOnChangeProvince(e.target.value)}
+                                >
+                                    {(provinces && provinces.length > 0) ?
+                                        provinces.map((province) => {
+                                            return (
+                                                <MenuItem key={province.ProvinceID} value={province.ProvinceID}>
+                                                    {province.ProvinceName}
+                                                </MenuItem>
+                                            )
+                                        })
+                                        :
+                                        <MenuItem>DEFULT</MenuItem>
+                                    }
+
+                                </TextField>
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'addressDistrict'}
+                                    label={'Quận/Huyện'}
+                                    name={'district'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    select
+                                    defaultValue={''}
+                                    value={districtId}
+                                    onChange={e => handleOnChangeDistrict(e.target.value)}
+                                >
+                                    {(districts && districts.length > 0 && districts.length < 719) ?
+                                        districts.map((dis) => {
+                                            return (
+                                                <MenuItem key={dis.DistrictID} value={dis.DistrictID}>
+                                                    {dis.DistrictName}
+                                                </MenuItem>
+                                            )
+                                        }) : <MenuItem>DEFAULT</MenuItem>
+                                    }
+                                </TextField>
+                            </div>
+
+                            <div className={'formControl'}>
+                                <TextField
+                                    required
+                                    id={'addressWard'}
+                                    label={'Phường/Xã'}
+                                    name={'ward'}
+                                    variant={'outlined'}
+                                    fullWidth={true}
+                                    size={'small'}
+                                    className={classes.root}
+                                    select
+                                    defaultValue={''}
+                                    value={wards ? wardId : ''}
+                                    onChange={e => handleOnChangeWard(e.target.value)}
+                                >
+                                    {(wards && wards.length > 0) ?
+                                        wards.map((ward) => {
+                                            return (
+                                                <MenuItem key={ward.WardCode} value={ward.WardCode}>
+                                                    {ward.WardName}
+                                                </MenuItem>
+                                            )
+                                        }) : <MenuItem>DEFAULT</MenuItem>
+                                    }
+                                </TextField>
+                            </div>
+
+                        </Box>
+
+                    </div>
+                    <div className={'orderPaymentMethod'}>
+
+                        <div className={'orderShipping'}>
+                            <div className={'title'}>
+                                <p>Vận chuyển</p>
+                            </div>
+
+                            <div className={'messageCheckInput'}>
+                                <div className={'messageWarning'} hidden={inputIsValid}>
+                                    <p>Vui lòng nhập đầy đủ thông tin nhận hàng !</p>
+                                </div>
+
+                                <div className={'messageSuccess'} hidden={!inputIsValid}>
+                                    <div>
+                                        <input type={"radio"} id={'shippingChecked'}
+                                               value={'1'}
+                                               checked={selectedShippingCost === '1'}
+                                               onChange={e => setSelectedShippingCost(e.target.value)}
+                                        />
+                                        <label htmlFor={'shippingChecked'}>Giao hàng thông thường</label>
                                     </div>
-                                </div>
-                                <div className={'order-summary-section'}>
-                                    <table className={'total-line-table'}>
-                                        <thead>
-                                        <tr>
-                                            <td><span className={'visually-hidden'}>Mô tả</span></td>
-                                            <td><span className={'visually-hidden'}>Giá tiền</span></td>
-                                        </tr>
-                                        </thead>
-                                        <tbody className={'total-line-table-tbody'}>
-                                        <tr className={'total-line total-line-subtotal'}>
-                                            <th className='total-line-name'>
-                                                Tạm tính
-                                            </th>
-                                            <td className={'total-line-price'}>370.000đ</td>
-                                        </tr>
-                                        <tr className={'total-line total-line-shipping-fee'}>
-                                            <th className={'total-line-name'}>
-                                                Phí vận chuyển
-                                            </th>
-                                            <td className={'total-line-price'}
-                                                data-bind="getTextShippingPrice()">20.000đ
-                                            </td>
-                                        </tr>
+                                    {
+                                        (shippingCost && shippingCost > 0) ?
+                                            <p>{formattedPrice(shippingCost)}đ</p>
+                                            : <p>0đ</p>
+                                    }
 
-                                        </tbody>
-                                        <tfoot className={'total-line-table-footer'}>
-                                        <tr className={'total-line payment-due'}>
-                                            <th className={'total-line-name'}>
-													<span className={'payment-due-label-total'}>
-														Tổng cộng
-													</span>
-                                            </th>
-                                            <td className={'total-line-price'}>
-                                                <span className={'payment-due-price'}>390.000đ</span>
-                                            </td>
-                                        </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <div className={'order-summary-section'}>
-                                    <div className={'order-summary-nav'}>
-                                        <button type="submit" className="btn btn-checkout spinner">
-                                            <span className="spinner-label">ĐẶT HÀNG</span>
-                                        </button>
-                                        <Link className="previous-link" to={'/cart'}>
-                                            <i className="previous-link-arrow">❮</i>
-                                            <span className="previous-link-content">Quay về giỏ hàng</span>
-                                        </Link>
+                                    <div className={'messageSuccessLoading'} hidden={loading}>
+                                        <TbLoader3 className={'loader'}/>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
+
+                        <div className={'payment'}>
+                            <div className={'title'}>
+                                <p>Phương thức thanh toán</p>
+                            </div>
+
+                            <form className={'paymentSelector'}>
+                                <div className={'paymentWrapper'}>
+                                    <div className={'radioWrapper'}>
+                                        <input type={"radio"}
+                                               id={'cod'}
+                                               value={'COD'}
+                                               name={'payment'}
+                                               checked={selectedMethod === 'COD'}
+                                               onChange={e => setSelectedMethod(e.target.value)}
+                                        />
+                                        <label htmlFor={'cod'}>Thanh toán khi nhận hàng (COD)</label>
+                                    </div>
+                                    <MdOutlinePayment/>
+                                </div>
+                                <div className={'paymentWrapper'}>
+                                    <div className={'radioWrapper'}>
+                                        <input
+                                            type={"radio"}
+                                            id={'VNPay'}
+                                            value={'VNPAY'}
+                                            name={'payment'}
+                                            checked={selectedMethod === 'VNPAY'}
+                                            onChange={e => setSelectedMethod(e.target.value)}
+                                        />
+                                        <label htmlFor={'VNPay'}>Thanh toán với VNPAY</label>
+                                    </div>
+                                    <div className={'VNPayImgWrapper'}>
+                                        <img src={VNPAY_IMG} alt={''}/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div className={'orderDetails'}>
+
+                        <div className={'title'}>
+                            <p>Đơn hàng ({cartItems.length} sản phẩm)</p>
+                        </div>
+
+                        <div className={'orderProducts'}>
+                            {cartItems && cartItems.length > 0 &&
+                                cartItems.map((item) => {
+                                    const promotions = item.product.promotions
+                                    let price = null
+                                    let originPrice = item.product.price
+                                    price = checkPromotions(promotions, originPrice, price)
+                                    return (
+                                        <div className={'orderProductsItem'} key={item.product.id}>
+                                            <div className={'orderProductsItemImgWrapper'}>
+                                                <img src={item.product.thumbnail} alt={''}/>
+                                            </div>
+                                            <div className={'orderProductsItemDetail'}>
+                                                <p>{item.product.name}</p>
+                                                <span>x{item.quantity}, {item.selectedColor} / {item.selectedSize}</span>
+                                            </div>
+                                            <div className={'orderProductsItemPrice'}>
+                                                <p>{formattedPrice(Math.round(price * item.quantity))}</p>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+
+                        </div>
+
+                        <div className={'discountCode'}>
+                            <input
+                                type={"text"}
+                                placeholder={'Nhập mã giảm giá'}
+                                value={discountCode}
+                                onChange={e => setDiscountCode(e.target.value)}
+                            />
+                            <button
+                                className={'applyCodeBtn'}
+                                onClick={e => handleOnClickCheckCode(e)}
+                            >Áp Mã
+                            </button>
+                        </div>
+
+                        <div className={'price'}>
+                            <div className={'provisionalAmount item'}>
+                                <p>Số tiền tạm tính</p>
+                                <p>{formattedPrice(provisionalAmount)}</p>
+                            </div>
+                            <div className={'shippingCost item'}>
+                                <p>Phí vận chuyển</p>
+                                <p>{formattedPrice(shippingCost)}</p>
+                            </div>
+                            <div className={'discountPrice item'}>
+                                <p>Mã khuyến mãi</p>
+                                <p>-{formattedPrice(discountPrice)}</p>
+                            </div>
+                        </div>
+
+                        <div className={'totalPrice'}>
+                            <p>Tổng tiền</p>
+                            <p>{formattedPrice(totalMoney)}</p>
+                        </div>
+
+                        <div className={'orderSubmitBtn'}>
+                            <button onClick={e => handleOnClickPayment(e)}>Đặt hàng</button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div className={'orderModalWrapper'} hidden={modalStatus}>
+                <div className={'orderModalContent'}>
+                    <div className={'loading'} hidden={loadingStatus}>
+                        <TbLoader3 className={'icon'}/>
+                    </div>
+                    <div className={'loaded'} hidden={!loadingStatus}>
+                        <TbCircleCheck className={'icon'}/>
+                        <span>Bạn đã đặt hàng thành công</span>
+                        <button className={'backHomeBtn'} onClick={e => handleBackHomePage(e)}>Về Trang Chủ</button>
                     </div>
                 </div>
             </div>

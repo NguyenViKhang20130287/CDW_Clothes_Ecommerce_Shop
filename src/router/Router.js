@@ -18,6 +18,7 @@ import ProductDetailScreen from "../pages/User/ProductDetailScreen/ProductDetail
 import SearchScreen from "../pages/User/SearchScreen/SearchScreen";
 import BlogDetailScreen from "../pages/User/BlogDetailScreen/BlogDetailScreen";
 import BlogScreen from "../pages/User/BlogScreen/BlogScreen";
+import PaymentResult from "../pages/User/PaymentResult/PaymentResult";
 
 const Router = () => {
     return (
@@ -44,6 +45,7 @@ const Router = () => {
                 <Route path={'/search'} element={<SearchScreen/>}/>
                 <Route path={'/blog'} element={<BlogScreen/>}/>
                 <Route path={'/blog/:id'} element={<BlogDetailScreen/>}/>
+                <Route path={'payment-result'} element={<PaymentResult/>}/>
             </Routes>
             <FooterComponent/>
         </div>
