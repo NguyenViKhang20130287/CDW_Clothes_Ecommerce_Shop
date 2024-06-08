@@ -156,3 +156,60 @@ div#sapo-product-reviews {
     line-height: 36px;
     padding: 0 17px;
 }
+
+#sapo-product-reviews-list {
+    text-align: left;
+}
+
+.review-box {
+    border: 1px solid #ddd;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+}
+
+.review-avatar {
+    width: 60px;
+    height: 60px;
+    margin-right: 16px;
+}
+
+.review-user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.review-username-rating {
+    display: flex;
+    align-items: center;
+}
+
+.review-username {
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.review-rating {
+    margin-top: -4px;
+}
+
+.review-details {
+    margin-top: 4px;
+    color: #555;
+}
+
+.review-body {
+    margin-top: 16px;
+}
+
+.review-content {
+    font-size: 14px;
+    color: #333;
+}

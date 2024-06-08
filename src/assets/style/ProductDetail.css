@@ -72,13 +72,17 @@
     }
 
     .product-image-detail .gallery-top {
-        height: 400px;
+        height: 350px;
+
     }
 
     .product-image-detail .big-swiper img {
         width: 100%;
         max-height: 100%;
         object-fit: cover;
+    }
+    .product-image-detail .mini-swiper {
+        margin-bottom: 10px;
     }
 }
 
