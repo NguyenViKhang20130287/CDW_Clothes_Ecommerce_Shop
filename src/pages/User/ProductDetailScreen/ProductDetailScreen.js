@@ -52,7 +52,7 @@ const ProductDetailScreen = () => {
                     <ProductImage product={product}></ProductImage>
                     <ProductInformation product={product}></ProductInformation>
                     <ProductDetailContent product={product}></ProductDetailContent>
-                    <ProductReview></ProductReview>
+                    <ProductReview product={product}></ProductReview>
                 </div>
                 <div className="row">
                     <RecentItem></RecentItem>
