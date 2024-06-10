@@ -16,6 +16,8 @@ import SizeSelectorScreen from "../pages/User/SizeSelectorScreen/SizeSelectorScr
 import OrderTrackingScreen from "../pages/User/OrderTrackingScreen/OrderTrackingScreen";
 import ProductDetailScreen from "../pages/User/ProductDetailScreen/ProductDetailScreen";
 import SearchScreen from "../pages/User/SearchScreen/SearchScreen";
+import BlogDetailScreen from "../pages/User/BlogDetailScreen/BlogDetailScreen";
+import BlogScreen from "../pages/User/BlogScreen/BlogScreen";
 import PaymentResult from "../pages/User/PaymentResult/PaymentResult";
 
 const Router = () => {
@@ -41,6 +43,8 @@ const Router = () => {
                 <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
                 <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
                 <Route path={'/search'} element={<SearchScreen/>}/>
+                <Route path={'/blog'} element={<BlogScreen/>}/>
+                <Route path={'/blog/:id'} element={<BlogDetailScreen/>}/>
                 <Route path={'payment-result'} element={<PaymentResult/>}/>
             </Routes>
             <FooterComponent/>

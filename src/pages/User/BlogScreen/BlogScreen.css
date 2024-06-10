@@ -1,0 +1,76 @@
+.blog-screen {
+    width: 80%;
+    display: flex;
+    margin: 20px auto;
+}
+
+.blog-screen .sidebar {
+    width: 20%;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+}
+
+.blog-screen .search-title {
+    font-size: 20px;
+    text-transform: uppercase;
+}
+
+.blog-screen .search-bar {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.blog-screen .filter-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.blog-screen .filter-options label {
+    margin-bottom: 10px;
+}
+
+.blog-screen .blog-content {
+    width: 80%;
+    padding: 20px;
+}
+
+.blog-screen .blog-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.blog-screen .blog-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.blog-screen .blog-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.blog-screen .blog-thumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.blog-screen .blog-item-title {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.blog-description {
+    font-size: 1em;
+    color: #555;
+}

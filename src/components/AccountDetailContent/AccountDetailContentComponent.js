@@ -4,6 +4,8 @@ import {useNavigate} from "react-router-dom";
 // components
 import './AccountDetailContentComponent.css'
 import PopupAddress from "../PopupAddress/PopupAddress";
+import RatingPopup from "./RatingPopup";
+
 // img
 import AVATAR_DEFAULT from '../../assets/img/user.png'
 import PRODUCT from '../../assets/img/shirt1.webp'
@@ -33,7 +35,6 @@ const AccountDetailContentComponent = ({
     const [newPassword, setNewPassword] = useState('')
     const [reNewPassword, setReNewPassword] = useState('')
     const [showOldPassword, setShowOldPassword] = useState(false)
-
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [addresses, setAddresses] = useState([])
     const [isHiddenPopup, setIsHiddenPopup] = useState(true)
@@ -46,6 +47,8 @@ const AccountDetailContentComponent = ({
     const childRef = useRef()
     const token = localStorage.getItem("token")
     const navigate = useNavigate()
+    const [openRatingPopup, setOpenRatingPopup] = useState(false);
+    const [selectedDetail, setSelectedDetail] = useState(null);
 
     const handleChangeAvatar = async (e) => {
         const file = e.target.files[0];
@@ -202,6 +205,7 @@ const AccountDetailContentComponent = ({
                 const res = await new APIService().fetchData("/user/user-details/orders", null, {token: token})
                 // console.log(res)
                 setOrders(res)
+                localStorage.setItem('user_id', orders[0].user_id)
             } catch (e) {
                 console.log(e)
             }
@@ -257,9 +261,16 @@ const AccountDetailContentComponent = ({
     useEffect(() => {
         fetchDataOrdersUser()
     }, [token]);
-
     // console.log('Orders: ', orders)
+    const handleOpenRatingPopup = (detail) => {
+        setSelectedDetail(detail);
+        setOpenRatingPopup(true);
+    };
 
+    const handleCloseRatingPopup = () => {
+        setOpenRatingPopup(false);
+        setSelectedDetail(null);
+    };
     return (
         <div className={'accountDetailContentWrapper'}>
             {nameShow === 'profile' &&
@@ -521,29 +532,37 @@ const AccountDetailContentComponent = ({
                                             {details.length > 0 &&
                                                 details.map(de => {
                                                     return (
-                                                        <div className={'orderProduct'}>
-                                                            <div className={'imgWrapper'}>
-                                                                <img src={de.product.thumbnail} alt={""}/>
-                                                            </div>
-                                                            <div className={'contentWrapper'}>
+                                                        <div>
+                                                            <div className={'orderProduct'}>
+                                                                <div className={'imgWrapper'}>
+                                                                    <img src={de.product.thumbnail} alt={""}/>
+                                                                </div>
+                                                                <div className={'contentWrapper'}>
                                                                     <span
                                                                         className={'nameProduct'}>{de.product_name}</span>
-                                                                <span
-                                                                    className={'colorSize'}>{de.color.name}, {de.size.name}, x{de.quantity}</span>
-                                                                <div className={'price'}>
-                                                                    {/*<span className={'oldPrice'}>350.000đ</span>*/}
                                                                     <span
-                                                                        className={'newPrice'}>{formattedPrice(de.price)}</span>
+                                                                        className={'colorSize'}>{de.color.name}, {de.size.name}, x{de.quantity}</span>
+                                                                    <div className={'price'}>
+                                                                        {/*<span className={'oldPrice'}>350.000đ</span>*/}
+                                                                        <span
+                                                                            className={'newPrice'}>{formattedPrice(de.price)}</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            <div className={'ratingButtonContainer'}>
+                                                                <button className={'ratingButton'}
+                                                                        onClick={() => handleOpenRatingPopup(de)}>Đánh
+                                                                    giá
+                                                                </button>
+                                                            </div>
                                                         </div>
+
                                                     )
                                                 })
                                             }
-
                                         </div>
                                         <div className={'action'}>
-                                            <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
+                                        <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
                                         </div>
                                     </div>
                                 )
@@ -559,6 +578,11 @@ const AccountDetailContentComponent = ({
 
                 </div>
             }
+            <RatingPopup
+                open={openRatingPopup}
+                handleClose={handleCloseRatingPopup}
+                detail={selectedDetail}
+            />
             <PopupAddress
                 showNamePopup={showNamePopup}
                 addressData={addressData}

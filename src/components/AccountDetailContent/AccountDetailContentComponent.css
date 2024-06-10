@@ -589,3 +589,24 @@ accountDetailContentWrapper {
     background: #FFFFFF;
     color: var(--color-black);
 }
+
+.orderProducts .ratingButtonContainer {
+    text-align: right;
+}
+
+.orderProducts .ratingButtonContainer .ratingButton {
+    width: 150px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: 1px solid var(--color-black);
+    background: var(--color-black);
+    color: #FFFFFF;
+    border-radius: 4px;
+    transition: all .3s;
+    margin-right: -10px;
+}
+.orderProducts .ratingButtonContainer .ratingButton:hover {
+    background: #FFFFFF;
+    color: var(--color-black);
+}
