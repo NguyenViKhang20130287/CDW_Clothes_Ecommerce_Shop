@@ -1,27 +1,48 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {TbCircleCheck} from "react-icons/tb";
 import './paymentResult.css'
 import {useDispatch, useSelector} from "react-redux";
 import {clearCart} from "../../../store/actions/cartActions";
 import {useNavigate} from "react-router-dom";
+import ApiService from "../../../services/APIService";
 
 const PaymentResult = () => {
     const dispatch = useDispatch()
     const cartItems = useSelector(state => state.root.cart);
     const navigate = useNavigate()
-    const paymentVNPay = localStorage.getItem("paymentVNPay")
+    const responsePayment = localStorage.getItem("responsePayment")
     const handleOnClick = (e) => {
         e.preventDefault()
-        if (cartItems.length > 0) dispatch(clearCart())
-        localStorage.removeItem("paymentVNPay")
+        localStorage.removeItem("responsePayment")
         navigate('/')
     }
 
-    useEffect(() => {
-        if (paymentVNPay === null){
-            navigate('/')
+    const updateStatus = async () => {
+        const data = {
+            "orderId": JSON.parse(responsePayment).orderId,
+            'status': "Paid"
         }
-    }, [paymentVNPay]);
+        try {
+            const res = await new ApiService().sendData("/order/update-status", data)
+            console.log('Response: ', res)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        if (responsePayment !== null && localStorage.getItem("responsePayment") !== null) {
+            const parsedResponse = JSON.parse(responsePayment);
+            if (parsedResponse.paymentStatus === 'Ok') {
+                updateStatus();
+                if (cartItems.length > 0) dispatch(clearCart());
+                localStorage.removeItem("responsePayment");
+            } else {
+                navigate('/');
+            }
+            console.log('Check');
+        }
+    }, []);
 
     return (
         <div className={'paymentResult-container'}>

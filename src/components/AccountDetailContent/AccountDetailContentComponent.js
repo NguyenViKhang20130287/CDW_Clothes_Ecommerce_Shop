@@ -13,7 +13,8 @@ import {IoSearchSharp} from "react-icons/io5";
 import {LiaShippingFastSolid} from "react-icons/lia";
 // services
 import APIService from "../../services/APIService";
-import {TbLoader, TbLoader3} from "react-icons/tb";
+import {TbLoader3} from "react-icons/tb";
+import { LuLoader2 } from "react-icons/lu";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -41,6 +42,7 @@ const AccountDetailContentComponent = ({
     const [orders, setOrders] = useState([])
     const [searchInput, setSearchInput] = useState('')
     const [isLoaded, setIsLoaded] = useState(true)
+    const [uploadAvatarLoaded, setupLoadAvatarLoaded] = useState(true)
     const childRef = useRef()
     const token = localStorage.getItem("token")
     const navigate = useNavigate()
@@ -48,6 +50,7 @@ const AccountDetailContentComponent = ({
     const handleChangeAvatar = async (e) => {
         const file = e.target.files[0];
         if (file) {
+            setupLoadAvatarLoaded(false)
             const formData = new FormData();
             formData.append('image', file);
 
@@ -62,6 +65,7 @@ const AccountDetailContentComponent = ({
                 const result = await response.json();
                 if (result.success) {
                     setAvatarLink(result.data.url);
+                    setupLoadAvatarLoaded(true)
                 } else {
                     console.error("Error uploading image to ImgBB", result);
                 }
@@ -84,7 +88,7 @@ const AccountDetailContentComponent = ({
         }
         // console.log('User data: ', userData)
         try {
-            const res = await new APIService().sendData("/user-details/edit", userData);
+            const res = await new APIService().updateData("/user/user-details/edit", userData);
             // console.log('Response edit user: ', res)
             if (res.statusCodeValue === 400) {
                 toast.error('Lỗi thao tác')
@@ -311,6 +315,9 @@ const AccountDetailContentComponent = ({
                             <form className={'editAvatar'}>
                                 <div className={'avatarWrapper'}>
                                     <img src={avatarLink ? avatarLink : AVATAR_DEFAULT} alt={''}/>
+                                    <div className={'uploadAvatarLoading'} hidden={uploadAvatarLoaded}>
+                                        <TbLoader3 className={'icon'}/>
+                                    </div>
                                 </div>
                                 <input
                                     className={'uploadImage'}
