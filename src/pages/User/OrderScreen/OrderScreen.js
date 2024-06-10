@@ -197,7 +197,7 @@ const OrderScreen = () => {
         e.preventDefault()
         setModalStatus(false)
         const data = {
-            "userId": userLogged.id,
+            "userId": userLogged && userLogged !== null ? userLogged.id : 0,
             "fullName": fullName,
             "phone": phone,
             "address": `${street} ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`,
@@ -215,6 +215,7 @@ const OrderScreen = () => {
             price = checkPromotions(promotions, originPrice, price)
             data.products.push({
                 "id": item.product.id,
+                "colorSizeId": item.selectedColorSize.id,
                 "color": item.selectedColor,
                 "size": item.selectedSize,
                 "quantity": item.quantity,
@@ -243,15 +244,21 @@ const OrderScreen = () => {
                 data.paymentStatus = true
                 const dataPayment = {
                     amount: totalMoney,
-                    orderInfo: 'order info'
+                    orderInfo: 0
                 }
+
                 setTimeout(async () => {
                     const res = await new ApiService().sendData("/order/", data)
                     console.log('res: ', res)
                     dataPayment.orderInfo = res.id
+                    console.log('order info: ', dataPayment)
                     const resPayment = await new ApiService().sendData("/payment/create_payment", dataPayment)
+                    const paymentResponse = {
+                        "paymentStatus": resPayment.status,
+                        "orderId": res.id
+                    }
                     console.log('Payment: ', resPayment)
-                    localStorage.setItem("orderData", data)
+                    localStorage.setItem("responsePayment", JSON.stringify(paymentResponse))
                     localStorage.setItem("paymentVNPay", resPayment)
                     window.location.href = resPayment.url;
                 }, 1000)
