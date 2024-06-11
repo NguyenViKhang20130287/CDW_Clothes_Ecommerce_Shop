@@ -168,26 +168,27 @@ const OrderScreen = () => {
 
     const handleCheckDiscountCode = async () => {
         try {
-            const res = await new ApiService().fetchData('/discount-code/check',
-                null, {code: discountCode})
-            // console.log('res: ', Object.keys(res).length)
-            if (Object.keys(res).length === 0) {
-                toast.error('Mã giảm giá không hợp lệ !')
-                return
-            }
+            const res = await axios.get('http://localhost:8080/api/v1/discount-code/check',
+                {
+                    params: {
+                        code: discountCode
+                    }
+                })
             console.log('Res: ', res)
-
-            if (res.discountRate === 0) {
-                setDiscountPrice(res.discountMoney)
+            if (res.data === "DiscountCode invalid!") {
+                toast.error('Mã giảm giá không hợp lệ !')
             } else {
-                setDiscountPrice(res.discountRate * provisionalAmount)
+                if (res.data.discountRate === 0) {
+                    setDiscountPrice(res.discountMoney)
+                } else {
+                    setDiscountPrice((res.data.discountRate/100) * provisionalAmount)
+                }
+                toast.success('Áp dụng mã giảm giá thành công')
             }
-            toast.success('Áp dụng mã giảm giá thành công')
         } catch (e) {
-            console.log(e)
         }
     }
-
+    console.log('rate: ', discountPrice)
     const handleOnClickCheckCode = async (e) => {
         e.preventDefault()
         await handleCheckDiscountCode()
@@ -197,7 +198,7 @@ const OrderScreen = () => {
         e.preventDefault()
         setModalStatus(false)
         const data = {
-            "userId": userLogged.id,
+            "userId": userLogged && userLogged !== null ? userLogged.id : 0,
             "fullName": fullName,
             "phone": phone,
             "address": `${street} ${ward.WardName}, ${district.DistrictName}, ${province.ProvinceName}`,
@@ -215,6 +216,7 @@ const OrderScreen = () => {
             price = checkPromotions(promotions, originPrice, price)
             data.products.push({
                 "id": item.product.id,
+                "colorSizeId": item.selectedColorSize.id,
                 "color": item.selectedColor,
                 "size": item.selectedSize,
                 "quantity": item.quantity,
@@ -243,15 +245,21 @@ const OrderScreen = () => {
                 data.paymentStatus = true
                 const dataPayment = {
                     amount: totalMoney,
-                    orderInfo: 'order info'
+                    orderInfo: 0
                 }
+
                 setTimeout(async () => {
                     const res = await new ApiService().sendData("/order/", data)
                     console.log('res: ', res)
                     dataPayment.orderInfo = res.id
+                    console.log('order info: ', dataPayment)
                     const resPayment = await new ApiService().sendData("/payment/create_payment", dataPayment)
+                    const paymentResponse = {
+                        "paymentStatus": resPayment.status,
+                        "orderId": res.id
+                    }
                     console.log('Payment: ', resPayment)
-                    localStorage.setItem("orderData", data)
+                    localStorage.setItem("responsePayment", JSON.stringify(paymentResponse))
                     localStorage.setItem("paymentVNPay", resPayment)
                     window.location.href = resPayment.url;
                 }, 1000)
@@ -281,7 +289,7 @@ const OrderScreen = () => {
         }
     }
 
-    const fetchDataUserLogged = async () =>{
+    const fetchDataUserLogged = async () => {
         if (token !== null) {
             try {
                 const res = await new ApiService().fetchData("/user/user-details", null, {token: token})

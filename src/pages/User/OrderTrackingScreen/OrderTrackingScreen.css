@@ -1,4 +1,46 @@
 
+.orderTrackingLoadingWrapper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.orderTrackingLoadingWrapper .content{
+    width: 300px;
+    /*background-color: #fff;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.orderTrackingLoadingWrapper .content .icon{
+    font-size: 100px;
+    color: #FFFFFF;
+    animation: spin 2s linear infinite;
+}
+
+.orderTrackingLoadingWrapper .content span{
+    font-size: 30px;
+    color: #FFFFFF;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 .tracking-info {
     align-items: center;
     display: flex;

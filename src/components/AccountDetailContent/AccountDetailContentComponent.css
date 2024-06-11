@@ -1,11 +1,9 @@
-.accountDetailContentContainer{
+.accountDetailContentContainer {
     position: relative;
 }
 
 accountDetailContentWrapper {
-    height: 420px;
     height: auto;
-    /*position: relative;*/
 }
 
 .accountDetailContentWrapper .title {
@@ -129,6 +127,24 @@ accountDetailContentWrapper {
     overflow: hidden;
     border-radius: 9999px;
     margin-bottom: 20px;
+    position: relative;
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper .uploadAvatarLoading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper .uploadAvatarLoading .icon {
+    font-size: 20px;
+    animation: spin 2s linear infinite;
 }
 
 .accountDetailContentWrapper .profileWrapper .editAvatar .avatarWrapper img {
@@ -357,7 +373,7 @@ accountDetailContentWrapper {
     align-items: center;
 }
 
-.changePasswordContainer .changePasswordWrapper form .changePassBtn{
+.changePasswordContainer .changePasswordWrapper form .changePassBtn {
     border: none;
     padding: 5px 10px;
     font-size: 14px;
@@ -431,14 +447,14 @@ accountDetailContentWrapper {
     display: none;
 }
 
-.purchaseOrderContainer .orderUserContainer .orderLoader{
+.purchaseOrderContainer .orderUserContainer .orderLoader {
     position: sticky;
     top: 0;
     left: 0;
     /*background: rgba(0, 0, 0, 0.8);*/
     background-color: #fff;;
     width: 100%;
-    min-height:  500px;
+    min-height: 500px;
     z-index: 5;
     display: flex;
     justify-content: center;
@@ -446,7 +462,7 @@ accountDetailContentWrapper {
     font-size: 30px;
 }
 
-.purchaseOrderContainer .orderUserContainer .orderLoader .icon{
+.purchaseOrderContainer .orderUserContainer .orderLoader .icon {
     animation: spin 2s linear infinite;
 }
 
@@ -473,7 +489,7 @@ accountDetailContentWrapper {
     align-items: center;
 }
 
-.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderId{
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderHeader .orderId {
     font-weight: 500;
 }
 
@@ -504,9 +520,32 @@ accountDetailContentWrapper {
     padding: 10px;
 }
 
-.purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct {
+.orderProduct {
     display: flex;
+    align-items: center;
     padding: 10px;
+    justify-content: space-between;
+}
+
+.orderProduct .info {
+    display: flex;
+    align-items: center;
+}
+
+.orderProducts .ratingButtonContainer {
+
+}
+
+.orderProducts .ratingButtonContainer .ratingButton {
+    font-weight: bold;
+    color: var(--color-black);
+    border: none;
+    background: none;
+    transition: all .3s;
+}
+
+.orderProducts .ratingButtonContainer .ratingButton:hover {
+    color: var(--color-silver);
 }
 
 .purchaseOrderContainer .orderUserContainer .orderUserWrapper .orderProducts .orderProduct .imgWrapper {
@@ -567,30 +606,11 @@ accountDetailContentWrapper {
     color: #FFFFFF;
     border-radius: 4px;
     transition: all .3s;
+    margin-right: 10px;
 }
 
-.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button:hover {
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button:hover{
     background: #FFFFFF;
     color: var(--color-black);
 }
 
-.orderProducts .ratingButtonContainer {
-    text-align: right;
-}
-
-.orderProducts .ratingButtonContainer .ratingButton {
-    width: 150px;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 5px 10px;
-    border: 1px solid var(--color-black);
-    background: var(--color-black);
-    color: #FFFFFF;
-    border-radius: 4px;
-    transition: all .3s;
-    margin-right: -10px;
-}
-.orderProducts .ratingButtonContainer .ratingButton:hover {
-    background: #FFFFFF;
-    color: var(--color-black);
-}

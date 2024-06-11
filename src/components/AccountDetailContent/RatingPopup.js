@@ -8,13 +8,24 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 800,
-    height: 600,
+    width: 600,
+    // height: 500,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
+    border: 'none',
+    borderRadius:'3px',
+    boxShadow: 10,
     p: 4,
 };
+
+const styleBtn ={
+    bgcolor: 'var(--color-black)',
+    p: 1,
+    mr:2,
+    '&:hover':{
+        bgcolor:'#fff',
+        color:'#000'
+    }
+}
 
 const RatingPopup = ({open, handleClose, detail, user}) => {
     const [stars, setStars] = useState(0);
@@ -79,10 +90,10 @@ const RatingPopup = ({open, handleClose, detail, user}) => {
                     sx={{mt: 2}}
                 />
                 <div className={'review-button-send'}>
-                    <Button variant="contained" onClick={handleClose} sx={{mt: 2, mr: 2}}>
+                    <Button variant="contained" onClick={handleClose} sx={styleBtn}>
                         Hủy
                     </Button>
-                    <Button variant="contained" onClick={handleSubmit} sx={{mt: 2}}>
+                    <Button variant="contained" onClick={handleSubmit} sx={styleBtn}>
                         Gửi đánh giá
                     </Button>
                 </div>
