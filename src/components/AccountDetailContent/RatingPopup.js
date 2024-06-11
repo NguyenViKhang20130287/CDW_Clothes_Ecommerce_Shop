@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Modal, Box, Typography, Button, Rating, TextField} from '@mui/material';
-import {FaPlus} from 'react-icons/fa';
 import './RatingPopup.css';
 import APIService from "../../services/APIService";
 
@@ -17,22 +16,12 @@ const style = {
     p: 4,
 };
 
-const RatingPopup = ({open, handleClose, detail}) => {
+const RatingPopup = ({open, handleClose, detail, user}) => {
     const [stars, setStars] = useState(0);
     const [reviewContent, setReviewContent] = useState('');
-    const [images, setImages] = useState([]);
-
     if (!detail) {
         return null;
     }
-
-    const handleImageChange = (e) => {
-        if (images.length < 5) {
-            setImages([...images, ...Array.from(e.target.files)]);
-        } else {
-            alert('You can only upload up to 5 images.');
-        }
-    };
 
     const handleSubmit = () => {
         postReview();
@@ -41,13 +30,12 @@ const RatingPopup = ({open, handleClose, detail}) => {
 
     const postReview = async () => {
         const postData = {
-            userId: 10,
+            userId: user.id,
             orderDetailId: detail.id,
             productId: detail.product.id,
             stars: stars,
             content: reviewContent
         };
-
         const apiService = new APIService();
         try {
             const response = await apiService.sendData('/review', postData);
@@ -90,24 +78,6 @@ const RatingPopup = ({open, handleClose, detail}) => {
                     fullWidth
                     sx={{mt: 2}}
                 />
-                {/*<div className="image-upload">*/}
-                {/*    <label htmlFor="file-input">*/}
-                {/*        <FaPlus size={30}/>*/}
-                {/*    </label>*/}
-                {/*    <input*/}
-                {/*        id="file-input"*/}
-                {/*        type="file"*/}
-                {/*        accept="image/*"*/}
-                {/*        multiple*/}
-                {/*        onChange={handleImageChange}*/}
-                {/*        hidden*/}
-                {/*    />*/}
-                {/*</div>*/}
-                {/*<div className="image-preview">*/}
-                {/*    {images.map((image, index) => (*/}
-                {/*        <img key={index} src={URL.createObjectURL(image)} alt={`img-${index}`}/>*/}
-                {/*    ))}*/}
-                {/*</div>*/}
                 <div className={'review-button-send'}>
                     <Button variant="contained" onClick={handleClose} sx={{mt: 2, mr: 2}}>
                         Hủy
