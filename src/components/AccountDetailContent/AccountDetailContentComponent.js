@@ -16,7 +16,7 @@ import {LiaShippingFastSolid} from "react-icons/lia";
 // services
 import APIService from "../../services/APIService";
 import {TbLoader3} from "react-icons/tb";
-import { LuLoader2 } from "react-icons/lu";
+import {LuLoader2} from "react-icons/lu";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -271,6 +271,12 @@ const AccountDetailContentComponent = ({
         setOpenRatingPopup(false);
         setSelectedDetail(null);
     };
+
+    const handleNavigateTracking = (item) => {
+        // console.log('Item: ', item)
+        navigate(`/order-tracking/${item.id}`)
+    }
+
     return (
         <div className={'accountDetailContentWrapper'}>
             {nameShow === 'profile' &&
@@ -532,8 +538,8 @@ const AccountDetailContentComponent = ({
                                             {details.length > 0 &&
                                                 details.map(de => {
                                                     return (
-                                                        <div>
-                                                            <div className={'orderProduct'}>
+                                                        <div className={'orderProduct'} key={de.id}>
+                                                            <div className={'info'}>
                                                                 <div className={'imgWrapper'}>
                                                                     <img src={de.product.thumbnail} alt={""}/>
                                                                 </div>
@@ -556,13 +562,16 @@ const AccountDetailContentComponent = ({
                                                                 </button>
                                                             </div>
                                                         </div>
-
                                                     )
                                                 })
                                             }
                                         </div>
                                         <div className={'action'}>
-                                        <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
+                                            <button className={'cancelOrder'} type={'button'}
+                                                    onClick={e => handleNavigateTracking(item)}
+                                            >Chi tiết
+                                            </button>
+                                            <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
                                         </div>
                                     </div>
                                 )
