@@ -39,8 +39,7 @@ const Router = () => {
                 <Route path={'/category/:id'} element={<CollectionScreen/>}/>
                 <Route path={'/account-detail'} element={<AccountDetail/>}/>
                 <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
-                <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
-                <Route path={'/order-tracking'} element={<OrderTrackingScreen/>}/>
+                <Route path={'/order-tracking/:id'} element={<OrderTrackingScreen/>}/>
                 <Route path={'/size-selector'} element={<SizeSelectorScreen/>}/>
                 <Route path={'/search'} element={<SearchScreen/>}/>
                 <Route path={'/blog'} element={<BlogScreen/>}/>
