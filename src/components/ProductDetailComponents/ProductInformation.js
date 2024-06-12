@@ -2,10 +2,12 @@ import React, {useEffect, useState} from "react";
 import policy1 from "../../assets/img/ProductDetailSlider/Policy/product_poli_1.webp";
 import policy2 from "../../assets/img/ProductDetailSlider/Policy/product_poli_3.webp";
 import cup from "../../assets/img/ProductDetailSlider/Policy/cup.webp";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import toast from "react-hot-toast";
+import APIService from "../../services/APIService";
 
 const ColorSwatch = ({colors, selectedColor, setSelectedColor}) => {
+    console.log("color", colors);
     return (
         <div className="swatch-color swatch clearfix">
             <div className="options-title">
@@ -77,20 +79,30 @@ const SizeSwatch = ({sizes, selectedSize, setSelectedSize, selectedColor, produc
 
 
 const ProductInformation = ({product}) => {
-    const colorMapping = {
-        'Trắng': '#fff',
-        'Đen': '#000000',
-        'Xanh ve chai': '#306249',
-        'Ghi': '#808080',
-        'Be': '#F5F5DC',
-        'Xám khói': '#F5F5F5',
-        'Nâu': '#964B00',
-        'Xám chì': '#696969',
-        'Xanh rêu': '#11452F'
-    };
+    const [currentColors, setCurrentColors] = useState([]);
     const [selectedColor, setSelectedColor] = useState('');
     const [selectedSize, setSelectedSize] = useState('');
     const [availableSizes, setAvailableSizes] = useState([]);
+    const [selectedColorSize, setSelectedColorSize] = useState(null);
+    const colorSet = new Set();
+    const fetchColors = async () => {
+        const apiService = new APIService();
+        try {
+            const result = await apiService.fetchData(`/color`);
+            const colorObject = result.content.reduce((obj, item) => {
+                obj[item.name] = item.colorCode;
+                return obj;
+            }, {});
+            setCurrentColors(colorObject);
+            console.log("color", colorObject);
+        } catch (error) {
+            console.error('Error fetching colors', error);
+        }
+    }
+    useEffect(() => {
+        fetchColors();
+    }, []);
+
 
     useEffect(() => {
         if (selectedColor) {
@@ -109,20 +121,20 @@ const ProductInformation = ({product}) => {
             setSelectedColor(product.colorSizes[0].color.name);
         }
     }, [product.colorSizes]);
-    const colorSet = new Set();
+
 
     const colors = product.colorSizes ? product.colorSizes.reduce((acc, item) => {
         if (!colorSet.has(item.color.name)) {
             colorSet.add(item.color.name);
             acc.push({
                 value: item.color.name,
-                code: colorMapping[item.color.name]
+                code: currentColors[item.color.name]
             });
         }
         return acc;
     }, []) : [];
 
-    const [selectedColorSize, setSelectedColorSize] = useState(null);
+
     useEffect(() => {
         if (product.colorSizes) {
             const colorSize = product.colorSizes.find(cs => cs.color.name === selectedColor && cs.size.name === selectedSize);
@@ -174,18 +186,14 @@ const ProductInformation = ({product}) => {
         });
         toast.success("Sản phẩm đã được thêm vào giỏ hàng")
     };
-    console.log(product.promotions);
     const currentDate = new Date();
     const hasValidPromotion = product.promotions && product.promotions.length > 0 && new Date(product.promotions[0].startDate) <= currentDate && currentDate <= new Date(product.promotions[0].endDate);
     const discountedPrice = hasValidPromotion ? product.price - (product.price * product.promotions[0].discount_rate / 100) : product.price;
-    console.log(discountedPrice);
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
         currencyDisplay: 'narrowSymbol'
     });
-
-
     const formattedPrice = formatter.format(product.price).replace(/\s/g, '');
     const formattedDiscountedPrice = formatter.format(discountedPrice).replace(/\s/g, '');
     return (

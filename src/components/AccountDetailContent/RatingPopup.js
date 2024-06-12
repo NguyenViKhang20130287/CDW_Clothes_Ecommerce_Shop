@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Modal, Box, Typography, Button, Rating, TextField} from '@mui/material';
 import './RatingPopup.css';
 import APIService from "../../services/APIService";
+import toast from "react-hot-toast";
 
 const style = {
     position: 'absolute',
@@ -50,8 +51,10 @@ const RatingPopup = ({open, handleClose, detail, user}) => {
         const apiService = new APIService();
         try {
             const response = await apiService.sendData('/review', postData);
+            toast.success("Đánh giá thành công, vui lòng chờ xác nhận")
             console.log(response);
         } catch (error) {
+            toast.error("Đánh giá thất bại")
             console.error(error);
         }
     }
