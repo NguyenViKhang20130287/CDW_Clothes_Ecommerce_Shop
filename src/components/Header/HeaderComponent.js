@@ -26,8 +26,7 @@ const HeaderComponent = () => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [categories, setCategories] = useState(null)
-
-    let hasShownToast = false;
+    let isExpired = false;
 
     const handleShowHideSearch = (e) => {
         e.preventDefault()
@@ -36,33 +35,26 @@ const HeaderComponent = () => {
         else setSearchPopupShowStatus(false)
     }
 
-    useEffect(() => {
-        // console.log('Token: ', token);
-
-        const fetchAvatar = async () => {
-            if (token) {
-                try {
-                    const data =
-                        await new APIService().fetchData("/user/user-details", null, {token: token});
-                    // console.log(data)
-                    setAvatar(data.userInformation.avatar);
-                } catch (error) {
+    const fetchAvatar = async () => {
+        if (token) {
+            try {
+                const data =
+                    await new APIService().fetchData("/user/user-details", null, {token: token});
+                setAvatar(data.userInformation.avatar);
+            } catch (error) {
+                if (!isExpired){
                     localStorage.removeItem('token');
-                    if (!hasShownToast && token === null) {
-                        toast.error('Phiên đăng nhập đã hết hạn !');
-                        hasShownToast = true; // Đánh dấu rằng toast đã được hiển thị
-                    }
+                    toast.error('Phiên đăng nhập đã hết hạn !');
+                    isExpired = true
                     navigate('/');
                 }
             }
-        };
+        }
+    }
 
+    useEffect(() => {
         fetchAvatar();
-
-        return () => {
-            hasShownToast = false; // Reset biến cờ khi component unmount
-        };
-    }, [navigate, token, avatar])
+    }, [token])
 
     const handleInputChange = (event) => {
         setSearchKeyword(event.target.value);
@@ -113,7 +105,7 @@ const HeaderComponent = () => {
     }
 
 
-    // fetch data cate
+// fetch data cate
     const fetchDataCategoryIsActive = async () => {
         try {
             const res = await new APIService().fetchData("/category/active")
@@ -136,7 +128,7 @@ const HeaderComponent = () => {
         }
     }, [categories]);
 
-    //
+//
     useEffect(() => {
         const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
         setTotalQuantity(newTotalQuantity);

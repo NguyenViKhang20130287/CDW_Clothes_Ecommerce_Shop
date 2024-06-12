@@ -18,6 +18,7 @@ const AccountDetail = () => {
     const [isShow, setIsShow] = useState('profile')
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
+    const [avatarLink, setAvatarLink]= useState('')
     let hasShownToast = false;
 
 
@@ -25,26 +26,28 @@ const AccountDetail = () => {
         setIsShow(isShow)
     }
 
-    useEffect(() => {
-        const loadData = async () => {
-            try {
-                const data =
-                    await new ApiService().fetchData("/user/user-details", null, {token: token});
-                setUser(data)
-            } catch (error) {
-                localStorage.removeItem('token');
-                if (!hasShownToast) {
-                    toast.error('Phiên đăng nhập đã hết hạn !');
-                    // eslint-disable-next-line react-hooks/exhaustive-deps
-                    hasShownToast = true; // Đánh dấu rằng toast đã được hiển thị
-                }
-                navigate('/');
-            }
+    const updateDataUser = (newUser) =>{
+        setUser(newUser)
+    }
+
+    const loadData = async () => {
+        try {
+            const data =
+                await new ApiService().fetchData("/user/user-details", null, {token: token});
+            setUser(data)
+        } catch (error) {
+            localStorage.removeItem('token');
+            navigate('/');
         }
+    }
 
+    useEffect(() => {
         loadData()
-
     }, [token, isShow])
+
+    useEffect(() => {
+        console.log('New user', user)
+    }, [user]);
 
     return (
         <div className={'AccountDetailContainer'}>
@@ -134,7 +137,7 @@ const AccountDetail = () => {
                         <AccountDetailContentComponent
                             nameShow={isShow}
                             user={user}
-                            updateUser={setUser}
+                            updateUser={updateDataUser}
                         />
                     </div>)
                     :
@@ -148,15 +151,6 @@ const AccountDetail = () => {
                     </div>
                 }
             </div>
-            {/* popup edit address*/}
-            {/*<PopupAddress*/}
-            {/*    title={'Cập nhật địa chỉ'}*/}
-            {/*    isHiddenPopup={isHiddenPopup}*/}
-            {/*    user={user}*/}
-            {/*    onClickHiddenPopup={e=>setIsHiddenPopup(true)}*/}
-            {/*    handleSubmit={handleUpdateAddress}*/}
-            {/*    ref={childRef}*/}
-            {/*/>*/}
         </div>
     )
 }

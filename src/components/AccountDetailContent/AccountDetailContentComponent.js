@@ -17,14 +17,12 @@ import {LiaShippingFastSolid} from "react-icons/lia";
 import APIService from "../../services/APIService";
 import {TbLoader3} from "react-icons/tb";
 import {LuLoader2} from "react-icons/lu";
+import axios from "axios";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
                                            user,
-                                           onClickUpdateAddress,
                                            updateUser,
-                                           setAddress,
-                                           setIsShowPopup
                                        }) => {
     const [username, setUsername] = useState('')
     const [fullName, setFullName] = useState('');
@@ -49,6 +47,7 @@ const AccountDetailContentComponent = ({
     const navigate = useNavigate()
     const [openRatingPopup, setOpenRatingPopup] = useState(false);
     const [selectedDetail, setSelectedDetail] = useState(null);
+    const [reloaded, setReloaded] = useState(true)
 
     const handleChangeAvatar = async (e) => {
         const file = e.target.files[0];
@@ -68,7 +67,9 @@ const AccountDetailContentComponent = ({
                 const result = await response.json();
                 if (result.success) {
                     setAvatarLink(result.data.url);
-                    setupLoadAvatarLoaded(true)
+                    setTimeout(() => {
+                        setupLoadAvatarLoaded(true)
+                    }, 1000)
                 } else {
                     console.error("Error uploading image to ImgBB", result);
                 }
@@ -92,14 +93,14 @@ const AccountDetailContentComponent = ({
         // console.log('User data: ', userData)
         try {
             const res = await new APIService().updateData("/user/user-details/edit", userData);
-            // console.log('Response edit user: ', res)
+            console.log('Response edit user: ', res)
             if (res.statusCodeValue === 400) {
                 toast.error('Lỗi thao tác')
                 return
             }
             toast.success('Thay đổi thông tin thành công')
-            navigate('/account-detail')
-
+            // const userDataUpdated = {...user, res}
+            updateUser(res)
         } catch (error) {
             console.log(error)
         }
@@ -112,7 +113,7 @@ const AccountDetailContentComponent = ({
         // console.log(user.username)
         try {
             const res =
-                await new APIService().sendData("/user-details/add-new-address",
+                await new APIService().sendData("/user/user-details/add-new-address",
                     data, {username: user.username})
             console.log('res: ', res)
             toast.success('Thêm địa chỉ thành công')
@@ -131,18 +132,14 @@ const AccountDetailContentComponent = ({
     const handleEditAddress = async (e) => {
         e.preventDefault()
         const data = childRef.current.getData();
-        console.log('Data from child ediit:', data);
+        console.log('Data from child edit:', data);
         try {
             const res =
-                await new APIService().sendData("/user-details/edit-address",
+                await new APIService().sendData("/user/user-details/edit-address",
                     data, {username: user.username})
             console.log('res: ', res)
             toast.success('Cập nhật địa chỉ thành công')
             setIsHiddenPopup(true)
-            // updateUser(prevUser => ({
-            //     ...prevUser,
-            //     addresses: [...prevUser.addresses, res]
-            // }));
             updateUser(prevUser => ({
                 ...prevUser,
                 addresses: prevUser.addresses.map(address =>
@@ -202,7 +199,7 @@ const AccountDetailContentComponent = ({
     const fetchDataOrdersUser = async () => {
         if (token !== null) {
             try {
-                const res = await new APIService().fetchData("/user/user-details/orders", null, {token: token})
+                const res = await new APIService().fetchData("/order/find-by-user", null, {token: token})
                 // console.log(res)
                 setOrders(res)
                 localStorage.setItem('user_id', orders[0].user_id)
@@ -228,6 +225,7 @@ const AccountDetailContentComponent = ({
         )
         setOrders(results)
     }
+
     useEffect(() => {
         setIsLoaded(false)
         setTimeout(async () => {
@@ -251,17 +249,35 @@ const AccountDetailContentComponent = ({
             setEmail(user.userInformation.email);
             setPhone(user.userInformation.phone);
             setAvatarLink(user.userInformation.avatar);
-            // setAddresses(user.addresses)
             setAddresses([...user.addresses].sort((a, b) => b.default - a.default))
         }
-
-        // console.log(fullName)
-    }, [isHiddenPopup]);
+    }, [isHiddenPopup, reloaded]);
 
     useEffect(() => {
         fetchDataOrdersUser()
     }, [token]);
-    // console.log('Orders: ', orders)
+
+    const handleSetDefaultAddress = async (id) => {
+        // console.log('Address id: ', id)
+        try {
+            const res = await axios.post("http://localhost:8080/api/v1/user/user-details/address/set-default",
+                null, {
+                    params: {
+                        userId: user.id,
+                        addressId: id
+                    }
+                })
+            // console.log('Res set default: ', res)
+            updateUser(prevUser => ({
+                ...prevUser,
+                addresses: res.data
+            }));
+            setReloaded(!reloaded)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     const handleOpenRatingPopup = (detail) => {
         setSelectedDetail(detail);
         setOpenRatingPopup(true);
@@ -404,7 +420,9 @@ const AccountDetailContentComponent = ({
                                                     Thiết lập mặc định
                                                 </button>
                                                 :
-                                                <button className={'setDefaultAddress'}>Thiết lập mặc định</button>
+                                                <button className={'setDefaultAddress'}
+                                                        onClick={e => handleSetDefaultAddress(address.id)}
+                                                >Thiết lập mặc định</button>
 
                                             }
                                         </div>

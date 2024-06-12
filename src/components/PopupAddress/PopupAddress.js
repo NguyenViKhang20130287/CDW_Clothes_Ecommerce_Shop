@@ -112,28 +112,21 @@ const PopupAddress = forwardRef((props, ref) => {
     const fetchDataProvince = async () => {
 
         try {
-            // console.log('Loading...')
             const data = await fetchData('province')
             // console.log('Data province: ', data)
             setProvinces(data)
         } catch (error) {
             console.log(error)
         }
-
     }
 
     useEffect(() => {
-
         if (user) {
             setFullName(user.userInformation.fullName);
             setPhone(user.userInformation.phone)
         }
-
         fetchDataProvince()
-
-
     }, [user, isHiddenPopup])
-
 
     const [provinceId, setProvinceId] = useState('')
     const [districtId, setDistrictId] = useState('')
@@ -143,8 +136,6 @@ const PopupAddress = forwardRef((props, ref) => {
     useEffect(() => {
         if (showNamePopup === 'add') {
             fetchDataProvince()
-            // setDistricts(null)
-            // setWards(null)
             setFullName('')
             setPhone('')
             setProvinceId('')
@@ -155,19 +146,11 @@ const PopupAddress = forwardRef((props, ref) => {
 
     const fetchDataAddressDetail = async () => {
         if (showNamePopup === 'update' && addressData) {
-            // console.log('Data: ', addressData)
-            // setProvinceId(String(addressData.provinceId))
             setFullName(addressData.fullName)
             setPhone(addressData.phone)
-
             await handleChangeProvince(addressData.provinceId)
-            // setDistrictId(String(addressData.districtId))
-
             await handleChangeDistrict(addressData.districtId)
-            // setWardId(String(addressData.wardId))
-
             await handleChangeWard(addressData.wardId)
-
             setStreet(addressData.street)
             setIsDefault(addressData.isDefault)
         }
@@ -175,14 +158,13 @@ const PopupAddress = forwardRef((props, ref) => {
 
     useEffect(() => {
         fetchDataAddressDetail()
-
     }, [showNamePopup, addressData]);
 
-
     useEffect(() => {
-        if (selectedProvince === null || selectedDistrict === null || selectedWard === null){
+        console.log('Street: ', street)
+        if (selectedProvince === null || selectedDistrict === null || selectedWard === null) {
             setDisable(true)
-        }else{
+        } else {
             setDisable(false)
         }
     }, [selectedDistrict, selectedProvince, selectedWard]);
