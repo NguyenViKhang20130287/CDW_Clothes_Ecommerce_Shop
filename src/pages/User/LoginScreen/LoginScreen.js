@@ -30,7 +30,7 @@ const LoginScreen = () => {
             }
             // console.log('User data: ', userData)
             const res = await new ApiService().sendData("/auth/login", userData)
-            // console.log('Login Data: ', res)
+            console.log('Login Data: ', res)
             if (res.statusCodeValue === 200) {
                 localStorage.setItem("token", res.body.token)
                 toast.success('Đăng nhập thành công', {

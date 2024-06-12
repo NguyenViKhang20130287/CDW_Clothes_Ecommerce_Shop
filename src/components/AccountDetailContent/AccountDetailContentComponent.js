@@ -18,6 +18,7 @@ import APIService from "../../services/APIService";
 import {TbLoader3} from "react-icons/tb";
 import {LuLoader2} from "react-icons/lu";
 import axios from "axios";
+import {addLog} from "../../services/LogService";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -101,8 +102,10 @@ const AccountDetailContentComponent = ({
             toast.success('Thay đổi thông tin thành công')
             // const userDataUpdated = {...user, res}
             updateUser(res)
+            await addLog(token, 'Thay đổi thông tin tài khoản')
         } catch (error) {
             console.log(error)
+            await addLog(token, `Lỗi khi thay đổi thông tin tài khoản ${error.response.data}`)
         }
     }
 
@@ -123,9 +126,11 @@ const AccountDetailContentComponent = ({
                 ...prevUser,
                 addresses: [...prevUser.addresses, res]
             }));
+            await addLog(token, 'Thêm địa chỉ mới')
         } catch (error) {
             console.log(error)
             toast.error('Lỗi thao tác !')
+            await addLog(token, 'Lỗi thao tác khi thêm địa chỉ mới')
         }
     }
 
@@ -146,9 +151,11 @@ const AccountDetailContentComponent = ({
                     address.id === res.id ? {...address, ...res} : address
                 )
             }));
+            await addLog(token, 'Cập nhật địa chỉ')
         } catch (error) {
             console.log(error)
             toast.error('Lỗi thao tác !')
+            await addLog(token, 'Lỗi thao tác cập nhật địa chỉ')
         }
     }
 
@@ -172,8 +179,10 @@ const AccountDetailContentComponent = ({
             setOldPassword('')
             setNewPassword('')
             setReNewPassword('')
+            await addLog(token, 'Thay đổi mật khẩu')
         } catch (error) {
             toast.error(error.response.data)
+            await addLog(token, `Lỗi khi thay đổi mật khẩu ${error.response.data}`)
             console.log(error)
         }
     }

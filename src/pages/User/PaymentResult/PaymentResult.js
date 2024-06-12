@@ -5,12 +5,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {clearCart} from "../../../store/actions/cartActions";
 import {useNavigate} from "react-router-dom";
 import ApiService from "../../../services/APIService";
+import {addLog} from "../../../services/LogService";
 
 const PaymentResult = () => {
     const dispatch = useDispatch()
     const cartItems = useSelector(state => state.root.cart);
     const navigate = useNavigate()
     const responsePayment = localStorage.getItem("responsePayment")
+    const token = localStorage.getItem("token")
     const handleOnClick = (e) => {
         e.preventDefault()
         localStorage.removeItem("responsePayment")
@@ -35,6 +37,7 @@ const PaymentResult = () => {
             const parsedResponse = JSON.parse(responsePayment);
             if (parsedResponse.paymentStatus === 'Ok') {
                 updateStatus();
+                addLog(token, 'Đặt hàng thanh toán bằng phương thức VNPAY thành công')
                 if (cartItems.length > 0) dispatch(clearCart());
                 localStorage.removeItem("responsePayment");
             } else {

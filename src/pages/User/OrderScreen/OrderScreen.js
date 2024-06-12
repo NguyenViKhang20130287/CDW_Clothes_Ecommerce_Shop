@@ -16,6 +16,7 @@ import moment from "moment/moment";
 import ApiService from "../../../services/APIService";
 import {clearCart} from "../../../store/actions/cartActions";
 import axios from "axios";
+import {addLog} from "../../../services/LogService";
 
 const useStyles = makeStyles({
     root: {
@@ -232,6 +233,7 @@ const OrderScreen = () => {
                 try {
                     setTimeout(async () => {
                         await new ApiService().sendData("/order/", data)
+                        await addLog(token, 'Đặt hàng thanh toán bằng phương thức COD thành công')
                         setLoadingStatus(true)
                     }, 1000)
                     setTimeout(() => {
