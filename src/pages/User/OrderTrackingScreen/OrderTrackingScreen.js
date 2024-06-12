@@ -123,7 +123,7 @@ const OrderTrackingScreen = () => {
                         <div className={'stepper-container'}>
                             <div className={'stepper'}>
                                 <div
-                                    className={`stepper-step ${order.deliveryStatus.id === 1 ? 'stepper-step--finish' : ''}`}>
+                                    className={`stepper-step ${order.deliveryStatus.id >= 1 ? 'stepper-step--finish' : ''}`}>
                                     <div
                                         className={`stepper-step-icon ${order.deliveryStatus.id >= 1 ? 'stepper-step-icon--finish' : ''}`}>
                                         <CgNotes/>
@@ -134,7 +134,7 @@ const OrderTrackingScreen = () => {
                                     </div>
                                 </div>
                                 <div
-                                    className={`stepper-step ${order.deliveryStatus.id === 2 ? 'stepper-step--finish' : ''}`}>
+                                    className={`stepper-step ${order.deliveryStatus.id >= 2 ? 'stepper-step--finish' : ''}`}>
                                     <div
                                         className={`stepper-step-icon ${order.deliveryStatus.id >= 2 ? 'stepper-step-icon--finish' : ''}`}>
                                         <FaRegMoneyBillAlt/></div>
@@ -145,7 +145,7 @@ const OrderTrackingScreen = () => {
                                     </div>
                                 </div>
                                 <div
-                                    className={`stepper-step ${order.deliveryStatus.id === 3 ? 'stepper-step--finish' : ''}`}>
+                                    className={`stepper-step ${order.deliveryStatus.id >= 3 ? 'stepper-step--finish' : ''}`}>
                                     <div
                                         className={`stepper-step-icon ${order.deliveryStatus.id >= 3 ? 'stepper-step-icon--finish' : ''}`}>
                                         <CiDeliveryTruck/></div>

@@ -45,6 +45,7 @@ const CategoryComponent = ({products, title, isHome}) => {
                             return (
                                 <ProductCardComponent
                                     key={p.id}
+                                    id={p.id}
                                     image={p.thumbnail}
                                     name={p.name}
                                     price={price}
