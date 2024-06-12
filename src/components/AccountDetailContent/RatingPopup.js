@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {Modal, Box, Typography, Button, Rating, TextField} from '@mui/material';
-import {FaPlus} from 'react-icons/fa';
 import './RatingPopup.css';
 import APIService from "../../services/APIService";
+import toast from "react-hot-toast";
 
 const style = {
     position: 'absolute',
@@ -28,22 +28,12 @@ const styleBtn ={
     }
 }
 
-const RatingPopup = ({open, handleClose, detail}) => {
+const RatingPopup = ({open, handleClose, detail, user}) => {
     const [stars, setStars] = useState(0);
     const [reviewContent, setReviewContent] = useState('');
-    const [images, setImages] = useState([]);
-
     if (!detail) {
         return null;
     }
-
-    const handleImageChange = (e) => {
-        if (images.length < 5) {
-            setImages([...images, ...Array.from(e.target.files)]);
-        } else {
-            alert('You can only upload up to 5 images.');
-        }
-    };
 
     const handleSubmit = () => {
         postReview();
@@ -52,18 +42,19 @@ const RatingPopup = ({open, handleClose, detail}) => {
 
     const postReview = async () => {
         const postData = {
-            userId: 10,
+            userId: user.id,
             orderDetailId: detail.id,
             productId: detail.product.id,
             stars: stars,
             content: reviewContent
         };
-
         const apiService = new APIService();
         try {
             const response = await apiService.sendData('/review', postData);
+            toast.success("Đánh giá thành công, vui lòng chờ xác nhận")
             console.log(response);
         } catch (error) {
+            toast.error("Đánh giá thất bại")
             console.error(error);
         }
     }

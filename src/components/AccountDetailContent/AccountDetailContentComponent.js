@@ -609,6 +609,7 @@ const AccountDetailContentComponent = ({
                 open={openRatingPopup}
                 handleClose={handleCloseRatingPopup}
                 detail={selectedDetail}
+                user={user}
             />
             <PopupAddress
                 showNamePopup={showNamePopup}
