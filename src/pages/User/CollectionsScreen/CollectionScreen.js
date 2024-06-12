@@ -3,7 +3,7 @@ import CheckBoxComponent from "../../../components/Checkbox/CheckBoxComponent";
 import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxComponent";
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
 import './CollectionScreen.css';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import APIService from "../../../services/APIService";
 import ProductCardComponent from "../../../components/ProductCard/ProductCardComponent";
 import {MdNavigateNext, MdNavigateBefore} from "react-icons/md";
@@ -12,6 +12,7 @@ const CollectionScreen = () => {
     const [selectOptionSort, setSelectOptionSort] = useState('newest');
     const [colorIsChecked, setColorIsChecked] = useState({});
     const {id} = useParams();
+    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState({});
@@ -19,7 +20,12 @@ const CollectionScreen = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState(id);
     const [selectedColor, setSelectedColor] = useState(null);
+    const [currentColors, setCurrentColors] = useState([]);
 
+    useEffect(() => {
+        setSelectedCategory(id);
+        setPage(0); // Reset page to 0 when category changes
+    }, [id]);
 
     const fetchProducts = async (categoryId ,currentPage, sortOption) => {
         try {
@@ -69,6 +75,23 @@ const CollectionScreen = () => {
         }
     };
 
+    const fetchColors = async () => {
+        const apiService = new APIService();
+        try {
+            const result = await apiService.fetchData(`/color`);
+            const colorObject = result.content.reduce((obj, item) => {
+                obj[item.name] = item.colorCode;
+                return obj;
+            }, {});
+            setCurrentColors(colorObject);
+        } catch (error) {
+            console.error('Error fetching colors', error);
+        }
+    }
+    useEffect(() => {
+        fetchColors();
+    }, []);
+
     useEffect(() => {
         fetchCategories();
     }, []);
@@ -113,18 +136,7 @@ const CollectionScreen = () => {
         }
     };
 
-    const colorMapping = {
-        'Trắng': '#fff',
-        'Đen': '#000000',
-        'Xanh ve chai': '#306249',
-        'Ghi': '#808080',
-        'Be': '#F5F5DC',
-        'Xám khói': '#F5F5F5',
-        'Nâu': '#964B00',
-        'Xám chì': '#696969',
-        'Xanh rêu': '#11452F'
-    };
-    const colors = Object.keys(colorMapping);
+    const colors = Object.keys(currentColors);
 
     const handleCheckboxChange = (event) => {
         const {name, checked} = event.target;
@@ -217,7 +229,7 @@ const CollectionScreen = () => {
                                     checked={colorIsChecked[color] || false}
                                     title={color}
                                     onChange={e => handleCheckboxChange(e)}
-                                    color={colorMapping[color]}
+                                    color={currentColors[color]}
                                 />
                             ))}
                         </div>
@@ -247,7 +259,7 @@ const CollectionScreen = () => {
                             })}
                         </div> : <p>Hiện không có sản phẩm nào</p>}
                     </div>
-                    {products && totalPages > 0
+                    {products && totalPages > 1
                         ? <nav className="woocommerce-pagination">
                             <ul className="pagination pagination__custom justify-content-md-center flex-nowrap flex-md-wrap overflow-auto overflow-md-visble">
                                 <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Previous">

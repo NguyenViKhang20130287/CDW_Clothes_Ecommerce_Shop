@@ -5,7 +5,6 @@ import ProductCard2Component from "./ProductCard2Component";
 import {useSelector} from "react-redux";
 const RecentItem = () => {
     const viewedProducts = useSelector(state => state.root.viewed);
-    console.log("view", viewedProducts);
     return (
         <div>
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12 section-recent-view-product">

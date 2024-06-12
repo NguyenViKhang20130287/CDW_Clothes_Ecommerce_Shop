@@ -18,8 +18,6 @@ const ProductDetailScreen = () => {
     const [categoryId, setCategoryId] = useState(null);
     const [similarProducts, setSimilarProducts] = useState([]);
     const dispatch = useDispatch();
-    const viewed = useSelector(state => state.root.viewed);
-    console.log("list", viewed);
 
     const fetchData = async () => {
         try {
