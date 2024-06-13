@@ -48,7 +48,7 @@ const RegisterConfirmScreen = () => {
         }
         // console.log('Data user: ', userData)
         try {
-            const res = await new ApiService().sendData("/register/confirm", userData)
+            const res = await new ApiService().sendData("/auth/register/confirm", userData)
             if (res.statusCodeValue === 200) {
                 toast.success('Đăng kí tài khoản thành công', {
                     onClose: () => {
