@@ -58,6 +58,7 @@ const OrderScreen = () => {
     const [modalStatus, setModalStatus] = useState(true)
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [addressUserLogged, setAddressUserLogged] = useState([])
+    const [discounts, setDiscounts] = useState([])
     const navigate = useNavigate()
     let hasNotify = false
     const dispatch = useDispatch()
@@ -70,7 +71,6 @@ const OrderScreen = () => {
             console.log(error)
         }
     }
-
     const handleOnChangeProvince = async (provinceId) => {
         // console.log('Id selected: ', provinceId)
         setProvinceId(String(provinceId))
@@ -89,7 +89,6 @@ const OrderScreen = () => {
             console.log(error)
         }
     }
-
     const handleOnChangeDistrict = async (districtId) => {
         // console.log('id selected: ', districtId)
         // console.log('districts selected: ', districts)
@@ -107,14 +106,12 @@ const OrderScreen = () => {
             console.log(e)
         }
     }
-
     const handleOnChangeWard = async (wardCode) => {
         // console.log('id selected: ', wardCode)
         setWardId(String(wardCode))
         const selected = wards.find(ward => ward.WardCode === wardCode);
         setWard(selected)
     }
-
     const checkValueInput = async () => {
         if (fullName !== '' && phone !== '' && street !== '' &&
             Object.keys(province).length > 0 && Object.keys(district).length > 0 &&
@@ -133,7 +130,6 @@ const OrderScreen = () => {
             }, 1000)
         }
     }
-
     const fetchShippingCost = async (fromDistrictId, fromWardId) => {
         try {
             const res = await fetchDataShipping(fromDistrictId, fromWardId)
@@ -143,7 +139,6 @@ const OrderScreen = () => {
             console.log(e)
         }
     }
-
     const expiredDateValid = (startDate, endDate) => {
         const currentDate = moment();
         const start = moment(startDate, 'YYYY-MM-DD HH:mm:ss');
@@ -162,39 +157,42 @@ const OrderScreen = () => {
         } else price = originPrice
         return price
     }
-
     const formattedPrice = (price) => {
         return price.toLocaleString('vi-VN') + 'đ';
     }
-
     const handleCheckDiscountCode = async () => {
         try {
             const res = await axios.get('http://localhost:8080/api/v1/discount-code/check',
                 {
                     params: {
-                        code: discountCode
+                        code: discountCode.toUpperCase()
                     }
                 })
             console.log('Res: ', res)
-            if (res.data === "DiscountCode invalid!") {
+            if (res.data === "Discount invalid") {
                 toast.error('Mã giảm giá không hợp lệ !')
+            } else if (res.data === 'Out of stock') {
+                toast.error('Mã đã được sử dụng hết !')
             } else {
                 if (res.data.discountRate === 0) {
-                    setDiscountPrice(res.discountMoney)
+                    setDiscountPrice(res.data.discountMoney)
                 } else {
-                    setDiscountPrice((res.data.discountRate/100) * provisionalAmount)
+                    setDiscountPrice((res.data.discountRate / 100) * provisionalAmount)
                 }
                 toast.success('Áp dụng mã giảm giá thành công')
             }
         } catch (e) {
+            console.log(e)
         }
     }
-    console.log('rate: ', discountPrice)
     const handleOnClickCheckCode = async (e) => {
         e.preventDefault()
         await handleCheckDiscountCode()
     }
 
+    useEffect(() => {
+        setDiscountPrice(0)
+    }, [discountCode]);
     const handleOnClickPayment = async (e) => {
         e.preventDefault()
         setModalStatus(false)
@@ -270,7 +268,6 @@ const OrderScreen = () => {
         }
 
     }
-
     const handleBackHomePage = (e) => {
         e.preventDefault()
         setModalStatus(true)
@@ -278,7 +275,6 @@ const OrderScreen = () => {
         navigate('/')
         dispatch(clearCart())
     }
-
     const fetchDataAddressUserLogged = async () => {
         if (token !== null) {
             try {
@@ -290,7 +286,6 @@ const OrderScreen = () => {
             }
         }
     }
-
     const fetchDataUserLogged = async () => {
         if (token !== null) {
             try {
@@ -330,15 +325,15 @@ const OrderScreen = () => {
             setWardId(String(addressBook.wardId))
         }
     }
-
+//
     useEffect(() => {
         fetchDataProvince()
     }, []);
-
+//
     useEffect(() => {
         checkValueInput()
     }, [fullName, phone, street, province, district, ward]);
-
+//
     useEffect(() => {
         let totalAmount = 0
         cartItems.forEach((item, index) => {
@@ -351,11 +346,11 @@ const OrderScreen = () => {
         })
         setProvisionalAmount(totalAmount)
     }, [cartItems]);
-
+//
     useEffect(() => {
         setTotalMoney(provisionalAmount + shippingCost - discountPrice)
     }, [discountPrice, provisionalAmount, shippingCost]);
-
+//
     useEffect(() => {
         // console.log(hasNotify)
         if (!hasNotify) {
@@ -369,22 +364,15 @@ const OrderScreen = () => {
             }
         }
     }, [cartItems]);
-
+//
     useEffect(() => {
         fetchDataAddressUserLogged()
         fetchDataUserLogged()
     }, [token]);
-
+//
     useEffect(() => {
         checkValueInput()
     }, [inputIsValid]);
-
-
-    // console.log('Pr: ', province)
-    // console.log('Dis: ', district)
-    // console.log('Ward: ', ward)
-    // console.log('Fullname: ', fullName)
-    // console.log(inputIsValid)
 
     return (
         <>
@@ -666,7 +654,6 @@ const OrderScreen = () => {
                                     )
                                 })
                             }
-
                         </div>
 
                         <div className={'discountCode'}>

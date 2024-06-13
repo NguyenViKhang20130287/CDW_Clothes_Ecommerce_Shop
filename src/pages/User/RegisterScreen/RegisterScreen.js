@@ -22,7 +22,7 @@ const RegisterScreen = () => {
             return;
         }
         try {
-            const data = await new ApiService().sendData("/register", null, {email: email});
+            const data = await new ApiService().sendData("/auth/register", null, {email: email});
             if (data.statusCodeValue === 200) {
                 localStorage.setItem("emailRegistered", email);
                 toast.success("OTP đã gửi về email của bạn", {
