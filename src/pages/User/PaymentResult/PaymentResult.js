@@ -6,6 +6,7 @@ import {clearCart} from "../../../store/actions/cartActions";
 import {useNavigate} from "react-router-dom";
 import ApiService from "../../../services/APIService";
 import {addLog} from "../../../services/LogService";
+import localStorage from "redux-persist/es/storage";
 
 const PaymentResult = () => {
     const dispatch = useDispatch()
@@ -13,6 +14,8 @@ const PaymentResult = () => {
     const navigate = useNavigate()
     const responsePayment = localStorage.getItem("responsePayment")
     const token = localStorage.getItem("token")
+    console.log('Token: ', token)
+    console.log('Response: ', responsePayment)
     const handleOnClick = (e) => {
         e.preventDefault()
         localStorage.removeItem("responsePayment")
@@ -21,7 +24,7 @@ const PaymentResult = () => {
 
     const updateStatus = async () => {
         const data = {
-            "orderId": JSON.parse(responsePayment).orderId,
+            "orderId": JSON.parse(await responsePayment).orderId,
             'status': "Paid"
         }
         try {
@@ -32,19 +35,25 @@ const PaymentResult = () => {
         }
     }
 
-    useEffect(() => {
-        if (responsePayment !== null && localStorage.getItem("responsePayment") !== null) {
-            const parsedResponse = JSON.parse(responsePayment);
+    const finishOrder = async () => {
+        if (responsePayment !== null) {
+            console.log('Res: ', responsePayment)
+
+            const parsedResponse = JSON.parse(await responsePayment);
             if (parsedResponse.paymentStatus === 'Ok') {
-                updateStatus();
-                addLog(token, 'Đặt hàng thanh toán bằng phương thức VNPAY thành công')
-                if (cartItems.length > 0) dispatch(clearCart());
+                await updateStatus();
+                await addLog(JSON.parse(token), 'Đặt hàng thanh toán bằng phương thức VNPAY thành công')
+                if (cartItems.length > 0 && localStorage.getItem('productByNow') === null) dispatch(clearCart());
                 localStorage.removeItem("responsePayment");
             } else {
                 navigate('/');
             }
             console.log('Check');
         }
+    }
+
+    useEffect(() => {
+            finishOrder()
     }, []);
 
     return (

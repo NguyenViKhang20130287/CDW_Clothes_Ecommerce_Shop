@@ -201,7 +201,14 @@ const ProductInformation = ({product}) => {
 
     const handleByNow = (product) => {
         // console.log('Item by Now: ', product)
-        localStorage.setItem("productByNow", product)
+        const productByNow = {
+            ...product,
+            selectedColor: selectedColor,
+            selectedSize: selectedSize,
+            quantity: quantity,
+            selectedColorSize: selectedColorSize
+        }
+        localStorage.setItem("productByNow", JSON.stringify(productByNow))
         navigate('/order')
     }
 
@@ -331,7 +338,7 @@ const ProductInformation = ({product}) => {
                             >Thêm vào giỏ
                             </button>
                             <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now"
-                                    onClick={e=> handleByNow(product)}>Mua ngay
+                                    onClick={e => handleByNow(product)}>Mua ngay
                             </button>
                         </div>
 

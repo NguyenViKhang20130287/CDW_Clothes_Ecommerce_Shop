@@ -164,7 +164,7 @@
     width: 100%;
 }
 
-.total-container .btn-checkout a{
+.total-container .btn-checkout{
     box-sizing: border-box;
     display: inline-block;
     width: 100%;
@@ -181,7 +181,7 @@
     font-size: 16px;
 }
 
-.total-container .btn-checkout:hover a{
+.total-container .btn-checkout:hover{
     background: var(--color-silver-white);
     color: #000;
 }

@@ -58,8 +58,9 @@ const OrderScreen = () => {
     const [modalStatus, setModalStatus] = useState(true)
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [addressUserLogged, setAddressUserLogged] = useState([])
-    const [discounts, setDiscounts] = useState([])
-    const productByNow = localStorage.getItem("productByNow")
+    const [discountId, setDiscountId] = useState(0)
+    const productByNow = JSON.parse(localStorage.getItem("productByNow"))
+    const [priceProductByNow, setPriceProductByNow] = useState(0)
     const navigate = useNavigate()
     let hasNotify = false
     const dispatch = useDispatch()
@@ -177,6 +178,7 @@ const OrderScreen = () => {
             } else {
                 if (res.data.discountRate === 0) {
                     setDiscountPrice(res.data.discountMoney)
+                    setDiscountId(res.data.id)
                 } else {
                     setDiscountPrice((res.data.discountRate / 100) * provisionalAmount)
                 }
@@ -234,9 +236,13 @@ const OrderScreen = () => {
                         await new ApiService().sendData("/order/", data)
                         await addLog(token, 'Đặt hàng thanh toán bằng phương thức COD thành công')
                         setLoadingStatus(true)
+                        if (discountPrice > 0) {
+                            const res = await axios.post(`http://localhost:8080/api/v1/discount-code/used/${discountId}`)
+                            console.log('Res used discount: ', res)
+                        }
                     }, 1000)
-                    setTimeout(() => {
-                        if (cartItems.length > 0) dispatch(clearCart())
+                    setTimeout(async () => {
+                        if (cartItems.length > 0 && !productByNow) dispatch(clearCart())
                     }, 1000 * 60)
                 } catch (e) {
                     console.log(e)
@@ -274,7 +280,6 @@ const OrderScreen = () => {
         setModalStatus(true)
         setLoading(false)
         navigate('/')
-        dispatch(clearCart())
     }
     const fetchDataAddressUserLogged = async () => {
         if (token !== null) {
@@ -335,20 +340,10 @@ const OrderScreen = () => {
         checkValueInput()
     }, [fullName, phone, street, province, district, ward]);
 //
-    useEffect(() => {
-        let totalAmount = 0
-        cartItems.forEach((item, index) => {
-            // console.log('Item: ', item)
-            const promotions = item.product.promotions
-            let price = null
-            let originPrice = item.product.price
-            price = checkPromotions(promotions, originPrice, price)
-            totalAmount += price * item.quantity
-        })
-        setProvisionalAmount(totalAmount)
-    }, [cartItems]);
+
 //
     useEffect(() => {
+        // if ()
         setTotalMoney(provisionalAmount + shippingCost - discountPrice)
     }, [discountPrice, provisionalAmount, shippingCost]);
 //
@@ -375,7 +370,40 @@ const OrderScreen = () => {
         checkValueInput()
     }, [inputIsValid]);
 
-    console.log('Product BY NOW: ', productByNow )
+    console.log('Product BY NOW: ', productByNow)
+
+    const calculatorPriceByNow = (product) =>{
+        const promotions = product.promotions
+        let price = null
+        let originPrice = product.price
+        price = checkPromotions(promotions, originPrice, price)
+        setPriceProductByNow(price)
+    }
+
+    useEffect(() => {
+        if (productByNow){
+            calculatorPriceByNow(productByNow)
+        }
+    }, [productByNow]);
+
+    useEffect(() => {
+        let totalAmount = 0
+        if (productByNow){
+            totalAmount = priceProductByNow * productByNow.quantity
+        }else {
+            cartItems.forEach((item, index) => {
+                // console.log('Item: ', item)
+                const promotions = item.product.promotions
+                let price = null
+                let originPrice = item.product.price
+                price = checkPromotions(promotions, originPrice, price)
+                totalAmount += price * item.quantity
+            })
+        }
+        setProvisionalAmount(totalAmount)
+    }, [cartItems, productByNow]);
+
+
 
     return (
         <>
@@ -635,28 +663,48 @@ const OrderScreen = () => {
                         </div>
 
                         <div className={'orderProducts'}>
-                            {cartItems && cartItems.length > 0 &&
-                                cartItems.map((item) => {
-                                    const promotions = item.product.promotions
-                                    let price = null
-                                    let originPrice = item.product.price
-                                    price = checkPromotions(promotions, originPrice, price)
-                                    return (
-                                        <div className={'orderProductsItem'} key={item.product.id}>
-                                            <div className={'orderProductsItemImgWrapper'}>
-                                                <img src={item.product.thumbnail} alt={''}/>
+                            {productByNow ?
+
+                                <div className={'orderProductsItem'}>
+                                    <div className={'orderProductsItemImgWrapper'}>
+                                        <img src={productByNow.thumbnail} alt={''}/>
+                                    </div>
+                                    <div className={'orderProductsItemDetail'}>
+                                        <p>{productByNow.name}</p>
+                                        <span>x{productByNow.quantity}, {productByNow.selectedColor} / {productByNow.selectedSize}</span>
+                                    </div>
+                                    <div className={'orderProductsItemPrice'}>
+                                        <p>{formattedPrice(Math.round(priceProductByNow * productByNow.quantity))}</p>
+                                    </div>
+                                </div>
+                                :
+                                (
+                                    // {
+                                    cartItems && cartItems.length > 0 &&
+                                    cartItems.map((item) => {
+                                        const promotions = item.product.promotions
+                                        let price = null
+                                        let originPrice = item.product.price
+                                        price = checkPromotions(promotions, originPrice, price)
+                                        return (
+                                            <div className={'orderProductsItem'} key={item.product.id}>
+                                                <div className={'orderProductsItemImgWrapper'}>
+                                                    <img src={item.product.thumbnail} alt={''}/>
+                                                </div>
+                                                <div className={'orderProductsItemDetail'}>
+                                                    <p>{item.product.name}</p>
+                                                    <span>x{item.quantity}, {item.selectedColor} / {item.selectedSize}</span>
+                                                </div>
+                                                <div className={'orderProductsItemPrice'}>
+                                                    <p>{formattedPrice(Math.round(price * item.quantity))}</p>
+                                                </div>
                                             </div>
-                                            <div className={'orderProductsItemDetail'}>
-                                                <p>{item.product.name}</p>
-                                                <span>x{item.quantity}, {item.selectedColor} / {item.selectedSize}</span>
-                                            </div>
-                                            <div className={'orderProductsItemPrice'}>
-                                                <p>{formattedPrice(Math.round(price * item.quantity))}</p>
-                                            </div>
-                                        </div>
-                                    )
-                                })
+                                        )
+                                    })
+                                    // }
+                                )
                             }
+
                         </div>
 
                         <div className={'discountCode'}>

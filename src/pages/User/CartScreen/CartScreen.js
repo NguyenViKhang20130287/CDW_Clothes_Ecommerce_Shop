@@ -5,7 +5,7 @@ import {useDispatch} from 'react-redux';
 import {MdDeleteOutline} from "react-icons/md";
 import {useSelector} from "react-redux";
 import {clearCart, decreaseQuantity, deleteItem, increaseQuantity} from "../../../store/actions/cartActions";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 const CartScreen = () => {
     const dispatch = useDispatch();
@@ -36,6 +36,11 @@ const CartScreen = () => {
 
     }, [cartItems]);
 
+    const navigate = useNavigate()
+    const handlePayment = (e) =>{
+        localStorage.removeItem('productByNow')
+        navigate('/order')
+    }
 
     return (
         <div className={'cart-big-container'}>
@@ -150,10 +155,12 @@ const CartScreen = () => {
                                     <div className="checkout">
                                         <button type="button" className="btn-checkout"
                                                 id="btn-proceed-checkout" title="Thanh toán"
-                                                disabled={!canCheckout}>
-                                            <Link to={'/order'}>
+                                                disabled={!canCheckout}
+                                                onClick={e=>handlePayment(e)}
+                                        >
+                                            {/*<Link to={'/order'}>*/}
                                                 Thanh toán
-                                            </Link>
+                                            {/*</Link>*/}
                                         </button>
                                     </div>
                                 </div>

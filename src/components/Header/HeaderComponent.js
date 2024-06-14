@@ -24,6 +24,7 @@ const HeaderComponent = () => {
     const [avatar, setAvatar] = useState('')
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
+    console.log('Token: ', token)
     const [totalQuantity, setTotalQuantity] = useState(0);
     const cartItems = useSelector(state => state.root.cart);
     const [searchKeyword, setSearchKeyword] = useState('');
