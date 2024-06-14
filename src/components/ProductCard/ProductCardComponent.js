@@ -1,5 +1,6 @@
 import React from "react";
 import './ProductCardComponent.css'
+import './Responsive.css'
 import {Link, useNavigate} from "react-router-dom";
 
 const ProductCardComponent = ({id, image, name, price, originPrice, discountRate}) => {

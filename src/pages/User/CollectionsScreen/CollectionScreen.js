@@ -3,6 +3,8 @@ import CheckBoxComponent from "../../../components/Checkbox/CheckBoxComponent";
 import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxComponent";
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
 import './CollectionScreen.css';
+import './Responsive.css'
+import {useNavigate, useParams} from "react-router-dom";
 import { useParams} from "react-router-dom";
 import APIService from "../../../services/APIService";
 import ProductCardComponent from "../../../components/ProductCard/ProductCardComponent";

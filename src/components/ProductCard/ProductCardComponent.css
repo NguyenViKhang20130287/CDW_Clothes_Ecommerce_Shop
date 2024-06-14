@@ -1,7 +1,7 @@
 
 .productCardItem {
-    width: 22%;
-    height: 330px;
+    width: 20%;
+    height: 400px;
     overflow: hidden;
     margin: 15px 12px;
     cursor: pointer;
@@ -17,7 +17,7 @@
     height: 70%;
 }
 
-.productCardItem .discount-rate{
+.productCardItem .discount-rate {
     position: absolute;
     background: red;
     font-size: 12px;
@@ -37,9 +37,9 @@
     padding: 10px;
     font-size: 14px;
     transition: all .3s;
-    height: 15%;
+    height: 10%;
     width: 100%;
-    white-space: pre-wrap;
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -68,12 +68,4 @@
     font-weight: 500;
     font-family: var(--font-family-sans-serif);
     text-decoration: line-through;
-}
-
-@media only screen and (max-width: 767px) {
-    .productCardItem {
-        width: 44%;
-        height: 300px;
-    }
-
 }

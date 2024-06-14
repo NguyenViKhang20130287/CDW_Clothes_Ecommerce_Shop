@@ -1,0 +1,10 @@
+@media screen and (max-width: 430px) {
+    .formEmailContainer .forgotPasswordWrapper{
+        height: 60vh;
+        padding: 20px;
+    }
+
+    .formEmailContainer .forgotPasswordWrapper .forgotPasswordBox{
+        width: 100%;
+    }
+}

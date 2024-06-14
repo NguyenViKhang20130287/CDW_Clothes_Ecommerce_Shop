@@ -59,6 +59,7 @@ const OrderScreen = () => {
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [addressUserLogged, setAddressUserLogged] = useState([])
     const [discounts, setDiscounts] = useState([])
+    const productByNow = localStorage.getItem("productByNow")
     const navigate = useNavigate()
     let hasNotify = false
     const dispatch = useDispatch()
@@ -373,6 +374,8 @@ const OrderScreen = () => {
     useEffect(() => {
         checkValueInput()
     }, [inputIsValid]);
+
+    console.log('Product BY NOW: ', productByNow )
 
     return (
         <>

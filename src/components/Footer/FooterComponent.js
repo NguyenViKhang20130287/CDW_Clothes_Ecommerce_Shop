@@ -79,7 +79,7 @@ const FooterComponent = () => {
                                  alt="lazada" width="40"/>
                         </a>
                     </div>
-                    <div className="col-xl-2 col-lg-3 col-md-6 col-12 footer-click one">
+                    <div className="col-xl-2 col-lg-3 col-md-6 col-12 footer-click one" style={{marginTop:'10px'}}>
                         <h4>About Us</h4>
                         <ul className="footer-menu toggle-mn">
                             <li><a href="/public" title="Trang chủ" rel="nofollow">Trang chủ</a></li>

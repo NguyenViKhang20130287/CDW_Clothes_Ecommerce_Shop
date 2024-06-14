@@ -1,3 +1,5 @@
+.showSidebar, .hideSidebar, .responsive{display: none}
+
 .AccountDetailContainer {
     background: #f5f5f5;
     position: relative;

@@ -1,0 +1,223 @@
+@media screen and (max-width: 430px) {
+    .headerWrapper, .categoriesContainer {
+        display: none;
+    }
+
+    .headerResponsive {
+        width: 100%;
+        display: block;
+    }
+
+    /* HEADER */
+    .headerResponsive .headerWrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        background-color: #FFFFFF;
+        padding: 15px;
+    }
+
+    .headerResponsive .headerWrapper button {
+        border: none;
+        outline: none;
+        background: none;
+    }
+
+    .headerResponsive .headerWrapper button .icon {
+        font-size: 25px;
+    }
+
+    .headerResponsive .headerWrapper .imageLogoWrapper {
+        width: 150px;
+    }
+
+    .headerResponsive .headerWrapper .imageLogoWrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .headerResponsive .headerWrapper .cartBtn {
+        position: relative;
+    }
+
+    .headerResponsive .headerWrapper .cartBtn .icon {
+        font-size: 30px;
+    }
+
+    .headerResponsive .headerWrapper .cartBtn .quantity {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-color: var(--color-black);
+        border-radius: 999px;
+        width: 18px;
+        height: 13px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .headerResponsive .headerWrapper .cartBtn .quantity span {
+        color: #FFFFFF;
+        font-size: 10px;
+    }
+
+    /* SIDEBAR */
+    .headerResponsive .sidebar {
+        height: 100vh;
+        width: 45%;
+        position: fixed;
+        background-color: #FFFFFF;
+        transition: all .3s;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    }
+
+    .headerResponsive .sidebar .wrapper {
+        display: block;
+        padding: 15px;
+    }
+
+    .headerResponsive .sidebar .wrapper .title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* SIDEBAR TITLE */
+    .headerResponsive .sidebar .wrapper .title .groupBtn {
+        display: flex;
+        align-items: center;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .btn {
+        background: none;
+        border-radius: 4px;
+        color: #000000;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        outline: none;
+        align-items: center;
+        font-weight: bold;
+        padding: 2px;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .btn:last-child {
+        margin-right: 0;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .loginBtn {
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .myAccount .avatarWrapper {
+        width: 30px;
+        height: 30px;
+        overflow: hidden;
+        border-radius: 999px;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .myAccount .avatarWrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .notify .contentWrapper {
+        display: none;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .notify {
+        position: relative;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .notify .quantity {
+        position: absolute;
+        right: -4px;
+        top: -1px;
+        width: 15px;
+        height: 15px;
+        border-radius: 999px;
+        background-color: var(--color-black);
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+
+    .headerResponsive .sidebar .wrapper .title .notify .quantity span {
+        color: #FFFFFF;
+        font-size: 10px;
+    }
+
+    /* SIDEBAR CATEGORIES */
+    .headerResponsive .sidebar .wrapper .categoriesWrapper,
+    .headerResponsive .sidebar .wrapper .guideWrapper,
+    .headerResponsive .sidebar .wrapper .accountWrapper {
+        margin-top: 20px;
+        padding: 10px 0;
+    }
+
+    .headerResponsive .sidebar .wrapper .categoriesWrapper .title h3,
+    .headerResponsive .sidebar .wrapper .guideWrapper .title h3,
+    .headerResponsive .sidebar .wrapper .accountWrapper .title h3 {
+        font-weight: 500;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
+
+    .headerResponsive .sidebar .wrapper .categoriesWrapper .categories,
+    .headerResponsive .sidebar .wrapper .guideWrapper .guides,
+    .headerResponsive .sidebar .wrapper .accountWrapper .accounts {
+        padding: 0 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .headerResponsive .sidebar .wrapper .categoriesWrapper .categories .item,
+    .headerResponsive .sidebar .wrapper .guideWrapper .guides .item,
+    .headerResponsive .sidebar .wrapper .accountWrapper .accounts .item {
+        font-size: 14px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .headerResponsive .sidebar .wrapper .accountWrapper .accounts button {
+        border: none;
+        background: none;
+        outline: none;
+        text-align: left;
+    }
+
+    /* SEARCH POPUP */
+    .searchPopup .searchWrapper{
+        width: 100%;
+    }
+    .searchPopup .searchWrapper h3 {
+        font-size: 20px;
+    }
+
+    .searchPopup .searchWrapper .searchInput {
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .searchPopup .searchWrapper .searchInput input{
+        padding: 2px;
+        font-size: 14px;
+    }
+
+    .searchPopup .searchWrapper .searchInput button {
+        padding: 2px;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .searchResult{
+        padding: 0;
+        width: 100%;
+    }
+}

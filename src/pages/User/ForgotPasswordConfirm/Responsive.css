@@ -1,0 +1,10 @@
+@media screen and (max-width: 430px) {
+    .forgotPasswordConfirmContainer .forgotPasswordConfirmWrapper{
+        height: 60vh;
+        padding: 20px;
+    }
+
+    .forgotPasswordConfirmContainer .forgotPasswordConfirmWrapper .forgotPasswordConfirmBox{
+        width: 100%;
+    }
+}
