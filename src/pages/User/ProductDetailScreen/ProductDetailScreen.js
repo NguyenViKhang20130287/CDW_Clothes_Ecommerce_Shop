@@ -46,18 +46,21 @@ const ProductDetailScreen = () => {
     return (
         <div className={"product-detail-screen"}>
             <div className="container">
-                <div className="row">
-                    <ProductImage product={product}></ProductImage>
-                    <ProductInformation product={product}></ProductInformation>
-                    <ProductDetailContent product={product}></ProductDetailContent>
-                    <ProductReview product={product}></ProductReview>
-                </div>
-                <div className="row">
-                    <RecentItem></RecentItem>
-                </div>
-                <div className="row">
-                    <SimilarItem products={similarProducts}></SimilarItem>
-                </div>
+                {product ? <div>
+                    <div className="row">
+                        <ProductImage product={product}></ProductImage>
+                        <ProductInformation product={product}></ProductInformation>
+                        <ProductDetailContent product={product}></ProductDetailContent>
+                        <ProductReview product={product}></ProductReview>
+                    </div>
+                    <div className="row">
+                        <RecentItem></RecentItem>
+                    </div>
+                    <div className="row">
+                        <SimilarItem products={similarProducts}></SimilarItem>
+                    </div>
+                </div> : <div className={"empty-product-detail"}>Không có sản phẩm phù hợp</div>
+                }
             </div>
         </div>
     );

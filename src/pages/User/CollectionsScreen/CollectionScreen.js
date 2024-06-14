@@ -3,7 +3,7 @@ import CheckBoxComponent from "../../../components/Checkbox/CheckBoxComponent";
 import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxComponent";
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
 import './CollectionScreen.css';
-import {useNavigate, useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import APIService from "../../../services/APIService";
 import ProductCardComponent from "../../../components/ProductCard/ProductCardComponent";
 import {MdNavigateNext, MdNavigateBefore} from "react-icons/md";
@@ -12,7 +12,6 @@ const CollectionScreen = () => {
     const [selectOptionSort, setSelectOptionSort] = useState('newest');
     const [colorIsChecked, setColorIsChecked] = useState({});
     const {id} = useParams();
-    const navigate = useNavigate();
     const [products, setProducts] = useState([]);
     const [categories, setCategories] = useState([]);
     const [category, setCategory] = useState({});
@@ -21,7 +20,6 @@ const CollectionScreen = () => {
     const [selectedCategory, setSelectedCategory] = useState(id);
     const [selectedColor, setSelectedColor] = useState(null);
     const [currentColors, setCurrentColors] = useState([]);
-
     useEffect(() => {
         setSelectedCategory(id);
         setPage(0); // Reset page to 0 when category changes
@@ -36,9 +34,6 @@ const CollectionScreen = () => {
                 url += `filter=${filter}&`;
             }
             url += `page=${currentPage}&perPage=16&sort=${sortBy}&order=${order}`;
-
-            console.log(categoryId)
-            console.log(url);
             const response = await new APIService().fetchData(url);
             let allProducts = response.content;
             console.log(allProducts);
@@ -239,53 +234,57 @@ const CollectionScreen = () => {
                     </div>
                 </div>
                 <div className={'productShowWrapper'}>
-                    <div className={'categoryContainer'}>
-                        <h3 className={'title'}>{category ? category.name : 'Tất cả sản phẩm'}</h3>
-                        {products && totalPages > 0 ? <div className={'categoriesWrapper'}>
-                            {products.map((product, index) => {
-                                let price = product.price;
-                                let originPrice = null;
-                                if (product.promotions && product.promotions.length > 0) {
-                                    originPrice = product.price;
-                                    price = product.price - product.price * product.promotions[0].discount_rate / 100;
-                                }
-                                return (
-                                    <ProductCardComponent
-                                        key={product.id}
-                                        id={product.id}
-                                        image={product.thumbnail}
-                                        name={product.name}
-                                        price={price}
-                                        originPrice={originPrice}
-                                    />
-                                );
-                            })}
-                        </div> : <p>Hiện không có sản phẩm nào</p>}
-                    </div>
-                    {products && totalPages > 1
-                        ? <nav className="woocommerce-pagination">
-                            <ul className="pagination pagination__custom justify-content-md-center flex-nowrap flex-md-wrap overflow-auto overflow-md-visble">
-                                <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Previous">
-                                    <button disabled={page === 0} onClick={handlePrev} className="prev page-link">
-                                        <MdNavigateBefore/>
-                                    </button>
-                                </li>
-                                {[...Array(totalPages).keys()].map(i => (
-                                    <li key={i}
-                                        className={`flex-shrink-0 flex-md-shrink-1 page-item ${page === i ? 'active' : ''}`}>
-                                        <button onClick={() => handlePageChange(i)}
-                                                className="page-link">{i + 1}</button>
+                    {products.length > 0 ? <div>
+                        <div className={'categoryContainer'}>
+                            <h3 className={'title'}>{category ? category.name : 'Tất cả sản phẩm'}</h3>
+                            {products && totalPages > 0 ? <div className={'categoriesWrapper'}>
+                                {products.map((product, index) => {
+                                    let price = product.price;
+                                    let originPrice = null;
+                                    const currentDate = new Date().toISOString().split('T')[0];
+                                    if (product.promotions && product.promotions.length > 0 && product.promotions[0].endDate > currentDate && product.promotions[0].startDate < currentDate) {
+                                        console.log(product.promotions[0].startDate)
+                                        originPrice = product.price;
+                                        price = product.price - product.price * product.promotions[0].discount_rate / 100;
+                                    }
+                                    return (
+                                        <ProductCardComponent
+                                            key={product.id}
+                                            id={product.id}
+                                            image={product.thumbnail}
+                                            name={product.name}
+                                            price={price}
+                                            originPrice={originPrice}
+                                        />
+                                    );
+                                })}
+                            </div> : <p>Hiện không có sản phẩm nào</p>}
+                        </div>
+                        {products && totalPages > 1
+                            ? <nav className="woocommerce-pagination">
+                                <ul className="pagination pagination__custom justify-content-md-center flex-nowrap flex-md-wrap overflow-auto overflow-md-visble">
+                                    <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Previous">
+                                        <button disabled={page === 0} onClick={handlePrev} className="prev page-link">
+                                            <MdNavigateBefore/>
+                                        </button>
                                     </li>
-                                ))}
-                                <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Next">
-                                    <button disabled={page === totalPages - 1} onClick={handleNext}
-                                            className="next page-link">
-                                        <MdNavigateNext/>
-                                    </button>
-                                </li>
-                            </ul>
-                        </nav> : <> </>
-                    }
+                                    {[...Array(totalPages).keys()].map(i => (
+                                        <li key={i}
+                                            className={`flex-shrink-0 flex-md-shrink-1 page-item ${page === i ? 'active' : ''}`}>
+                                            <button onClick={() => handlePageChange(i)}
+                                                    className="page-link">{i + 1}</button>
+                                        </li>
+                                    ))}
+                                    <li className="flex-shrink-0 flex-md-shrink-1 page-item" title="Next">
+                                        <button disabled={page === totalPages - 1} onClick={handleNext}
+                                                className="next page-link">
+                                            <MdNavigateNext/>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </nav> : <> </>
+                        }
+                    </div> : <div className={"empty-category"}>Danh mục không có sản phẩm hoặc không phù hợp</div>}
                 </div>
             </div>
         </div>
