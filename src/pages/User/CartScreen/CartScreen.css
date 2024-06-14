@@ -1,5 +1,6 @@
-.container {
+.cart-big-container .container {
     font-family: "Futura", sans-serif;
+    min-height: 650px;
 }
 
 .header-cart {
@@ -272,4 +273,12 @@
     font-size: 15px;
     margin-left: 35px;
     margin-top: 20px;
+}
+.cart-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 20px;
+    color: #888;
 }

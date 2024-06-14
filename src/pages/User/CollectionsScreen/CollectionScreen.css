@@ -60,3 +60,12 @@
 .collectionScreenContainer .collectionScreenWrapper .productShowWrapper{
     width: 80%;
 }
+
+.collectionScreenContainer .collectionScreenWrapper .productShowWrapper .empty-category {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 20px;
+    color: #888;
+}

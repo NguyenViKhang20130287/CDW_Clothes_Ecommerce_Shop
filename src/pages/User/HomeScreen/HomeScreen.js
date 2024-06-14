@@ -7,11 +7,6 @@ import {Link} from "react-router-dom";
 import CategoryComponent from "../../../components/Category/CategoryComponent";
 
 // images
-import SLIDER_1 from '../../../assets/slider/slider_1.webp'
-import SLIDER_2 from '../../../assets/slider/slider_2.webp'
-import SLIDER_3 from '../../../assets/slider/slider_3.webp'
-import SLIDER_4 from '../../../assets/slider/slider_4.webp'
-import SLIDER_5 from '../../../assets/slider/slider_5.webp'
 import SHIRT_IMG from '../../../assets/img/shirt1.webp'
 import FEEDBACK_1 from '../../../assets/findoutmore/feedback_1.webp'
 import FEEDBACK_2 from '../../../assets/findoutmore/feedback_2.webp'
@@ -26,7 +21,7 @@ import './HomeScreen.css'
 import ApiService from "../../../services/APIService";
 
 const HomeScreen = () => {
-    const images = [SLIDER_1, SLIDER_2, SLIDER_3, SLIDER_4, SLIDER_5]
+    const [sliders, setSliders] = useState(null)
     const imagesFeedback = [FEEDBACK_1, FEEDBACK_2, FEEDBACK_3, FEEDBACK_4,
         FEEDBACK_5, FEEDBACK_6, FEEDBACK_7, FEEDBACK_8]
     const [products, setProducts] = useState(null)
@@ -41,6 +36,16 @@ const HomeScreen = () => {
         autoplaySpeed: 2000
     };
 
+    const fetchSlider = async () => {
+        try {
+            const res = await new ApiService().fetchData("/slider")
+            const activeSliders = res.content.filter(slider => slider.status === true);
+            setSliders(activeSliders);
+        } catch (error) {
+            console.log('Err fetch slider: ', error)
+        }
+    }
+
     const fetchDataTop5ProductNewest = async () => {
         try {
             const res = await new ApiService().fetchData("/product/top-7-newest")
@@ -52,6 +57,7 @@ const HomeScreen = () => {
 
     useEffect(() => {
         fetchDataTop5ProductNewest()
+        fetchSlider()
     }, []);
 
     return (
@@ -59,9 +65,9 @@ const HomeScreen = () => {
             {/**/}
             <div className={'homeWrapper'}>
                 <Slider {...settings} className={'sliderWrapper'}>
-                    {images.map((item, index) => (
+                    {sliders && sliders.map((slider, index) => (
                         <div className={'slider'} key={index}>
-                            <img src={item} alt={`Slider ${index}}`}/>
+                            <img src={slider.link} alt={`Slider ${index}}`}/>
                         </div>
                     ))}
                 </Slider>

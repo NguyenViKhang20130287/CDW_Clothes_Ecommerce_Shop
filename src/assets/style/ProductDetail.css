@@ -3,6 +3,15 @@
     font-family: var(--font-family-monospace);
 }
 
+.product-detail-screen .empty-product-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    font-size: 20px;
+    color: #888;
+}
+
 .product-image-detail {
     position: relative;
 }
@@ -112,6 +121,17 @@
 }
 
 @media (min-width: 1200px) {
+    .product-image-detail .gallery-top {
+        height: 700px;
+    }
+    .bigger-swiper .swiper-slide {
+        height: 700px!important;
+    }
+    .product-image-detail .big-swiper img {
+        width: 90%!important;
+        max-height: 120%;
+        object-fit: cover;
+    }
     .mini-swiper {
         width: 80%;
         margin: 0 auto;
@@ -270,11 +290,12 @@
 }
 
 .swatch .options-title {
+    font-family: "Futura", sans-serif;
     margin-bottom: 8px;
     text-align: left;
     float: none;
     min-width: 100px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .swatch .options-title span {
