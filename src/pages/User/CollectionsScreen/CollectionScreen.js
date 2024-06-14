@@ -29,12 +29,15 @@ const CollectionScreen = () => {
 
     const fetchProducts = async (categoryId ,currentPage, sortOption) => {
         try {
-            let url = `/product`;
+            let url = `/product?`;
             const { sortBy, order } = getSortParams(sortOption);
             if (categoryId !== 'all') {
-                url += `/category/${categoryId}`;
+                const filter = encodeURIComponent(`{"categoryId":${categoryId}}`);
+                url += `filter=${filter}&`;
             }
-            url += `?page=${currentPage}&perPage=16&sort=${sortBy}&order=${order}`;
+            url += `page=${currentPage}&perPage=16&sort=${sortBy}&order=${order}`;
+
+            console.log(categoryId)
             console.log(url);
             const response = await new APIService().fetchData(url);
             let allProducts = response.content;
