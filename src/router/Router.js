@@ -19,6 +19,7 @@ import SearchScreen from "../pages/User/SearchScreen/SearchScreen";
 import BlogDetailScreen from "../pages/User/BlogDetailScreen/BlogDetailScreen";
 import BlogScreen from "../pages/User/BlogScreen/BlogScreen";
 import PaymentResult from "../pages/User/PaymentResult/PaymentResult";
+import ScrollButton from "../components/ScrollButton/ScrollButton";
 
 const Router = () => {
     return (
@@ -46,6 +47,7 @@ const Router = () => {
                 <Route path={'/blog/:id'} element={<BlogDetailScreen/>}/>
                 <Route path={'payment-result'} element={<PaymentResult/>}/>
             </Routes>
+            <ScrollButton/>
             <FooterComponent/>
         </div>
     );
