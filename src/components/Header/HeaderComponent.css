@@ -111,7 +111,7 @@
     flex-wrap: wrap;
 }
 
-.searchResult .searchResultList .find-more{
+.searchResult .searchResultList .find-more {
     width: 22%;
     height: 330px;
     margin-top: 15px;
@@ -127,7 +127,7 @@
     transition: all .3s;
 }
 
-.searchResult .searchResultList .find-more:hover{
+.searchResult .searchResultList .find-more:hover {
     transform: scale(1.1);
     color: var(--color-silver);
 }
@@ -286,6 +286,93 @@
     color: var(--color-silver);
 }
 
+/* notification */
+
+.rightContent .notify {
+    position: relative;
+}
+
+.rightContent .notify .quantity {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    background-color: var(--color-black);
+    border-radius: 999px;
+    width: 20px;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rightContent .notify .quantity span {
+    font-weight: bold;
+    font-size: 10px;
+    color: #fff;
+}
+
+.rightContent .notify .contentWrapper {
+    display: none;
+    position: absolute;
+    top: 30px;
+    left: 10px;
+    border: 1px solid #cccccc;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    color: var(--color-black);
+    width: 250px;
+}
+
+.rightContent .notify .contentWrapper .header{
+    margin-bottom: 0;
+    text-align: left;
+    font-weight: bold;
+    font-size: 14px;
+    border-bottom: 1px solid #ccc;
+    padding: 5px;
+}
+
+.rightContent .notify .contentWrapper .content{
+    max-height: 200px;
+    width: 100%;
+    overflow-y: scroll;
+    border-radius: 0;
+}
+
+.rightContent .notify .contentWrapper .content .item {
+    margin-bottom: 0;
+    width: 100%;
+    word-break: break-word;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    transition: all .3s;
+    padding: 5px 10px;
+    font-size: 13px;
+}
+
+.rightContent .notify .contentWrapper .content .item:hover{
+    background-color: rgb(0, 0, 0, 0.2);
+}
+
+.rightContent .notify .contentWrapper .content .item:first-child{
+    border-radius: 0;
+}
+
+.rightContent .notify .contentWrapper .content .item:last-child{
+    border-bottom: none;
+}
+
+.rightContent .notify .contentWrapper .content::-webkit-scrollbar {
+    display: none;
+}
+
+
+.rightContent .notify:hover .contentWrapper{
+    display: block;
+}
+
+/**/
 .categoriesContainer {
     display: flex;
     justify-content: center;

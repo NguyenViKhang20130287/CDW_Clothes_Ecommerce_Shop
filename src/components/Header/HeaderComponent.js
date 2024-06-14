@@ -6,7 +6,7 @@ import {useSelector} from "react-redux";
 import LOGO from '../../assets/img/logo.webp'
 import AVATAR_DEFAULT from '../../assets/img/user.png'
 // icons
-import {IoCartOutline, IoSearchOutline, IoPersonOutline, IoCloseOutline} from "react-icons/io5";
+import {IoCartOutline, IoSearchOutline, IoPersonOutline, IoCloseOutline, IoNotificationsOutline} from "react-icons/io5";
 import {HiBars3BottomLeft} from "react-icons/hi2";
 // css
 import './HeaderComponent.css'
@@ -14,6 +14,7 @@ import './HeaderComponent.css'
 import ProductCardComponent from "../ProductCard/ProductCardComponent";
 // services
 import APIService from "../../services/APIService";
+import axios from "axios";
 
 const HeaderComponent = () => {
     const [searchPopupShowStatus, setSearchPopupShowStatus] = useState(false)
@@ -26,6 +27,8 @@ const HeaderComponent = () => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchResult, setSearchResult] = useState([]);
     const [categories, setCategories] = useState(null)
+    const [notifications, setNotifications] = useState([])
+    const [seen, setSeen] = useState(false)
     let isExpired = false;
 
     const handleShowHideSearch = (e) => {
@@ -40,9 +43,11 @@ const HeaderComponent = () => {
             try {
                 const data =
                     await new APIService().fetchData("/user/user-details", null, {token: token});
+                // console.log(data)
                 setAvatar(data.userInformation.avatar);
+                setNotifications(data.notifications)
             } catch (error) {
-                if (!isExpired){
+                if (!isExpired) {
                     localStorage.removeItem('token');
                     toast.error('Phiên đăng nhập đã hết hạn !');
                     isExpired = true
@@ -118,7 +123,6 @@ const HeaderComponent = () => {
 
     useEffect(() => {
         fetchDataCategoryIsActive();
-
     }, []);
 
     useEffect(() => {
@@ -135,6 +139,26 @@ const HeaderComponent = () => {
 
         //
     }, [cartItems]);
+    console.log(notifications.length)
+
+    const handleSeenNotification = async (id) => {
+        try {
+            const res = await axios.post(`http://localhost:8080/api/v1/notification/seen/${id}`)
+            console.log('Res: ', res)
+            setSeen(!seen)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        fetchAvatar()
+    }, [seen]);
+
+    let sortedNotifications =[]
+    if (notifications && notifications.length > 0 ){
+        sortedNotifications = [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    }
 
     return (
         <div className={'main'}>
@@ -258,6 +282,37 @@ const HeaderComponent = () => {
                             <button className={'btnIcons'} id={'searchBtn'} type={"button"}
                                     onClick={e => handleShowHideSearch(e)}>
                                 <IoSearchOutline className={'icons'}/>
+                            </button>
+                            <button className={'btnIcons notify'}>
+                                <IoNotificationsOutline className={'icons'}/>
+                                {notifications && notifications.length > 0 &&
+                                    <div className={'quantity'}>
+                                        <span>{notifications.filter(no => no.seen === false).length}</span>
+                                    </div>
+                                }
+                                <div className={'contentWrapper'}>
+                                    <p className={'header'}>Thông báo</p>
+                                    <div className={'content'}>
+                                        {notifications && notifications.length > 0 ?
+                                            sortedNotifications.map(item => {
+                                                return (
+                                                    <p
+                                                        className={'item'}
+                                                        key={item.id}
+                                                        onClick={e => handleSeenNotification(item.id)}
+                                                        style={!item.seen ? {
+                                                            fontWeight: 500
+                                                        } : {fontWeight: 'normal'}}
+                                                    >
+                                                        {item.content}</p>
+                                                )
+                                            })
+                                            :
+                                            <p className={'item'}>Không có thông báo nào</p>
+
+                                        }
+                                    </div>
+                                </div>
                             </button>
                             <button className={'btnIcons'} type={"button"}>
                                 <Link to={'/cart'}>
