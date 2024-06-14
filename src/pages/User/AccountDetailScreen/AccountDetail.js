@@ -10,15 +10,20 @@ import AccountDetailContentComponent from "../../../components/AccountDetailCont
 // icons
 import {FaPen, FaRegUser} from "react-icons/fa";
 import {BiPurchaseTag} from "react-icons/bi";
+import { BsLayoutTextSidebar } from "react-icons/bs";
 // css
 import './AccountDetail.css'
+import './Responsive.css'
+import {TbCircuitSwitchClosed} from "react-icons/tb";
+import {IoClose} from "react-icons/io5";
 
 const AccountDetail = () => {
     const [user, setUser] = useState(null)
     const [isShow, setIsShow] = useState('profile')
     const token = localStorage.getItem('token')
     const navigate = useNavigate()
-    const [avatarLink, setAvatarLink]= useState('')
+    const [avatarLink, setAvatarLink] = useState('')
+    const [isHidden, setIsHidden] = useState(true)
     let hasShownToast = false;
 
 
@@ -26,7 +31,7 @@ const AccountDetail = () => {
         setIsShow(isShow)
     }
 
-    const updateDataUser = (newUser) =>{
+    const updateDataUser = (newUser) => {
         setUser(newUser)
     }
 
@@ -52,6 +57,63 @@ const AccountDetail = () => {
     return (
         <div className={'AccountDetailContainer'}>
             <div className={'AccountDetailWrapper'}>
+                {/* SHOW SIDEBAR BUTTON */}
+                {/*<button className={'showSidebar'} onClick={e=>setIsHidden(false)}>*/}
+                {/*    <BsLayoutTextSidebar/>*/}
+                {/*</button>*/}
+                {/* SIDEBAR RESPONSIVE */}
+                <div className={'AccountDetailSideBar responsive'}
+                    // style={isHidden ? {transform: 'translateX(-100%)'} : {transform: 'translateX(0)'}}
+                >
+                    {/*<button className={'hideSidebar'} onClick={e => setIsHidden(true)}>*/}
+                    {/*    <IoClose/>*/}
+                    {/*</button>*/}
+                    <div className={'accountDetailImg'}>
+                        <div className={'imgWrapper'}>
+                            <img
+                                src={user?.userInformation?.avatar || AVATAR_DEFAULT}
+                                alt={'avatar'}
+                            />
+                        </div>
+                        <div className={'info'}>
+                            <span className={'username'}>{user?.username || null}</span>
+                            <div className={'editProfile'}>
+                                <FaPen style={{fontSize: '12px', marginRight: '5px'}}/>
+                                <span>Sửa hồ sơ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className={'accountDetailItem myAccount'}>
+                        <span className={'title'}>
+                            <FaRegUser className={'icons'}/>
+                            <span>Tài khoản của tôi</span>
+                        </span>
+                        <div className={'options'}>
+                            <button
+                                className={'profile'}
+                                style={isShow === 'profile' ? {color: 'red'} : {color: '#000'}}
+                                onClick={event => handleSelectShow('profile')}
+                            >Hồ sơ
+                            </button>
+                            {/**/}
+                            <button
+                                className={'address'}
+                                style={isShow === 'address' ? {color: 'red'} : {color: '#000'}}
+                                onClick={event => handleSelectShow('address')}
+                            >Địa chỉ
+                            </button>
+                            {/**/}
+                            <button
+                                className={'changePass'}
+                                style={isShow === 'changePassword' ? {color: 'red'} : {color: '#000'}}
+                                onClick={event => handleSelectShow('changePassword')}
+                            >Đổi mật khẩu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* SIDEBAR */}
                 <div className={'AccountDetailSideBar'}>
                     <div className={'accountDetailImg'}>
                         <div className={'imgWrapper'}>
@@ -74,62 +136,36 @@ const AccountDetail = () => {
                             <span>Tài khoản của tôi</span>
                         </span>
                         <div className={'options'}>
-                            {isShow === 'profile' ?
-                                <button
-                                    className={'profile'}
-                                    style={{color: 'red'}}
-                                    onClick={event => handleSelectShow('profile')}
-                                >Hồ sơ</button>
-                                : <button className={'profile'}
-                                          onClick={event => handleSelectShow('profile')}
-                                >Hồ sơ</button>
-                            }
+                            <button
+                                className={'profile'}
+                                style={isShow === 'profile' ? {color: 'red'} : {color: '#000'}}
+                                onClick={event => handleSelectShow('profile')}
+                            >Hồ sơ
+                            </button>
                             {/**/}
-                            {isShow === 'address' ?
-                                <button
-                                    className={'address'}
-                                    style={{color: 'red'}}
-                                    onClick={event => handleSelectShow('address')}
-                                >Địa chỉ</button>
-                                :
-                                <button
-                                    className={'address'}
-                                    onClick={event => handleSelectShow('address')}
-                                >Địa chỉ</button>
-                            }
+                            <button
+                                className={'address'}
+                                style={isShow === 'address' ? {color: 'red'} : {color: '#000'}}
+                                onClick={event => handleSelectShow('address')}
+                            >Địa chỉ
+                            </button>
                             {/**/}
-                            {isShow === 'changePassword' ?
-                                <button
-                                    className={'changePass'}
-                                    style={{color: 'red'}}
-                                    onClick={event => handleSelectShow('changePassword')}
-                                >Đổi mật khẩu</button>
-                                :
-                                <button
-                                    className={'changePass'}
-                                    onClick={event => handleSelectShow('changePassword')}
-                                >Đổi mật khẩu</button>
-                            }
+                            <button
+                                className={'changePass'}
+                                style={isShow === 'changePassword' ? {color: 'red'} : {color: '#000'}}
+                                onClick={event => handleSelectShow('changePassword')}
+                            >Đổi mật khẩu
+                            </button>
                         </div>
                     </div>
-
-                    {isShow === 'purchaseOrder' ?
-                        <div
-                            className={'accountDetailItem purchaseOrder'}
-                            style={{color: 'red'}}
-                            onClick={e => handleSelectShow('purchaseOrder')}>
-                            <BiPurchaseTag className={'icons'}/>
-                            <span>Đơn mua</span>
-                        </div>
-                        :
-                        <div
-                            className={'accountDetailItem purchaseOrder'}
-                            onClick={e => handleSelectShow('purchaseOrder')}>
-                            <BiPurchaseTag className={'icons'}/>
-                            <span>Đơn mua</span>
-                        </div>
-                    }
-
+                    {/**/}
+                    <div
+                        className={'accountDetailItem purchaseOrder'}
+                        style={isShow === 'purchaseOrder' ? {color: 'red'} : {color: '#000'}}
+                        onClick={e => handleSelectShow('purchaseOrder')}>
+                        <BiPurchaseTag className={'icons'}/>
+                        <span>Đơn mua</span>
+                    </div>
                     {/*  Content  */}
                 </div>
                 {user ?

@@ -1,0 +1,10 @@
+@media screen and (max-width: 430px) {
+    .registerConfirmContainer .registerConfirmWrapper{
+        height: 60vh;
+        padding: 20px;
+    }
+
+    .registerConfirmContainer .registerConfirmWrapper .registerConfirmBox{
+        width: 100%;
+    }
+}

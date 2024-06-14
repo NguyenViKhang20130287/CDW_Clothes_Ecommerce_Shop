@@ -5,6 +5,7 @@ import {Link, useNavigate} from "react-router-dom";
 import toast from "react-hot-toast";
 //
 import './ForgotPasswordConfirm.css'
+import './Responsive.css'
 // services
 import APIService from "../../../services/APIService";
 

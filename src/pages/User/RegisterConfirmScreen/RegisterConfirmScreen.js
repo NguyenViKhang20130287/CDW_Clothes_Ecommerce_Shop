@@ -5,6 +5,7 @@ import {CiLock, CiUser, CiMail} from "react-icons/ci";
 import toast from "react-hot-toast";
 // components
 import './RegisterConfirmScreen.css'
+import './Responsive.css'
 // services
 import ApiService from "../../../services/APIService";
 

@@ -1,0 +1,10 @@
+@media screen and (max-width: 430px) {
+    .loginContainer .loginWrapper{
+        height: 60vh;
+        padding: 20px;
+    }
+
+    .loginContainer .loginWrapper .loginBox{
+        width: 100%;
+    }
+}

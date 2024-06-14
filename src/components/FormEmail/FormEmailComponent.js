@@ -2,6 +2,7 @@ import React from "react";
 import {CiMail} from "react-icons/ci";
 import {Link} from "react-router-dom";
 import './FornEmailComponent.css'
+import './Responsive.css'
 
 const FormEmailComponent = ({title, onChange, value, onClick, error, borderColor}) => {
     return (
