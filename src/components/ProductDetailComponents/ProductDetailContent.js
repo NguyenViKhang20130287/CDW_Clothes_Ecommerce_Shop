@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const ProductDetailContent = ({product}) => {
     const [selectedTab, setSelectedTab] = useState('MÔ TẢ SẢN PHẨM');
+    const hasHTMLTags = /<[^>]*>/.test(product.content);
 
     const handleTabClick = (tabName) => {
         setSelectedTab(tabName);
@@ -38,7 +39,10 @@ const ProductDetailContent = ({product}) => {
                                     - Thiết kế: Thêu và in<br/>
                                     <br/>
                                 </p>
-                                {product.content}
+                                {hasHTMLTags ?
+                                    <div dangerouslySetInnerHTML={{__html: product.content}} /> :
+                                    <p>{product.content}</p>
+                                }
                             </div>
                         </div>
                     </div>
