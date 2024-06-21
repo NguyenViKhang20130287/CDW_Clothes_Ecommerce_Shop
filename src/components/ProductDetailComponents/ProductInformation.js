@@ -5,6 +5,7 @@ import cup from "../../assets/img/ProductDetailSlider/Policy/cup.webp";
 import {useDispatch} from "react-redux";
 import toast from "react-hot-toast";
 import APIService from "../../services/APIService";
+import {useNavigate} from "react-router-dom";
 
 const ColorSwatch = ({colors, selectedColor, setSelectedColor}) => {
     console.log("color", colors);
@@ -84,6 +85,7 @@ const ProductInformation = ({product}) => {
     const [selectedSize, setSelectedSize] = useState('');
     const [availableSizes, setAvailableSizes] = useState([]);
     const [selectedColorSize, setSelectedColorSize] = useState(null);
+    const navigate = useNavigate()
     const colorSet = new Set();
     const fetchColors = async () => {
         const apiService = new APIService();
@@ -196,6 +198,13 @@ const ProductInformation = ({product}) => {
     });
     const formattedPrice = formatter.format(product.price).replace(/\s/g, '');
     const formattedDiscountedPrice = formatter.format(discountedPrice).replace(/\s/g, '');
+
+    const handleByNow = (product) => {
+        // console.log('Item by Now: ', product)
+        localStorage.setItem("productByNow", product)
+        navigate('/order')
+    }
+
     return (
         <div className="col-12 col-md-12 col-lg-4 details-pro">
             <div className="wrapright-content">
@@ -321,7 +330,8 @@ const ProductInformation = ({product}) => {
                                     className="btn btn-lg btn-gray btn-cart btn_buy add_to_cart" onClick={addToCart}
                             >Thêm vào giỏ
                             </button>
-                            <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now">Mua ngay
+                            <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now"
+                                    onClick={e=> handleByNow(product)}>Mua ngay
                             </button>
                         </div>
 

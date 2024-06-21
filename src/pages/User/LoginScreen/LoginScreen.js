@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import toast from "react-hot-toast";
 import {Link, useNavigate} from "react-router-dom";
 // services
 import ApiService from '../../../services/APIService'
@@ -7,7 +8,7 @@ import {CiUser, CiLock} from "react-icons/ci";
 import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";
 // css
 import './LoginScreen.css'
-import toast from "react-hot-toast";
+import './Responsive.css'
 
 const LoginScreen = () => {
     const [username, setUsername] = useState('')
@@ -102,15 +103,6 @@ const LoginScreen = () => {
                             <Link to={'/forgot-password'} className={'forgotPassword'}>
                                 Quên mật khẩu
                             </Link>
-                        </div>
-                        <span className={'span'}>Hoặc</span>
-                        <div className={'otherOptionLogins'}>
-                            <button type={'button'} className={'optionWrapper facebook'}>
-                                <FaFacebookF/>
-                            </button>
-                            <button type={'button'} className={'optionWrapper google'}>
-                                <FaGoogle/>
-                            </button>
                         </div>
                     </div>
                 </div>

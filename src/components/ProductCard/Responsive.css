@@ -1,0 +1,27 @@
+@media screen and (max-width: 430px) {
+    .productCardItem {
+        width: 45%;
+        height: 300px;
+        margin: 5px;
+    }
+
+    .productCardItem .itemImage{
+        height: auto;
+    }
+
+    .productCardItem .itemImage img{
+        object-fit: contain;
+    }
+
+    .productCardItem .itemName{
+        height: 25%;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .productCardItem .itemPrice{
+        background: none;
+        height: 15%;
+    }
+}

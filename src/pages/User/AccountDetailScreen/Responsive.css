@@ -1,0 +1,48 @@
+@media screen and (max-width: 430px) {
+
+    /*MAIN*/
+    .AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar {
+        display: none;
+    }
+
+    .showSidebar {
+        display: block;
+        border: none;
+        background: none;
+        font-size: 20px;
+    }
+
+    .hideSidebar{
+        display: block;
+        float: right;
+        border: none;
+        background: none;
+        font-size: 20px;
+        padding: 5px;
+    }
+
+    .AccountDetailContainer {
+        align-content: center;
+        height: 80vh;
+        padding: 0;
+        position: relative;
+    }
+
+    .AccountDetailContainer .AccountDetailWrapper {
+        width: 100%;
+        /*height: 100%;*/
+        /*overflow: hidden;*/
+        margin: 0;
+        padding: 0;
+    }
+
+
+
+    .AccountDetailContainer .AccountDetailWrapper .AccountDetailSideBar .showSidebar{
+
+    }
+
+    .AccountDetailContainer .AccountDetailWrapper .AccountDetailContent {
+        width: 100%;
+    }
+}
