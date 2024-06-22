@@ -6,6 +6,7 @@
     justify-content: center;
     align-items: center;
     padding: 50px;
+    height: 60vh;
 }
 
 .formEmailContainer .forgotPasswordWrapper .forgotPasswordBox {
