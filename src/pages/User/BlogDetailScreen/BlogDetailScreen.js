@@ -8,11 +8,9 @@ const BlogDetailScreen = () => {
     const { id } = useParams();
     const [blogDetail, setBlogDetail] = useState({})
     const date = new Date(blogDetail.createdBy);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
-    const year = date.getFullYear();
+    const hasHTMLTags = /<[^>]*>/.test(blogDetail.content);
+    const hasHTMLTagsInDescription = /<[^>]*>/.test(blogDetail.description);
 
-    const formattedDate = `${day}/${month}/${year}`;
     const fetchBlogDetail = async () => {
         try {
             const response = await new APIService().fetchData(`/blog/${id}`);
@@ -38,17 +36,26 @@ const BlogDetailScreen = () => {
                 <div className="blog-detail">
                     <h1 className="blog-title">{blogDetail.title}</h1>
                     <div className="blog-meta">
-                        <Avatar src={blogDetail.createdBy ? blogDetail.createdBy.userInformation.avatar : null} />
+                        <Avatar src={blogDetail.createdBy ? blogDetail.createdBy.userInformation.avatar : null}/>
                         <div className="blog-meta-info">
-                            <span className="blog-author">{blogDetail.createdBy ? blogDetail.createdBy.username : 'Unknown'}</span>
+                            <span
+                                className="blog-author">{blogDetail.createdBy ? blogDetail.createdBy.username : 'Unknown'}</span>
                             <span className="blog-date">{formatDate(blogDetail.createdAt)}</span>
                         </div>
                     </div>
-                    <p className="blog-description">{blogDetail.description}</p>
-                    <img className="blog-thumbnail" src={blogDetail.thumbnail} alt={blogDetail.title} />
-                    <div className="blog-content">{blogDetail.content}</div>
+                    {hasHTMLTagsInDescription ?
+                        <div dangerouslySetInnerHTML={{__html: blogDetail.description}} /> :
+                        <p>{blogDetail.description}</p>
+                    }
+                    <img className="blog-thumbnail" src={blogDetail.thumbnail} alt={blogDetail.title}/>
+                    <div className="blog-content">
+                        {hasHTMLTags ?
+                            <div dangerouslySetInnerHTML={{__html: blogDetail.content}}/> :
+                            <p>{blogDetail.content}</p>
+                        }
+                    </div>
                 </div>
-            ) : <div>Loading...</div>}
+            ) : <div className={"empty-product-detail"}>Không có blog phù hợp</div>}
         </div>
     );
 }

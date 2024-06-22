@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import APIService from "../../../services/APIService";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
+import userEvent from "@testing-library/user-event";
 
 const ProductDetailScreen = () => {
     const apiService = new APIService();
@@ -42,6 +43,7 @@ const ProductDetailScreen = () => {
     useEffect(() => {
         fetchData();
         fetchSimilarProducts();
+        window.scrollTo(0, 0);
     }, [id])
     return (
         <div className={"product-detail-screen"}>

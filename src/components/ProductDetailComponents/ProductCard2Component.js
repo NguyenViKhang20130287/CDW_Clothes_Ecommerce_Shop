@@ -1,5 +1,6 @@
 import React from "react";
 import "../../assets/style/RecentItem.css";
+import {Link} from "react-router-dom";
 
 const ProductCard2Component = ({product}) => {
     if (!product) {
@@ -43,34 +44,37 @@ const ProductCard2Component = ({product}) => {
                       data-cart-form=""
                       encType="multipart/form-data">
                     <div className={`product-thumbnail ${discountRate ? 'sale' : ''}`} data-sale={discountRate}>
-                        <a className="image_thumb"
-                           href="/product-detail/4"
-                           title={product.title}>
-                            <div className="product-image">
-                                <img className="lazy loaded"
-                                     src={product.thumbnail}
-                                     alt={product.title}
-                                     data-was-processed="true"/>
-                            </div>
-                            <div className="product-image second-image">
-                                <img className="lazy loaded"
-                                     src= {secondImage}
-                                     alt={product.title}
-                                     data-was-processed="true"/>
-                            </div>
-                        </a>
+                        <Link to={`/product-detail/${product.id}`}>
+                            <a className="image_thumb"
+                               title={product.title}>
+                                <div className="product-image">
+                                    <img className="lazy loaded"
+                                         src={product.thumbnail}
+                                         alt={product.title}
+                                         data-was-processed="true"/>
+                                </div>
+                                <div className="product-image second-image">
+                                    <img className="lazy loaded"
+                                         src={secondImage}
+                                         alt={product.title}
+                                         data-was-processed="true"/>
+                                </div>
+                            </a>
+                        </Link>
                     </div>
                     <div className="product-info">
+                        <Link to={`/product-detail/${product.id}`}>
                         <h3 className="product-name"><a
-                            href="/product-detail/4"
                             title={product.name}>
                             {product.name}</a></h3>
                         <div className="bottom-action">
                             <div className="price-box">
-                                <span className="price">{discountRate ? `${formatVND(priceWithDiscount)}` : `${formatVND(product.price)}`}</span>
+                                <span
+                                    className="price">{discountRate ? `${formatVND(priceWithDiscount)}` : `${formatVND(product.price)}`}</span>
                                 {discountRate && <span className="compare-price">{formatVND(product.price)}</span>}
                             </div>
                         </div>
+                        </Link>/
                     </div>
                 </form>
             </div>

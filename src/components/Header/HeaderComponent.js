@@ -131,14 +131,10 @@ const HeaderComponent = () => {
         }
     }, [categories]);
 
-//
     useEffect(() => {
         const newTotalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
         setTotalQuantity(newTotalQuantity);
-
-        //
     }, [cartItems]);
-    console.log(notifications.length)
 
     const handleSeenNotification = async (id) => {
         try {
