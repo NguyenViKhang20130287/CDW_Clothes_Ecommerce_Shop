@@ -16,7 +16,6 @@ const ProductDetailScreen = () => {
     const apiService = new APIService();
     const {id} = useParams();
     const [product, setProduct] = useState({});
-    const [categoryId, setCategoryId] = useState(null);
     const [similarProducts, setSimilarProducts] = useState([]);
     const dispatch = useDispatch();
 
@@ -24,7 +23,6 @@ const ProductDetailScreen = () => {
         try {
             const result = await new APIService().fetchData(`/product/${id}`);
             setProduct(result);
-            setCategoryId(result.category.id);
             dispatch({type: 'recent/add', payload: result});
         } catch (error) {
             console.error('Error fetching product', error);
