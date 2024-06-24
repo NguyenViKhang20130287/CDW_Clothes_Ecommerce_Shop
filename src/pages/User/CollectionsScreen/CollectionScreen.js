@@ -4,10 +4,12 @@ import RadioBoxComponent from "../../../components/RadioBoxComponent/RadioBoxCom
 import {FaBars, FaSort, FaFilter} from "react-icons/fa";
 import './CollectionScreen.css';
 import './Responsive.css'
-import { useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import APIService from "../../../services/APIService";
 import ProductCardComponent from "../../../components/ProductCard/ProductCardComponent";
 import {MdNavigateNext, MdNavigateBefore} from "react-icons/md";
+import {TbLoader3} from "react-icons/tb";
+import moment from "moment/moment";
 
 const CollectionScreen = () => {
     const [selectOptionSort, setSelectOptionSort] = useState('newest');
@@ -21,15 +23,17 @@ const CollectionScreen = () => {
     const [selectedCategory, setSelectedCategory] = useState(id);
     const [selectedColor, setSelectedColor] = useState(null);
     const [currentColors, setCurrentColors] = useState([]);
+    const [loaded, setLoaded] = useState(true)
     useEffect(() => {
         setSelectedCategory(id);
         setPage(0); // Reset page to 0 when category changes
     }, [id]);
 
-    const fetchProducts = async (categoryId ,currentPage, sortOption) => {
+    const fetchProducts = async (categoryId, currentPage, sortOption) => {
+        setLoaded(false)
         try {
             let url = `/product?`;
-            const { sortBy, order } = getSortParams(sortOption);
+            const {sortBy, order} = getSortParams(sortOption);
             if (categoryId !== 'all') {
                 const filter = encodeURIComponent(`{"categoryId":${categoryId}}`);
                 url += `filter=${filter}&`;
@@ -47,6 +51,7 @@ const CollectionScreen = () => {
             // Set filtered products and update pagination
             setProducts(allProducts);
             setTotalPages(response.totalPages);
+            setLoaded(true)
         } catch (error) {
             console.error(error);
         }
@@ -112,26 +117,26 @@ const CollectionScreen = () => {
         setProducts(allProducts);
     }, [products, selectedColor]);
     const sortOptions = [
-        { value: 'newest', title: 'Mới nhất' },
-        { value: 'ascending', title: 'Giá: Thấp đến Cao' },
-        { value: 'descending', title: 'Giá: Cao đến Thấp' },
-        { value: 'nameAtoZ', title: 'Tên: A đến Z' },
-        { value: 'nameZtoA', title: 'Tên: Z đến A' },
+        {value: 'newest', title: 'Mới nhất'},
+        {value: 'ascending', title: 'Giá: Thấp đến Cao'},
+        {value: 'descending', title: 'Giá: Cao đến Thấp'},
+        {value: 'nameAtoZ', title: 'Tên: A đến Z'},
+        {value: 'nameZtoA', title: 'Tên: Z đến A'},
     ];
     const getSortParams = (sortOption) => {
         switch (sortOption) {
             case 'newest':
-                return { sortBy: 'createdAt', order: 'DESC' };
+                return {sortBy: 'createdAt', order: 'DESC'};
             case 'ascending':
-                return { sortBy: 'price', order: 'ASC' };
+                return {sortBy: 'price', order: 'ASC'};
             case 'descending':
-                return { sortBy: 'price', order: 'DESC' };
+                return {sortBy: 'price', order: 'DESC'};
             case 'nameAtoZ':
-                return { sortBy: 'name', order: 'ASC' };
+                return {sortBy: 'name', order: 'ASC'};
             case 'nameZtoA':
-                return { sortBy: 'name', order: 'DESC' };
+                return {sortBy: 'name', order: 'DESC'};
             default:
-                return { sortBy: 'createdAt', order: 'DESC' };
+                return {sortBy: 'createdAt', order: 'DESC'};
         }
     };
 
@@ -184,7 +189,23 @@ const CollectionScreen = () => {
             onChange: () => handleCategoryChange(category.id.toString())
         }))
     ];
-
+    const expiredDateValid = (startDate, endDate) => {
+        const currentDate = moment();
+        const start = moment(startDate, 'YYYY-MM-DD HH:mm:ss');
+        const end = moment(endDate, 'YYYY-MM-DD HH:mm:ss');
+        return currentDate.isBetween(start, end, 'minutes', '[]');
+    }
+    const checkPromotions = (promotions, originPrice, price) => {
+        if (promotions && promotions.length > 0) {
+            const promotion = promotions.find(promotion => promotion.status === true);
+            if (expiredDateValid(promotion.startDate, promotion.endDate)) {
+                price = originPrice * ((100 - promotion.discount_rate) / 100)
+            } else {
+                price = originPrice
+            }
+        } else price = originPrice
+        return price
+    }
 
     return (
         <div className={'collectionScreenContainer'}>
@@ -235,6 +256,12 @@ const CollectionScreen = () => {
                     </div>
                 </div>
                 <div className={'productShowWrapper'}>
+                    <div className={'collectionLoading'} hidden={loaded}>
+                        <div className={'content'}>
+                            <TbLoader3 className={'icon'}/>
+                            <p>Đang tải dữ liệu...</p>
+                        </div>
+                    </div>
                     {products.length > 0 ? <div>
                         <div className={'categoryContainer'}>
                             <h3 className={'title'}>{category ? category.name : 'Tất cả sản phẩm'}</h3>
@@ -243,11 +270,33 @@ const CollectionScreen = () => {
                                     let price = product.price;
                                     let originPrice = null;
                                     const currentDate = new Date().toISOString().split('T')[0];
-                                    if (product.promotions && product.promotions.length > 0 && product.promotions[0].endDate > currentDate && product.promotions[0].startDate < currentDate) {
-                                        console.log(product.promotions[0].startDate)
-                                        originPrice = product.price;
-                                        price = product.price - product.price * product.promotions[0].discount_rate / 100;
-                                    }
+                                    let discountRate
+                                    if (product.promotions && product.promotions.length > 0) {
+                                        const promotionActive = product.promotions.filter(pro => pro.status && !pro.deleted)
+                                        // console.log('Promotions: ', promotionActive)
+                                        let length = promotionActive.length
+                                        // console.log('Length: ', length)
+                                        // console.log('Promotion newest: ', promotionActive[length - 1])
+                                        const promotionNewest = promotionActive[length - 1]
+                                        if (promotionActive.length > 0) {
+                                            if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                                                originPrice = product.price;
+                                                price = product.price - product.price * promotionNewest.discount_rate / 100;
+                                                discountRate = promotionNewest.discount_rate || ''
+                                            }
+                                        } else discountRate = null
+                                    } else discountRate = null
+                                    // console.log('RRate: ', discountRate)
+                                    // let price = null
+                                    // let originPrice = product.price
+                                    // console.log(product.promotions)
+                                    // price = checkPromotions(product.promotions, originPrice, price)
+                                    // if (!product.promotions)
+                                    //     console.log('Promotion is empty')
+                                    // const pr = product.promotions && product.promotions.length > 0
+                                    //     && product.promotions.reverse().find(promotion => promotion.status === true && promotion.deleted === false);
+                                    // console.log('Promotion: ', pr ?? null)
+
                                     return (
                                         <ProductCardComponent
                                             key={product.id}
@@ -256,6 +305,7 @@ const CollectionScreen = () => {
                                             name={product.name}
                                             price={price}
                                             originPrice={originPrice}
+                                            discountRate={discountRate}
                                         />
                                     );
                                 })}

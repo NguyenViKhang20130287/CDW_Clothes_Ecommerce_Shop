@@ -8,12 +8,14 @@ import './ForgotPasswordConfirm.css'
 import './Responsive.css'
 // services
 import APIService from "../../../services/APIService";
+import {TbLoader3} from "react-icons/tb";
 
 const ForgotPasswordConfirm = () => {
     const [typePassword, setTypePassword] = useState('password')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
     const [otp, setOtp] = useState('')
+    const [isLoaded, setIsLoaded] = useState(true)
     const navigate = useNavigate()
 
     const handleShowHidePassword = (e) => {
@@ -27,11 +29,14 @@ const ForgotPasswordConfirm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsLoaded(false)
         if (rePassword !== password) {
+            setIsLoaded(true)
             toast.error('Mật khẩu nhập lại không trùng khớp!')
             return
         }
         if (password.length < 6) {
+            setIsLoaded(true)
             toast.error('Mật khẩu phải dài hơn 6 kí tự !')
             return
         }
@@ -47,8 +52,10 @@ const ForgotPasswordConfirm = () => {
             if (res.statusCodeValue === 200) {
                 toast.success('Thay đổi mật khẩu thành công')
                 localStorage.removeItem('emailForgot')
+                setIsLoaded(true)
                 navigate('/login')
             } else {
+                setIsLoaded(true)
                 toast.error(res.body)
             }
         } catch (error) {
@@ -94,7 +101,10 @@ const ForgotPasswordConfirm = () => {
                                 className={'forgotPasswordConfirmBtn'}
                                 onClick={e => handleSubmit(e)}
                         >
-                            ĐẶT LẠI MẬT KHẨU
+                            <span hidden={!isLoaded}>ĐẶT LẠI MẬT KHẨU</span>
+                            <div className={'loginLoader'} hidden={isLoaded}>
+                                <TbLoader3 className={'icon'}/>
+                            </div>
                         </button>
                     </form>
                     <div className={'loginOptionWrapper'}>

@@ -180,9 +180,9 @@ const OrderTrackingScreen = () => {
 
                         <div className={'buy-again-container'}>
                             <div className={'empty'}></div>
-                            <div className={'buy-again'}>
-                                <button className={'buy-again-btn'}>Mua Lại</button>
-                            </div>
+                            {/*<div className={'buy-again'}>*/}
+                            {/*    <button className={'buy-again-btn'}>Mua Lại</button>*/}
+                            {/*</div>*/}
                         </div>
 
                         <div className={'address-delivery-big-container'}>

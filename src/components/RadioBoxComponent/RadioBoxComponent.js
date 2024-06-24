@@ -9,6 +9,7 @@ const RadioBoxComponent = ({options}) => {
                 <div className={'radioBoxItem'} key={index}>
                     <input type={'radio'}
                            id={item.id}
+                           name={item.id}
                            value={item.value}
                            checked={item.checked}
                            onChange={item.onChange}/>

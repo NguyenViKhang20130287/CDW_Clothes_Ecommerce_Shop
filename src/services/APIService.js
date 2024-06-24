@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BASE_URL = 'http://localhost:8080/api/v1'
+const BASE_URL = 'https://teelab-be.up.railway.app/api/v1'
+// const BASE_URL = 'http://localhost:8080/api/v1'
 
 class ApiService {
     constructor(accessToken = null) {

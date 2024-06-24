@@ -47,6 +47,7 @@ const SearchComponent = ({keyword}) => {
                     return (
                         <ProductCardComponent
                             key={index}
+                            id={product.id}
                             image={product.thumbnail}
                             name={product.name}
                             price={price}

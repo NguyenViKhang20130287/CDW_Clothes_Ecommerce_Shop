@@ -8,12 +8,14 @@ import './RegisterConfirmScreen.css'
 import './Responsive.css'
 // services
 import ApiService from "../../../services/APIService";
+import {TbLoader3} from "react-icons/tb";
 
 const RegisterConfirmScreen = () => {
     const [username, setUserName] = useState("")
     const [typePassword, setTypePassword] = useState('password')
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
+    const [isLoaded, setIsLoaded] = useState(true)
     const [otp, setOtp] = useState('')
     const navigate = useNavigate()
 
@@ -29,6 +31,7 @@ const RegisterConfirmScreen = () => {
 
     const handleRegisterConfirm = async (e) => {
         e.preventDefault()
+        setIsLoaded(false)
         if (rePassword !== password) {
             toast.error('Mật khẩu không trùng khớp, vui lòng nhập lại !')
             return
@@ -58,10 +61,12 @@ const RegisterConfirmScreen = () => {
                         }, 10000);
                     }
                 });
+                setIsLoaded(true)
                 navigate('/login');
             } else {
                 toast.error(res.body)
                 // setMessage(res.body)
+                setIsLoaded(true)
             }
             console.log('Data register confirm: ', res)
         } catch (error) {
@@ -123,7 +128,11 @@ const RegisterConfirmScreen = () => {
                         <button type={'submit'}
                                 className={'registerConfirmBtn'}
                                 onClick={e => handleRegisterConfirm(e)}
-                        >ĐĂNG KÍ
+                        >
+                            <span hidden={!isLoaded}>ĐĂNG KÍ</span>
+                            <div className={'loginLoader'} hidden={isLoaded}>
+                                <TbLoader3 className={'icon'}/>
+                            </div>
                         </button>
                     </form>
                     <div className={'loginOptionWrapper'}>

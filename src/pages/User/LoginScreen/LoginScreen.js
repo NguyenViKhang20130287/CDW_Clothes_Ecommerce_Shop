@@ -9,17 +9,21 @@ import {FaEye, FaGoogle, FaFacebookF, FaEyeSlash} from "react-icons/fa";
 // css
 import './LoginScreen.css'
 import './Responsive.css'
+import {TbLoader3} from "react-icons/tb";
 
 const LoginScreen = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [isShowPassword, setIsShowPassword] = useState(false)
     const [errorColor, setErrorColor] = useState('var(--color-silver)')
+    const [isLoaded, setIsLoaded] = useState(true)
     const navigate = useNavigate()
 
     const handleLogin = async (e) => {
+        setIsLoaded(false)
         e.preventDefault()
         if (password.length < 6) {
+            setIsLoaded(true)
             setErrorColor('red')
             toast.error('Mật khẩu phải dài hơn 6 kí tự')
             return
@@ -41,9 +45,11 @@ const LoginScreen = () => {
                         }, 10000);
                     }
                 });
+                setIsLoaded(true)
                 navigate('/');
             } else {
                 toast.error(res.body)
+                setIsLoaded(true)
             }
         } catch (error) {
             console.log(error)
@@ -92,7 +98,11 @@ const LoginScreen = () => {
                         <button type={'submit'}
                                 className={'loginBtn'}
                                 onClick={e => handleLogin(e)}
-                        >ĐĂNG NHẬP
+                        >
+                            <span hidden={!isLoaded}>ĐĂNG NHẬP</span>
+                            <div className={'loginLoader'} hidden={isLoaded}>
+                                <TbLoader3 className={'icon'}/>
+                            </div>
                         </button>
                     </form>
                     <div className={'otherOptions'}>

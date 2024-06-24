@@ -14,9 +14,18 @@ const CartScreen = () => {
 
     const totalPrice = cartItems.reduce((total, item) => {
         let discountRate = 0;
-        if (item.product.productPromotions && item.product.productPromotions.length > 0) {
-            discountRate = item.product.productPromotions[0].promotion.discount_rate;
-        }
+        const currentDate = new Date().toISOString().split('T')[0];
+        if (item.product.promotions && item.product.promotions.length > 0) {
+            const promotionActive = item.product.promotions.filter(pro => pro.status && !pro.deleted)
+            let length = promotionActive.length
+            const promotionNewest = promotionActive[length - 1]
+            if (promotionActive.length > 0) {
+                if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                    discountRate = promotionNewest.discount_rate
+                }
+            } else discountRate = 0
+
+        } else discountRate = 0
         const discountPrice = (item.product.price - (item.product.price * discountRate / 100));
         return total + (discountPrice * item.quantity);
     }, 0);
@@ -76,11 +85,29 @@ const CartScreen = () => {
                                             );
 
                                             let discountRate = 0;
-                                            if (item.product.productPromotions && item.product.productPromotions.length > 0) {
-                                                discountRate = item.product.productPromotions[0].promotion.discount_rate;
-                                            }
-                                            const discountPrice = (item.product.price - (item.product.price * discountRate / 100));
-                                            const formattedPrice = item.product.price.toLocaleString('vi-VN') + 'đ';
+                                            // if (item.product.productPromotions && item.product.productPromotions.length > 0) {
+                                            //     discountRate = item.product.productPromotions[0].promotion.discount_rate;
+                                            // }
+                                            let price = item.product.price;
+                                            let originPrice = 0;
+                                            const currentDate = new Date().toISOString().split('T')[0];
+                                            if (item.product.promotions && item.product.promotions.length > 0) {
+                                                const promotionActive = item.product.promotions.filter(pro => pro.status && !pro.deleted)
+                                                let length = promotionActive.length
+                                                const promotionNewest = promotionActive[length - 1]
+                                                if (promotionActive.length > 0) {
+                                                    if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                                                        originPrice = item.product.price;
+                                                        price = item.product.price - item.product.price * promotionNewest.discount_rate / 100;
+                                                        discountRate = promotionNewest.discount_rate || ''
+                                                    }
+                                                } else discountRate = null
+
+                                            } else discountRate = null
+                                            const discountPrice = price
+                                                // (item.product.price - (item.product.price * discountRate / 100));
+                                            const formattedPrice = originPrice.toLocaleString('vi-VN') + 'đ'
+                                                // item.product.price.toLocaleString('vi-VN') + 'đ';
                                             const formattedDiscountPrice = discountPrice.toLocaleString('vi-VN') + 'đ';
                                             return (
                                                 <div className="col-12 col-sm-12 col-md-12 col-xl-12" key={index}>

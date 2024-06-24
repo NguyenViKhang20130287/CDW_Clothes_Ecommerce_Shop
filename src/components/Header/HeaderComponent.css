@@ -167,7 +167,7 @@
 }
 
 .leftContent span:last-child {
-    margin-right: 130px;
+    margin-right: 190px;
 }
 
 .leftContent .home:hover, .leftContent .warranty:hover, .rightContent .sizeTable:hover {
@@ -333,7 +333,7 @@
 .rightContent .notify .contentWrapper {
     display: none;
     position: absolute;
-    top: 40px;
+    top: 35px;
     left: 10px;
     border: 1px solid #cccccc;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;

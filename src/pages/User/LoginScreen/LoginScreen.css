@@ -69,14 +69,41 @@
 .loginContainer .loginWrapper .loginBox .formGroup .loginBtn {
     box-sizing: border-box;
     width: 100%;
+    height: 40px;
     border: none;
     background: var(--color-black);
     font-weight: bold;
     color: #ffffff;
-    padding: 5px 0;
     border-radius: 6px;
     transition: all .5s;
     border: 1px solid var(--color-black);
+    position: relative;
+}
+
+.loginContainer .loginWrapper .loginBox .formGroup .loginBtn .loginLoader{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.loginContainer .loginWrapper .loginBox .formGroup .loginBtn .loginLoader .icon{
+    font-size: 16px;
+    animation: spin 2s linear infinite;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loginContainer .loginWrapper .loginBox .formGroup .loginBtn:hover {

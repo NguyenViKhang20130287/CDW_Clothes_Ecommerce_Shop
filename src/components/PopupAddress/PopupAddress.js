@@ -77,6 +77,7 @@ const PopupAddress = forwardRef((props, ref) => {
     }
 
     const handleChangeWard = async (wardId) => {
+        console.log('Ward: ', wards)
         const selected = await wards.find(ward => ward.WardCode === wardId);
         setSelectedWard(selected ? selected : null)
         setWardId(wardId)
@@ -93,11 +94,12 @@ const PopupAddress = forwardRef((props, ref) => {
         showNamePopup === 'add' ? handleSubmit(formData) : handleEditAddress(formData);
     };
 
+    console.log('Address data: ', addressData)
     useImperativeHandle(ref, () => ({
         getData: () => ({
             id: showNamePopup === 'update' ? addressData.id : '',
-            fullName: showNamePopup === 'update' ? addressData.fullName : fullName,
-            phone: showNamePopup === 'update' ? addressData.phone : phone,
+            fullName: fullName,
+            phone:  phone,
             provinceId: selectedProvince.ProvinceID,
             province: selectedProvince.ProvinceName,
             districtId: selectedDistrict.DistrictID,
@@ -161,7 +163,6 @@ const PopupAddress = forwardRef((props, ref) => {
     }, [showNamePopup, addressData]);
 
     useEffect(() => {
-        console.log('Street: ', street)
         if (selectedProvince === null || selectedDistrict === null || selectedWard === null) {
             setDisable(true)
         } else {

@@ -74,7 +74,7 @@ const ProductCard2Component = ({product}) => {
                                 {discountRate && <span className="compare-price">{formatVND(product.price)}</span>}
                             </div>
                         </div>
-                        </Link>/
+                        </Link>
                     </div>
                 </form>
             </div>
