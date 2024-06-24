@@ -87,20 +87,8 @@ const HomeScreen = () => {
                     className={'categoriesWrapper'}
                     isHome={true}
                     title={'Sản Phẩm Mới Nhất'}
-                    image={SHIRT_IMG}
-                    name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
-                    price={'185.000'}
-                    originPrice={'350.000'}
                     products={products}
                 />
-                {/**/}
-                <CategoryComponent
-                    className={'categoriesWrapper'}
-                    categoryName={'Sản Phẩm Bán Chạy'}
-                    image={SHIRT_IMG}
-                    name={'Áo Thun Teelab Local Brand Unisex Baseball Jersey Shirt TS228'}
-                    price={'185.000'}
-                    originPrice={'350.000'}/>
 
                 {/**/}
                 <div className={'findOutMoreWrapper'}>

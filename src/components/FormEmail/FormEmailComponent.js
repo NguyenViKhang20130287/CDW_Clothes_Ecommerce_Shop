@@ -3,8 +3,9 @@ import {CiMail} from "react-icons/ci";
 import {Link} from "react-router-dom";
 import './FornEmailComponent.css'
 import './Responsive.css'
+import {TbLoader3} from "react-icons/tb";
 
-const FormEmailComponent = ({title, onChange, value, onClick, error, borderColor}) => {
+const FormEmailComponent = ({title, onChange, value, onClick, error, borderColor, isLoaded}) => {
     return (
         <div className={'formEmailContainer'}>
             <div className={'forgotPasswordWrapper'}>
@@ -30,7 +31,11 @@ const FormEmailComponent = ({title, onChange, value, onClick, error, borderColor
                         <button type={'submit'}
                                 className={'forgotPasswordBtn'}
                                 onClick={onClick}
-                        >NHẬN MÃ OTP
+                        >
+                            <span hidden={!isLoaded}>NHẬN MÃ OTP</span>
+                            <div className={'loginLoader'} hidden={isLoaded}>
+                                <TbLoader3 className={'icon'}/>
+                            </div>
                         </button>
                     </form>
                     <div className={'loginOptionWrapper'}>

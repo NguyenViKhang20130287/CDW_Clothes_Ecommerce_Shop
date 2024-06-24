@@ -6,6 +6,7 @@ import {Link, useNavigate} from "react-router-dom";
 const ProductCardComponent = ({id, image, name, price, originPrice, discountRate}) => {
     let formattedPrice = price ? price.toLocaleString('vi-VN') : 'N/A';
     let formattedOriginPrice = originPrice ? originPrice.toLocaleString('vi-VN') : 'N/A';
+    // console.log('DiscountRate: ', discountRate)
     return (
 
         <div className={'productCardItem'}>

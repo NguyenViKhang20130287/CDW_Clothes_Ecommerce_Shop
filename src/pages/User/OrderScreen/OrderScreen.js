@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 // icon
 import {MdOutlinePayment} from "react-icons/md";
-import {TbLoader3, TbCircleCheck} from "react-icons/tb";
+import {TbCircleCheck, TbLoader3} from "react-icons/tb";
 // css
 import "./OrderScreen.css";
 import {Box, TextField} from "@mui/material";
@@ -11,7 +11,7 @@ import VNPAY_IMG from '../../../assets/img/vnpay-seeklogo.svg'
 import {fetchData, fetchDataShipping} from "../../../services/AddressApiService";
 import {useDispatch, useSelector} from "react-redux";
 import toast from "react-hot-toast";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import moment from "moment/moment";
 import ApiService from "../../../services/APIService";
 import {clearCart} from "../../../store/actions/cartActions";
@@ -58,8 +58,10 @@ const OrderScreen = () => {
     const [modalStatus, setModalStatus] = useState(true)
     const [loadingStatus, setLoadingStatus] = useState(false)
     const [addressUserLogged, setAddressUserLogged] = useState([])
-    const [discounts, setDiscounts] = useState([])
-    const productByNow = localStorage.getItem("productByNow")
+    const [discountId, setDiscountId] = useState(0)
+    const productByNow = JSON.parse(localStorage.getItem("productByNow"))
+    const [priceProductByNow, setPriceProductByNow] = useState(0)
+    const [idAddressDefault, setIdAddressDefault] = useState('')
     const navigate = useNavigate()
     let hasNotify = false
     const dispatch = useDispatch()
@@ -148,7 +150,7 @@ const OrderScreen = () => {
     }
 
     const checkPromotions = (promotions, originPrice, price) => {
-        if (promotions && promotions.length > 0) {
+        if (promotions && promotions.length > 0 && promotions !== undefined) {
             const promotion = promotions.find(promotion => promotion.status === true);
             if (expiredDateValid(promotion.startDate, promotion.endDate)) {
                 price = originPrice * ((100 - promotion.discount_rate) / 100)
@@ -163,7 +165,7 @@ const OrderScreen = () => {
     }
     const handleCheckDiscountCode = async () => {
         try {
-            const res = await axios.get('http://localhost:8080/api/v1/discount-code/check',
+            const res = await axios.get('https://teelab-be.up.railway.app/api/v1/discount-code/check',
                 {
                     params: {
                         code: discountCode.toUpperCase()
@@ -177,6 +179,7 @@ const OrderScreen = () => {
             } else {
                 if (res.data.discountRate === 0) {
                     setDiscountPrice(res.data.discountMoney)
+                    setDiscountId(res.data.id)
                 } else {
                     setDiscountPrice((res.data.discountRate / 100) * provisionalAmount)
                 }
@@ -209,21 +212,39 @@ const OrderScreen = () => {
             "shippingCost": shippingCost,
             "products": []
         }
-        cartItems.forEach(item => {
-            const promotions = item.product.promotions
+        if (productByNow) {
+            console.log('Strating...')
+            console.log('Promotion: ', productByNow.promotions)
+            const promotions = productByNow.promotions
             let price = null
-            let originPrice = item.product.price
+            let originPrice = productByNow.price
             price = checkPromotions(promotions, originPrice, price)
+            console.log('Price: ', price)
             data.products.push({
-                "id": item.product.id,
-                "colorSizeId": item.selectedColorSize.id,
-                "color": item.selectedColor,
-                "size": item.selectedSize,
-                "quantity": item.quantity,
+                "id": productByNow.id,
+                "colorSizeId": productByNow.selectedColorSize.id,
+                "color": productByNow.selectedColor,
+                "size": productByNow.selectedSize,
+                "quantity": productByNow.quantity,
                 "price": Math.round(price)
             });
-        });
-        console.log('Data: ', data)
+        } else {
+            cartItems.forEach(item => {
+                const promotions = item.product.promotions
+                let price = null
+                let originPrice = item.product.price
+                price = checkPromotions(promotions, originPrice, price)
+                data.products.push({
+                    "id": item.product.id,
+                    "colorSizeId": item.selectedColorSize.id,
+                    "color": item.selectedColor,
+                    "size": item.selectedSize,
+                    "quantity": item.quantity,
+                    "price": Math.round(price)
+                });
+            });
+        }
+        console.log('Data buy: ', data)
 
         console.log(selectedMethod)
         // eslint-disable-next-line default-case
@@ -234,34 +255,46 @@ const OrderScreen = () => {
                         await new ApiService().sendData("/order/", data)
                         await addLog(token, 'Đặt hàng thanh toán bằng phương thức COD thành công')
                         setLoadingStatus(true)
+                        if (discountPrice > 0) {
+                            const res = await axios.post(`https://teelab-be.up.railway.app/api/v1/discount-code/used/${discountId}`)
+                            console.log('Res used discount: ', res)
+                        }
+                        localStorage.removeItem('productByNow')
                     }, 1000)
-                    setTimeout(() => {
-                        if (cartItems.length > 0) dispatch(clearCart())
-                    }, 1000 * 60)
+                    console.log('Productbynow: ', productByNow)
+                    if (productByNow === null && cartItems.length > 0){
+                        dispatch(clearCart())
+                    }
+                    // setTimeout(async () => {
+                    //     if (cartItems.length > 0) dispatch(clearCart())
+                    // }, 1000 * 60)
                 } catch (e) {
                     console.log(e)
                 }
                 break
             case 'VNPAY':
-                data.paymentStatus = true
-                const dataPayment = {
+                const paramsPayment = {
                     amount: totalMoney,
                     orderInfo: 0
                 }
 
                 setTimeout(async () => {
                     const res = await new ApiService().sendData("/order/", data)
-                    console.log('res: ', res)
-                    dataPayment.orderInfo = res.id
-                    console.log('order info: ', dataPayment)
-                    const resPayment = await new ApiService().sendData("/payment/create_payment", dataPayment)
+                    console.log('Response: ', res)
+                    paramsPayment.orderInfo = res.id
+                    // console.log('order info: ', dataPayment)
+                    const resPayment = await new ApiService().sendData("/payment/create_payment", paramsPayment)
                     const paymentResponse = {
                         "paymentStatus": resPayment.status,
                         "orderId": res.id
                     }
-                    console.log('Payment: ', resPayment)
+                    if (discountPrice > 0) {
+                        const res = await axios.post(`https://teelab-be.up.railway.app/api/v1/discount-code/used/${discountId}`)
+                        console.log('Res used discount: ', res)
+                    }
+                    console.log('Payment response: ', resPayment)
                     localStorage.setItem("responsePayment", JSON.stringify(paymentResponse))
-                    localStorage.setItem("paymentVNPay", resPayment)
+                    // localStorage.setItem("paymentVNPay", resPayment)
                     window.location.href = resPayment.url;
                 }, 1000)
 
@@ -274,7 +307,6 @@ const OrderScreen = () => {
         setModalStatus(true)
         setLoading(false)
         navigate('/')
-        dispatch(clearCart())
     }
     const fetchDataAddressUserLogged = async () => {
         if (token !== null) {
@@ -302,6 +334,7 @@ const OrderScreen = () => {
         if (addressUserLogged.length > 0) {
             const addressBook = addressUserLogged.find(address => address.id === addressId)
             console.log('Book: ', addressBook)
+            setIdAddressDefault(addressBook.id)
             setFullName(addressBook.fullName)
             setPhone(addressBook.phone)
             setStreet(addressBook.street)
@@ -326,56 +359,124 @@ const OrderScreen = () => {
             setWardId(String(addressBook.wardId))
         }
     }
-//
+
+    const getAddressDefault = async () => {
+        // console.log('Address logged: ', addressUserLogged)
+        if (addressUserLogged.length > 0) {
+            const arDefault = addressUserLogged.find(ar => ar.default === true)
+            // console.log('Address default: ', arDefault)
+            setIdAddressDefault(String(arDefault.id))
+            setFullName(arDefault.fullName)
+            setPhone(arDefault.phone)
+            setStreet(arDefault.street)
+            try {
+                const provinceResponse = await fetchData('province')
+                const dis = await fetchData('district', {
+                    province_id: arDefault.provinceId
+                })
+                const ward = await fetchData('ward', {
+                    district_id: arDefault.districtId
+                })
+                setProvince(provinceResponse.find(p => p.ProvinceID === arDefault.provinceId))
+                setDistricts(dis)
+                setDistrict(dis.find(d => d.DistrictID === arDefault.districtId))
+                setWards(ward)
+                setWard(ward.find(w => w.WardCode === String(arDefault.wardId)))
+            } catch (e) {
+                console.log(e)
+            }
+            setProvinceId(String(arDefault.provinceId))
+            setDistrictId(String(arDefault.districtId))
+            setWardId(String(arDefault.wardId))
+        }
+    }
+
+    //
     useEffect(() => {
         fetchDataProvince()
     }, []);
-//
+    //
     useEffect(() => {
         checkValueInput()
     }, [fullName, phone, street, province, district, ward]);
-//
+    //
+
+    //
     useEffect(() => {
-        let totalAmount = 0
-        cartItems.forEach((item, index) => {
-            // console.log('Item: ', item)
-            const promotions = item.product.promotions
-            let price = null
-            let originPrice = item.product.price
-            price = checkPromotions(promotions, originPrice, price)
-            totalAmount += price * item.quantity
-        })
-        setProvisionalAmount(totalAmount)
-    }, [cartItems]);
-//
-    useEffect(() => {
+        // if ()
         setTotalMoney(provisionalAmount + shippingCost - discountPrice)
     }, [discountPrice, provisionalAmount, shippingCost]);
-//
-    useEffect(() => {
-        // console.log(hasNotify)
-        if (!hasNotify) {
-            if (cartItems.length === 0) {
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                hasNotify = true
-                setTimeout(() => {
-                    toast.error('Chưa có sản phẩm nào trong giỏ hàng !')
-                    navigate('/cart');
-                }, 500)
-            }
-        }
-    }, [cartItems]);
-//
+    //
+    // useEffect(() => {
+    //     // console.log(hasNotify)
+    //     if (!hasNotify) {
+    //         if (cartItems.length === 0 && !productByNow) {
+    //             // eslint-disable-next-line react-hooks/exhaustive-deps
+    //             hasNotify = true
+    //             setTimeout(() => {
+    //                 toast.error('Chưa có sản phẩm nào trong giỏ hàng !')
+    //                 navigate('/cart');
+    //             }, 500)
+    //         }
+    //     }
+    // }, [cartItems]);
+
+    //
     useEffect(() => {
         fetchDataAddressUserLogged()
         fetchDataUserLogged()
     }, [token]);
-//
+
+    useEffect(() => {
+        getAddressDefault()
+    }, [addressUserLogged]);
+
+    //
     useEffect(() => {
         checkValueInput()
     }, [inputIsValid]);
 
-    console.log('Product BY NOW: ', productByNow )
+    // console.log('Product BY NOW: ', productByNow)
+    // console.log('ID Address default: ', idAddressDefault)
+
+    const calculatorPriceByNow = (product) => {
+        const promotions = product.promotions
+        let price = null
+        let originPrice = product.price
+        price = checkPromotions(promotions, originPrice, price)
+        setPriceProductByNow(price)
+    }
+
+    useEffect(() => {
+        if (productByNow) {
+            calculatorPriceByNow(productByNow)
+        }
+    }, [productByNow]);
+
+    useEffect(() => {
+        let totalAmount = 0
+        if (productByNow) {
+            totalAmount = priceProductByNow * productByNow.quantity
+        } else {
+            cartItems.forEach((item, index) => {
+                // console.log('Item: ', item)
+                let price = item.product.price;
+                const currentDate = new Date().toISOString().split('T')[0];
+                if (item.product.promotions && item.product.promotions.length > 0) {
+                    const promotionActive = item.product.promotions.filter(pro => pro.status && !pro.deleted)
+                    let length = promotionActive.length
+                    const promotionNewest = promotionActive[length - 1]
+                    if (promotionActive.length > 0) {
+                        if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                            price = item.product.price - item.product.price * promotionNewest.discount_rate / 100;
+                        }
+                    }
+                }
+                totalAmount += price * item.quantity
+            })
+        }
+        setProvisionalAmount(totalAmount)
+    }, [cartItems, productByNow]);
 
     return (
         <>
@@ -406,6 +507,7 @@ const OrderScreen = () => {
                                         className={classes.root}
                                         select
                                         defaultValue={''}
+                                        value={idAddressDefault}
                                         onChange={e => handleOnChangeAddressBook(e.target.value)}
                                     >
                                         <MenuItem>Chọn địa chỉ</MenuItem>
@@ -635,28 +737,62 @@ const OrderScreen = () => {
                         </div>
 
                         <div className={'orderProducts'}>
-                            {cartItems && cartItems.length > 0 &&
-                                cartItems.map((item) => {
-                                    const promotions = item.product.promotions
-                                    let price = null
-                                    let originPrice = item.product.price
-                                    price = checkPromotions(promotions, originPrice, price)
-                                    return (
-                                        <div className={'orderProductsItem'} key={item.product.id}>
-                                            <div className={'orderProductsItemImgWrapper'}>
-                                                <img src={item.product.thumbnail} alt={''}/>
+                            {productByNow ?
+
+                                <div className={'orderProductsItem'}>
+                                    <div className={'orderProductsItemImgWrapper'}>
+                                        <img src={productByNow.thumbnail} alt={''}/>
+                                    </div>
+                                    <div className={'orderProductsItemDetail'}>
+                                        <p>{productByNow.name}</p>
+                                        <span>x{productByNow.quantity}, {productByNow.selectedColor} / {productByNow.selectedSize}</span>
+                                    </div>
+                                    <div className={'orderProductsItemPrice'}>
+                                        <p>{formattedPrice(Math.round(priceProductByNow * productByNow.quantity))}</p>
+                                    </div>
+                                </div>
+                                :
+                                (
+                                    // {
+                                    cartItems && cartItems.length > 0 &&
+                                    cartItems.map((item) => {
+                                        // const promotions = item.product.promotions
+                                        // let price = null
+                                        // let originPrice = item.product.price
+                                        // price = checkPromotions(promotions, originPrice, price)
+
+                                        let price = item.product.price;
+                                        const currentDate = new Date().toISOString().split('T')[0];
+                                        if (item.product.promotions && item.product.promotions.length > 0) {
+                                            const promotionActive = item.product.promotions.filter(pro => pro.status && !pro.deleted)
+                                            let length = promotionActive.length
+                                            const promotionNewest = promotionActive[length - 1]
+                                            if (promotionActive.length > 0) {
+                                                if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                                                    price = item.product.price - item.product.price * promotionNewest.discount_rate / 100;
+                                                }
+                                            }
+                                        }
+                                        console.log('Amount: ', provisionalAmount)
+                                        return (
+                                            <div className={'orderProductsItem'} key={item.product.id}>
+                                                <div className={'orderProductsItemImgWrapper'}>
+                                                    <img src={item.product.thumbnail} alt={''}/>
+                                                </div>
+                                                <div className={'orderProductsItemDetail'}>
+                                                    <p>{item.product.name}</p>
+                                                    <span>x{item.quantity}, {item.selectedColor} / {item.selectedSize}</span>
+                                                </div>
+                                                <div className={'orderProductsItemPrice'}>
+                                                    <p>{formattedPrice(Math.round(price * item.quantity))}</p>
+                                                </div>
                                             </div>
-                                            <div className={'orderProductsItemDetail'}>
-                                                <p>{item.product.name}</p>
-                                                <span>x{item.quantity}, {item.selectedColor} / {item.selectedSize}</span>
-                                            </div>
-                                            <div className={'orderProductsItemPrice'}>
-                                                <p>{formattedPrice(Math.round(price * item.quantity))}</p>
-                                            </div>
-                                        </div>
-                                    )
-                                })
+                                        )
+                                    })
+                                    // }
+                                )
                             }
+
                         </div>
 
                         <div className={'discountCode'}>

@@ -36,21 +36,37 @@ const CategoryComponent = ({products, title, isHome}) => {
             <h3 className={'title'}>{title}</h3>
             <div className={'categoriesWrapper'}>
                 {listProduct &&
-                    listProduct.map((p, index) => {
-                            let price = null
-                            let originPrice = p.price
-                            price = checkPromotions(p.promotions, originPrice, price)
-                            const pr = p.promotions && p.promotions.length > 0
-                                && p.promotions.find(promotion => promotion.status === true);
+                    listProduct.map((product, index) => {
+
+                            let price = product.price;
+                            let originPrice = null;
+                            const currentDate = new Date().toISOString().split('T')[0];
+                            let discountRate
+                            if (product.promotions && product.promotions.length > 0) {
+                                const promotionActive = product.promotions.filter(pro => pro.status && !pro.deleted)
+                                // console.log('Promotions: ', promotionActive)
+                                let length = promotionActive.length
+                                // console.log('Length: ', length)
+                                // console.log('Promotion newest: ', promotionActive[length - 1])
+                                const promotionNewest = promotionActive[length - 1]
+                                if (promotionActive.length > 0) {
+                                    if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                                        originPrice = product.price;
+                                        price = product.price - product.price * promotionNewest.discount_rate / 100;
+                                        discountRate = promotionNewest.discount_rate || ''
+                                    }
+                                } else discountRate = null
+
+                            } else discountRate = null
                             return (
                                 <ProductCardComponent
-                                    key={p.id}
-                                    id={p.id}
-                                    image={p.thumbnail}
-                                    name={p.name}
+                                    key={product.id}
+                                    id={product.id}
+                                    image={product.thumbnail}
+                                    name={product.name}
                                     price={price}
                                     originPrice={originPrice}
-                                    discountRate={pr.discount_rate}
+                                    discountRate={discountRate}
                                 />
                             )
                         }

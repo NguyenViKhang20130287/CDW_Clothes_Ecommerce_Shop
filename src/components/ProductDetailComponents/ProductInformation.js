@@ -155,6 +155,7 @@ const ProductInformation = ({product}) => {
             setQuantity(prevQuantity => prevQuantity + 1);
         } else {
             console.log('Hết hàng');
+            toast.error('Không đủ số lượng có sẵn!')
         }
     };
 
@@ -186,11 +187,35 @@ const ProductInformation = ({product}) => {
                 selectedColorSize: selectedColorSize
             }
         });
-        toast.success("Sản phẩm đã được thêm vào giỏ hàng")
+        // toast.success("Sản phẩm đã được thêm vào giỏ hàng")
     };
-    const currentDate = new Date();
-    const hasValidPromotion = product.promotions && product.promotions.length > 0 && new Date(product.promotions[0].startDate) <= currentDate && currentDate <= new Date(product.promotions[0].endDate);
-    const discountedPrice = hasValidPromotion ? product.price - (product.price * product.promotions[0].discount_rate / 100) : product.price;
+    // const currentDate = new Date();
+
+    let hasValidPromotion = false
+        // product.promotions && product.promotions.length > 0 && new Date(product.promotions[0].startDate) <= currentDate && currentDate <= new Date(product.promotions[0].endDate);
+    let discountedPrice = null
+        // hasValidPromotion ? product.price - (product.price * product.promotions[0].discount_rate / 100) : product.price;
+    const currentDate = new Date().toISOString().split('T')[0];
+    let discountRate = 0
+    if (product.promotions && product.promotions.length > 0) {
+        const promotionActive = product.promotions.filter(pro => pro.status && !pro.deleted)
+        let length = promotionActive.length
+        console.log('Promotions active: ', promotionActive)
+        const promotionNewest = promotionActive[length - 1]
+        console.log('Promotion newest: ', promotionNewest)
+        if (promotionActive.length > 0) {
+            if (promotionNewest.endDate > currentDate && promotionNewest.startDate < currentDate) {
+                console.log('Promotion Valid')
+                hasValidPromotion = true
+                discountedPrice = product.price - product.price * promotionNewest.discount_rate / 100;
+                discountRate = promotionNewest.discount_rate
+            }else {
+                hasValidPromotion = false
+            }
+        } else {
+            hasValidPromotion = false
+        }
+    }
     const formatter = new Intl.NumberFormat('vi-VN', {
         style: 'currency',
         currency: 'VND',
@@ -198,10 +223,20 @@ const ProductInformation = ({product}) => {
     });
     const formattedPrice = formatter.format(product.price).replace(/\s/g, '');
     const formattedDiscountedPrice = formatter.format(discountedPrice).replace(/\s/g, '');
+    console.log('Status promotion: ', hasValidPromotion)
+    console.log('FormattedPrice: ', formattedPrice)
+    console.log('discount: ', formattedDiscountedPrice)
 
     const handleByNow = (product) => {
         // console.log('Item by Now: ', product)
-        localStorage.setItem("productByNow", product)
+        const productByNow = {
+            ...product,
+            selectedColor: selectedColor,
+            selectedSize: selectedSize,
+            quantity: quantity,
+            selectedColorSize: selectedColorSize
+        }
+        localStorage.setItem("productByNow", JSON.stringify(productByNow))
         navigate('/order')
     }
 
@@ -227,7 +262,7 @@ const ProductInformation = ({product}) => {
                             </span>
                             <span className="save-price">-
                             <span
-                                className="price product-price-save">{product.promotions[0].discount_rate}%</span>
+                                className="price product-price-save">-{discountRate}%</span>
                              </span>
                         </> :
                         <span className="special-price">
@@ -331,7 +366,7 @@ const ProductInformation = ({product}) => {
                             >Thêm vào giỏ
                             </button>
                             <button type="button" className="btn btn-lg btn-gray btn_buy btn-buy-now"
-                                    onClick={e=> handleByNow(product)}>Mua ngay
+                                    onClick={e => handleByNow(product)}>Mua ngay
                             </button>
                         </div>
 

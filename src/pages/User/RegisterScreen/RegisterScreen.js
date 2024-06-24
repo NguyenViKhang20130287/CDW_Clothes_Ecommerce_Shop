@@ -11,11 +11,13 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState("");
     const [error, setError] = useState("");
     const [errorColor, setErrorColor] = useState("#999999FF");
+    const [isLoaded, setIsLoaded] = useState(true)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 
     const handleRegister = async (e) => {
         e.preventDefault();
+        setIsLoaded(false)
         if (!emailRegex.test(email)) {
             setErrorColor("red");
             toast.error("Địa chỉ email không hợp lệ!")
@@ -28,9 +30,11 @@ const RegisterScreen = () => {
                 toast.success("OTP đã gửi về email của bạn", {
                     onClose: () => navigate("/register-confirm")
                 });
+                setIsLoaded(true)
                 navigate("/register-confirm");
             } else {
                 toast.error(data.body)
+                setIsLoaded(true)
             }
         } catch (err) {
             console.error(err);
@@ -52,6 +56,7 @@ const RegisterScreen = () => {
                 onClick={handleRegister}
                 error={error}
                 borderColor={errorColor}
+                isLoaded={isLoaded}
             />
         </div>
     );

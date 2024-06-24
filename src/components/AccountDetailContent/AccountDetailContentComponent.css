@@ -466,14 +466,6 @@ accountDetailContentWrapper {
     animation: spin 2s linear infinite;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-}
 
 .purchaseOrderContainer .orderUserContainer .orderUserWrapper {
     background: #FFFFFF;
@@ -593,11 +585,15 @@ accountDetailContentWrapper {
 }
 
 .purchaseOrderContainer .orderUserContainer .orderUserWrapper .action {
-    text-align: right
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 
 .purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button {
     width: 150px;
+    height: 40px;
     font-size: 14px;
     font-weight: bold;
     padding: 5px 10px;
@@ -609,8 +605,44 @@ accountDetailContentWrapper {
     margin-right: 10px;
 }
 
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action .cancelOrder{
+    position: relative;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action .cancelOrder:disabled{
+    background-color: #ccc;
+    color: #ffff;
+    border: none;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action .cancelOrder .cancelLoader{
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.purchaseOrderContainer .orderUserContainer .orderUserWrapper .action .cancelOrder .cancelLoader .icon{
+    font-size: 16px;
+    animation: spin 2s linear infinite;
+}
+
 .purchaseOrderContainer .orderUserContainer .orderUserWrapper .action button:hover{
     background: #FFFFFF;
     color: var(--color-black);
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 

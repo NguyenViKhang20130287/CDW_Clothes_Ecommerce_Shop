@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 const persistedCart = localStorage.getItem('cart');
 const persistedViewed = localStorage.getItem('recentlyViewed');
 const initState = {
@@ -31,13 +33,15 @@ export const root = (state = initState, action) => {
                 const newCart = [...state.cart];
                 const existingProduct = newCart[existingProductIndex];
                 if (selectedColorSize && existingProduct.quantity + quantity > selectedColorSize.quantity) {
-                    console.log("Khong the them");
+                    toast.error("Sản phẩm đã có trong giỏ hàng, không thể thêm nhiều hơn")
                     return state;
                 }
                 const updatedProduct = {
                     ...existingProduct,
                     quantity: existingProduct.quantity + quantity
                 };
+
+                toast.success("Sản phẩm đã được thêm vào giỏ hàng")
                 newCart[existingProductIndex] = updatedProduct;
                 localStorage.setItem('cart', JSON.stringify(newCart));
                 return {
@@ -47,10 +51,11 @@ export const root = (state = initState, action) => {
             } else {
                 // Product is not in the cart, add it
                 if (selectedColorSize && quantity > selectedColorSize.quantity) {
-                    console.log("Khong the them");
+                    toast.error("Sản phẩm đã có trong giỏ hàng, không thể thêm nhiều hơn")
                     return state;
                 }
                 const newCart = [...state.cart, action.payload];
+                toast.success("Sản phẩm đã được thêm vào giỏ hàng")
                 localStorage.setItem('cart', JSON.stringify(newCart));
                 return {
                     ...state,
@@ -58,6 +63,7 @@ export const root = (state = initState, action) => {
                 };
             }
         }
+
         case "colorSize/updateStock": {
             const { product, selectedColor, selectedSize, quantity } = action.payload;
             const existingProductIndex = state.products.findIndex(prod => prod.id === product.id);

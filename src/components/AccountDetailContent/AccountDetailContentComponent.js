@@ -19,6 +19,7 @@ import {TbLoader3} from "react-icons/tb";
 import {LuLoader2} from "react-icons/lu";
 import axios from "axios";
 import {addLog} from "../../services/LogService";
+import ApiService from "../../services/APIService";
 
 const AccountDetailContentComponent = ({
                                            nameShow,
@@ -49,6 +50,9 @@ const AccountDetailContentComponent = ({
     const [openRatingPopup, setOpenRatingPopup] = useState(false);
     const [selectedDetail, setSelectedDetail] = useState(null);
     const [reloaded, setReloaded] = useState(true)
+    const [isUpdated, setIsUpdated] = useState(false)
+    const [cancelLoaded, setCancelLoaded] = useState(true)
+    const [loadingOrderIds, setLoadingOrderIds] = useState([]);
 
     const handleChangeAvatar = async (e) => {
         const file = e.target.files[0];
@@ -100,7 +104,6 @@ const AccountDetailContentComponent = ({
                 return
             }
             toast.success('Thay đổi thông tin thành công')
-            // const userDataUpdated = {...user, res}
             updateUser(res)
             await addLog(token, 'Thay đổi thông tin tài khoản')
         } catch (error) {
@@ -121,11 +124,12 @@ const AccountDetailContentComponent = ({
             console.log('res: ', res)
             toast.success('Thêm địa chỉ thành công')
             setIsHiddenPopup(true)
-            // setAddresses(prevAddresses => [...prevAddresses, res]);
-            updateUser(prevUser => ({
-                ...prevUser,
-                addresses: [...prevUser.addresses, res]
-            }));
+            setAddresses(prevAddresses => [...prevAddresses, res]);
+            // updateUser(prevUser => ({
+            //     ...prevUser,
+            //     addresses: [...prevUser.addresses, res]
+            // }));
+            setIsUpdated(!isUpdated)
             await addLog(token, 'Thêm địa chỉ mới')
         } catch (error) {
             console.log(error)
@@ -133,6 +137,23 @@ const AccountDetailContentComponent = ({
             await addLog(token, 'Lỗi thao tác khi thêm địa chỉ mới')
         }
     }
+
+    const fetchAddressUser = async () => {
+        try {
+            console.log('Token: ', token)
+            const res = await new APIService().fetchData('/user/user-details/addresses', null, {
+                token: token
+            })
+            console.log('Response address: ', res)
+            setAddresses(res.sort((a, b) => b.default - a.default))
+        } catch (e) {
+            console.log('Err fetching data address: ', e)
+        }
+    }
+
+    useEffect(() => {
+        fetchAddressUser()
+    }, [isUpdated]);
 
     const handleEditAddress = async (e) => {
         e.preventDefault()
@@ -145,12 +166,7 @@ const AccountDetailContentComponent = ({
             console.log('res: ', res)
             toast.success('Cập nhật địa chỉ thành công')
             setIsHiddenPopup(true)
-            updateUser(prevUser => ({
-                ...prevUser,
-                addresses: prevUser.addresses.map(address =>
-                    address.id === res.id ? {...address, ...res} : address
-                )
-            }));
+            setIsUpdated(!isUpdated)
             await addLog(token, 'Cập nhật địa chỉ')
         } catch (error) {
             console.log(error)
@@ -173,7 +189,7 @@ const AccountDetailContentComponent = ({
         }
         try {
             const res =
-                await new APIService().sendData("/user-details/change-password", userData)
+                await new APIService().sendData("/user/user-details/change-password", userData)
             // console.log('res: ', res)
             toast.success(res)
             setOldPassword('')
@@ -258,7 +274,7 @@ const AccountDetailContentComponent = ({
             setEmail(user.userInformation.email);
             setPhone(user.userInformation.phone);
             setAvatarLink(user.userInformation.avatar);
-            setAddresses([...user.addresses].sort((a, b) => b.default - a.default))
+            // setAddresses([...user.addresses].sort((a, b) => b.default - a.default))
         }
     }, [isHiddenPopup, reloaded]);
 
@@ -269,7 +285,7 @@ const AccountDetailContentComponent = ({
     const handleSetDefaultAddress = async (id) => {
         // console.log('Address id: ', id)
         try {
-            const res = await axios.post("http://localhost:8080/api/v1/user/user-details/address/set-default",
+            const res = await axios.post("https://teelab-be.up.railway.app/api/v1/user/user-details/address/set-default",
                 null, {
                     params: {
                         userId: user.id,
@@ -277,11 +293,7 @@ const AccountDetailContentComponent = ({
                     }
                 })
             // console.log('Res set default: ', res)
-            updateUser(prevUser => ({
-                ...prevUser,
-                addresses: res.data
-            }));
-            setReloaded(!reloaded)
+            setIsUpdated(!isUpdated)
         } catch (e) {
             console.log(e)
         }
@@ -301,6 +313,40 @@ const AccountDetailContentComponent = ({
         // console.log('Item: ', item)
         navigate(`/order-tracking/${item.id}`)
     }
+
+    const handleCancelOrder = async (orderId) => {
+        console.log('Order id: ', orderId)
+        setLoadingOrderIds(prev => [...prev, orderId]);
+        // setCancelLoaded(false)
+        const data = {
+            "orderId": orderId,
+            'status': "Canceled"
+        }
+        try {
+            const res = await new ApiService().sendData("/order/update-status", data)
+            console.log('Response updated status: ', res)
+            setLoadingOrderIds(prev => prev.filter(id => id !== orderId));
+            // setCancelLoaded(true)
+            setIsUpdated(!isUpdated)
+            toast.success('Hủy đơn hàng thành công')
+        } catch (e) {
+            console.log(e)
+            toast.error('Lỗi thao tác')
+        }
+    }
+
+    useEffect(() => {
+        fetchDataOrdersUser()
+        console.log('Fetch order...')
+    }, [isUpdated]);
+
+    // useEffect(() => {
+    //     if (nameShow !== 'update'){
+    //         setFullName('')
+    //         setPhone('')
+    //
+    //     }
+    // }, [nameShow]);
 
     return (
         <div className={'accountDetailContentWrapper'}>
@@ -525,15 +571,15 @@ const AccountDetailContentComponent = ({
             }
             {nameShow === 'purchaseOrder' &&
                 <div className={'purchaseOrderContainer'}>
-                    <div className={'listStatusWrapper'}>
-                        <button className={'statusBtn active'}>Tất cả</button>
-                        <button className={'statusBtn'}>Chờ thanh toán</button>
-                        <button className={'statusBtn'}>Vận chuyển</button>
-                        <button className={'statusBtn'}>Chờ giao hàng</button>
-                        <button className={'statusBtn'}>Hoàn thành</button>
-                        <button className={'statusBtn'}>Đã hủy</button>
-                        <button className={'statusBtn'}>Trả hàng/Hoàn tiền</button>
-                    </div>
+                    {/*<div className={'listStatusWrapper'}>*/}
+                    {/*    <button className={'statusBtn active'}>Tất cả</button>*/}
+                    {/*    <button className={'statusBtn'}>Chờ thanh toán</button>*/}
+                    {/*    <button className={'statusBtn'}>Vận chuyển</button>*/}
+                    {/*    <button className={'statusBtn'}>Chờ giao hàng</button>*/}
+                    {/*    <button className={'statusBtn'}>Hoàn thành</button>*/}
+                    {/*    <button className={'statusBtn'}>Đã hủy</button>*/}
+                    {/*    <button className={'statusBtn'}>Trả hàng/Hoàn tiền</button>*/}
+                    {/*</div>*/}
                     <div className={'searchOrderContainer'}>
                         <div className={'searchOrderWrapper'}>
                             <IoSearchSharp size={'20'} color={'#999999'}/>
@@ -558,7 +604,11 @@ const AccountDetailContentComponent = ({
                                         <div className={'orderHeader'}>
                                             <span className={'orderId'}>Mã đơn hàng: {item.id}</span>
                                             <div className={'orderStatus'}>
-                                                <span>{item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.description}</span>
+                                                <span
+                                                    style={item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.name === 'Canceled' ?
+                                                        {color: 'red'} : {color: '#26aa99'}
+                                                    }
+                                                >{item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.description}</span>
                                             </div>
                                         </div>
                                         <div className={'orderProducts'}>
@@ -584,6 +634,7 @@ const AccountDetailContentComponent = ({
                                                             </div>
                                                             <div className={'ratingButtonContainer'}>
                                                                 <button className={'ratingButton'}
+                                                                        hidden={!(item.deliveryStatus.name === 'Delivered')}
                                                                         onClick={() => handleOpenRatingPopup(de)}>Đánh
                                                                     giá
                                                                 </button>
@@ -594,11 +645,22 @@ const AccountDetailContentComponent = ({
                                             }
                                         </div>
                                         <div className={'action'}>
-                                            <button className={'cancelOrder'} type={'button'}
+                                            <button className={'orderDetailBtn'} type={'button'}
                                                     onClick={e => handleNavigateTracking(item)}
                                             >Chi tiết
                                             </button>
-                                            <button className={'cancelOrder'} type="button">Hủy đơn hàng</button>
+                                            <button className={'cancelOrder'} type="button"
+                                                    onClick={e => handleCancelOrder(item.id)}
+                                                    disabled={item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.name === 'Canceled' ||
+                                                        item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.name === 'OutforDelivery' ||
+                                                        item.deliveryStatusHistories[item.deliveryStatusHistories.length - 1].deliveryStatus.name === 'Delivered'}
+                                            >
+                                                <div className={'cancelLoader'}
+                                                     hidden={!loadingOrderIds.includes(item.id)}>
+                                                    <TbLoader3 className={'icon'}/>
+                                                </div>
+                                                <span hidden={loadingOrderIds.includes(item.id)}>Hủy đơn hàng</span>
+                                            </button>
                                         </div>
                                     </div>
                                 )

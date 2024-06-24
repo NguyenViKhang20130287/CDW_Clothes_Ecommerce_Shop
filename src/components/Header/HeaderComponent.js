@@ -24,6 +24,7 @@ const HeaderComponent = () => {
     const [avatar, setAvatar] = useState('')
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
+    console.log('Token: ', token)
     const [totalQuantity, setTotalQuantity] = useState(0);
     const cartItems = useSelector(state => state.root.cart);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -137,7 +138,7 @@ const HeaderComponent = () => {
 
     const handleSeenNotification = async (id) => {
         try {
-            const res = await axios.post(`http://localhost:8080/api/v1/notification/seen/${id}`)
+            const res = await axios.post(`https://teelab-be.up.railway.app/api/v1/notification/seen/${id}`)
             console.log('Res: ', res)
             setSeen(!seen)
         } catch (e) {
@@ -186,6 +187,7 @@ const HeaderComponent = () => {
                                     }
                                     return (
                                         <ProductCardComponent
+                                            id={product.id}
                                             key={index}
                                             image={product.thumbnail}
                                             name={product.name}
@@ -203,7 +205,7 @@ const HeaderComponent = () => {
                     <div className={'leftContent'}>
                         <Link to={'/'} className={'home'}>TRANG CHỦ</Link>
                         <span className={'warranty'}>
-                            <Link to={'/exchange'}>ĐỔI TRẢ</Link>
+                            <Link to={'/blog'}>BLOG</Link>
                         </span>
                     </div>
                     <div className={'centerContent'}>
