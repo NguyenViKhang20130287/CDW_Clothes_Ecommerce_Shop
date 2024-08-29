@@ -28,7 +28,6 @@ const ProductDetailScreen = () => {
             console.error('Error fetching product', error);
         }
     };
-    // dispatch({type: 'recent/add', payload: product});
     const fetchSimilarProducts = async () => {
         try {
             const result = await apiService.fetchData(`/product/${id}/related`);
